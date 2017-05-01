@@ -12,5 +12,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserHobbyRepository extends PagingAndSortingRepository<UserHobby, Long> {
 
-    int countByTagIdAndUserId(int tagId, int userId);
+//    int countByTagIdAndUserId(int tagId, int userId);
 }

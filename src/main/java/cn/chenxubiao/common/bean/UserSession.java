@@ -13,6 +13,7 @@ import java.util.Set;
 public class UserSession {
     private int userId;     //用户id
     private int avatarId;   //头像id
+    private int backgroundId;
     private String userName;
     private String cellphone;
     private int sex;
@@ -32,6 +33,7 @@ public class UserSession {
     public UserSession(UserInfo userInfo) {
         this.userId = userInfo.getId();
         this.userName = userInfo.getUserName();
+        this.backgroundId = userInfo.getBackgroundId();
         this.email = userInfo.getEmail();
         this.cellphone = userInfo.getCellphone();
         this.sex = userInfo.getSex();
@@ -39,6 +41,14 @@ public class UserSession {
         this.userStatus = userInfo.getStatus();
         this.createTime = userInfo.getCreateTime();
         this.modifyTime = userInfo.getModifyTime();
+    }
+
+    public int getBackgroundId() {
+        return backgroundId;
+    }
+
+    public void setBackgroundId(int backgroundId) {
+        this.backgroundId = backgroundId;
     }
 
     public int getUserId() {

@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Created by chenxb on 17-3-30.
  */
 @SpringBootApplication
-@EntityScan(basePackages = {"cn.chenxubiao.user.domain", "cn.chenxubiao.picture.domain", "cn.chenxubiao.tag.domain", "cn.chenxubiao.trend.domain"})
+@EntityScan(basePackages = {"cn.chenxubiao.user.domain", "cn.chenxubiao.picture.domain", "cn.chenxubiao.tag.domain", "cn.chenxubiao.project.domain"})
 @ServletComponentScan
 @ComponentScan(basePackages = "cn.chenxubiao")
 @EnableTransactionManagement
-//@EnableJpaRepositories(basePackages = {"cn.chenxubiao.picture.repository","cn.chenxubiao.tag.repository","cn.chenxubiao.trend.repository","cn.chenxubiao.user.repository"})
+//@EnableJpaRepositories(basePackages = {"cn.chenxubiao.picture.repository","cn.chenxubiao.tag.repository","cn.chenxubiao.project.repository","cn.chenxubiao.user.repository"})
 public class Application extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

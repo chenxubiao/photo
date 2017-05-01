@@ -9,4 +9,8 @@ import java.util.List;
  */
 public interface UserRoleService {
     List<UserRole> findListByUserId(int userId);
+
+    void save(UserRole userRole);
+
+    boolean isExist(int userId, int roleId);
 }

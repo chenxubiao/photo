@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
  * Created by chenxb on 17-4-1.
  */
 @Service
-public class TrendProjectCommentsServiceImpl implements TrendProjectCommentsService {
+public class ProjectCommentServiceImpl implements ProjectCommentService {
 }

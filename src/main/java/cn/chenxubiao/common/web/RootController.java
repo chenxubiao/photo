@@ -98,7 +98,7 @@ public class RootController {
 
     public UserSession getUserSession(HttpServletRequest request) {
         if(request != null) {
-            UserSession userSession = (UserSession) request.getAttribute(BBSConsts.USER_SESSION_KEY);
+            UserSession userSession = (UserSession) request.getSession().getAttribute(BBSConsts.USER_SESSION_KEY);
             if(userSession != null) {
                 return userSession;
             }

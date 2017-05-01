@@ -1,4 +1,4 @@
-package cn.chenxubiao.trend.domain;
+package cn.chenxubiao.project.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,8 +7,8 @@ import java.util.Date;
 /**
  * Created by chenxb on 17-4-1.
  */
-@Entity
-@Table(name = "bbs_trend_project_collection")
+//@Entity
+//@Table(name = "bbs_trend_project_collection")
 public class TrendProjectCollection implements Serializable {
 
     private static final long serialVersionUID = 5861101687016870195L;

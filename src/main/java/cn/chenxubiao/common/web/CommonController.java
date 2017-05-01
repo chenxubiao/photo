@@ -8,4 +8,9 @@ public class CommonController extends BBSBaseController {
     public boolean checkLogin() {
         return true;
     }
+
+    @Override
+    public boolean enableUserSession() {
+        return true;
+    }
 }
