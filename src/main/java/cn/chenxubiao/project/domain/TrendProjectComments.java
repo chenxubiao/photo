@@ -1,4 +1,4 @@
-package cn.chenxubiao.trend.domain;
+package cn.chenxubiao.project.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,8 +7,8 @@ import java.util.Date;
 /**
  * Created by chenxb on 17-4-1.
  */
-@Entity
-@Table(name = "bbs_trend_project_comments")
+//@Entity
+//@Table(name = "bbs_trend_project_comments")
 public class TrendProjectComments implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

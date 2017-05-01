@@ -5,10 +5,16 @@ package cn.chenxubiao.user.bean;
  */
 public class UserProfileBean {
     private int avatarId;   //头像id
-    private String tagIds;  //用户喜好，标签id，以 , 隔开
-    private String userIds; //被关注者id，以 , 隔开
+    private int backgroundId;  //用户喜好，标签id，以 , 隔开
+    private String cellphone; //被关注者id，以 , 隔开
     private int sex;        //性别
     private String birthday;//出生日期
+    private String description;
+    private String categoryIds;
+//    private int type;       //类型
+    private String cameraNames;   //相机名称
+    private String lensNames;   //镜头名称
+    private String toolNames;   //工具名称
 
     public int getAvatarId() {
         return avatarId;
@@ -18,20 +24,20 @@ public class UserProfileBean {
         this.avatarId = avatarId;
     }
 
-    public String getTagIds() {
-        return tagIds;
+    public int getBackgroundId() {
+        return backgroundId;
     }
 
-    public void setTagIds(String tagIds) {
-        this.tagIds = tagIds;
+    public void setBackgroundId(int backgroundId) {
+        this.backgroundId = backgroundId;
     }
 
-    public String getUserIds() {
-        return userIds;
+    public String getCellphone() {
+        return cellphone;
     }
 
-    public void setUserIds(String userIds) {
-        this.userIds = userIds;
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
     }
 
     public int getSex() {
@@ -48,5 +54,45 @@ public class UserProfileBean {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(String categoryIds) {
+        this.categoryIds = categoryIds;
+    }
+
+    public String getCameraNames() {
+        return cameraNames;
+    }
+
+    public void setCameraNames(String cameraNames) {
+        this.cameraNames = cameraNames;
+    }
+
+    public String getLensNames() {
+        return lensNames;
+    }
+
+    public void setLensNames(String lensNames) {
+        this.lensNames = lensNames;
+    }
+
+    public String getToolNames() {
+        return toolNames;
+    }
+
+    public void setToolNames(String toolNames) {
+        this.toolNames = toolNames;
     }
 }

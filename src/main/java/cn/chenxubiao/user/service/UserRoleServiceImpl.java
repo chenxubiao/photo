@@ -22,4 +22,28 @@ public class UserRoleServiceImpl implements UserRoleService {
         }
         return userRoleRepository.findUserRolesByUserId(userId);
     }
+
+    @Override
+    public void save(UserRole userRole) {
+        if (userRole == null) {
+            return;
+        }
+        boolean isExist = isExist(userRole.getUserId(), userRole.getRoleId());
+        if (isExist) {
+            return;
+        }
+        userRoleRepository.save(userRole);
+    }
+
+    @Override
+    public boolean isExist(int userId, int roleId) {
+        if (userId <= 0 || roleId <= 0) {
+            return false;
+        }
+        int count = userRoleRepository.countByUserIdAndRoleId(userId, roleId);
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
 }

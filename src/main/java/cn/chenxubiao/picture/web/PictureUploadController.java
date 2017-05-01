@@ -31,19 +31,17 @@ import static cn.chenxubiao.common.utils.consts.BBSConsts.PROTECTED_BASE_PATH;
  * Created by chenxb on 17-4-2.
  */
 @RestController
-public class UploadPictureController extends CommonController {
+public class PictureUploadController extends CommonController {
 
     @Autowired
     private AttachmentService attachmentService;
     @Autowired
     private PictureExifService pictureExifService;
 
-    private List<String> valiadExtensions = BBSMapping.VALID_EXTENSIONS;
-
-    @RequestMapping(value = "/upload/picture", method = RequestMethod.POST)
+    @RequestMapping(value = "/picture/upload/project", method = RequestMethod.POST)
     public ResponseEntity uploadPicture(HttpServletRequest request, HttpSession session) {
 
-        Map<String, Object> map = UploadUtil.uploadPicture(request);
+        Map<String, Object> map = UploadUtil.uploadPicture(request,BBSMapping.PICTURE_PROJECT_LIST);
         if (CollectionUtil.isEmpty(map)) {
             return ResponseEntity.failure(Errors.UNKNOWN_ERROR);
         }

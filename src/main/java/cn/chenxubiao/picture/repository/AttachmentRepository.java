@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public interface PictureAttachmentRepository extends PagingAndSortingRepository<Attachment, Long> {
+public interface AttachmentRepository extends PagingAndSortingRepository<Attachment, Long> {
 
     Attachment findById(int id);
 

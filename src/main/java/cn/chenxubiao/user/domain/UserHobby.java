@@ -1,6 +1,7 @@
 package cn.chenxubiao.user.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,9 +9,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "bbs_user_hobby")
-public class UserHobby {
+public class UserHobby implements Serializable {
+
+    private static final long serialVersionUID = -2711141942821505354L;
     private int userId;
-    private int tagId;
+    private int categoryId;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -27,12 +30,12 @@ public class UserHobby {
         this.userId = userId;
     }
 
-    public int getTagId() {
-        return tagId;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setTagId(int tagId) {
-        this.tagId = tagId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Integer getId() {

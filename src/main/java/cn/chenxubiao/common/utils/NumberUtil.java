@@ -1,6 +1,9 @@
 package cn.chenxubiao.common.utils;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by chenxb on 17-4-2.
@@ -29,5 +32,17 @@ public class NumberUtil {
         } else {
             return 0;
         }
+    }
+
+    public static Set<Integer> parseToIntSet(String ids) {
+        if (StringUtil.isBlank(ids)) {
+            return null;
+        }
+        Set<Integer> set = new LinkedHashSet<>();
+        String[] strings = ids.split(",");
+        for (String string : strings) {
+            set.add(Integer.parseInt(string));
+        }
+        return set;
     }
 }

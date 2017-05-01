@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * Created by chenxb on 17-4-1.
  */
 @Service
-public class PictureAttachmentServiceImpl implements PictureAttachmentService {
+public class AttachmentServiceImpl implements AttachmentService {
     @Autowired
     private AttachmentRepository attachmentRepository;
 

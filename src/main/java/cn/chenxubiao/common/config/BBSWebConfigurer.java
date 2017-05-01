@@ -3,6 +3,7 @@ package cn.chenxubiao.common.config;
 import cn.chenxubiao.common.interceptor.AuthorityInterceptor;
 import cn.chenxubiao.common.interceptor.BBSInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -23,14 +24,14 @@ public class BBSWebConfigurer extends WebMvcConfigurerAdapter {
     }
 
     // 跨域
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("*")
-//                .allowCredentials(true)
-//                .allowedMethods("GET", "POST", "DELETE", "PUT")
-//                .maxAge(3600);
-//    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .maxAge(3600);
+    }
 
 
 }

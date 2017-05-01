@@ -8,7 +8,10 @@ public class BBSConsts {
     public static final String REDIS_PROJECT_PREFIX = "bbs_";
     public static final String REDIS_STAT_TOTAL_KEY = REDIS_PROJECT_PREFIX + "stat_total";
     public static final String REDIS_TIMESTAMP_KEY = REDIS_PROJECT_PREFIX + "timestamp";
+    public static final String DATA = "data";
     public static final String UPLOAD_NAME = "uploadFile";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
     public static final String USER_SESSION_KEY = "thisUser";
     public static final int PICTURE_UPLOAD_NAME_LEN = 128;
     public static final String PROTECTED_BASE_PATH = "/var/upload/bbs/pictures";
@@ -18,9 +21,8 @@ public class BBSConsts {
     public static final int CRM_ADMIN = 1;
 
     public static final class UserRole {
-        public static final int USER_IS_GUEST = 1;
-        public static final int USER_IS_SIGN = 2;
-        public static final int USER_IS_OPERATOR = 3;
+        public static final int USER_IS_COMMON = 1;
+        public static final int USER_IS_OPERATOR = 2;
     }
 
     public static final class UserStatus{

@@ -21,6 +21,7 @@ public class UserInfo implements Serializable{
     @Size(min = 1, max = 32, message = "用户名不能为空")
     private String userName;
     private int avatarId;   //头像id
+    private int backgroundId;
     private String cellphone;
     private int sex;    //性别
     private int status;
@@ -38,6 +39,14 @@ public class UserInfo implements Serializable{
 
     public Integer getId() {
         return id;
+    }
+
+    public int getBackgroundId() {
+        return backgroundId;
+    }
+
+    public void setBackgroundId(int backgroundId) {
+        this.backgroundId = backgroundId;
     }
 
     public void setId(Integer id) {

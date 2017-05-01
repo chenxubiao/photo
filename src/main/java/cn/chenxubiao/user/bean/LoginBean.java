@@ -19,7 +19,6 @@ public class LoginBean {
     @Size(min = 1, max = 32, message = Errors.PASSWORD_NULL_ERROR)
     private String password;
     private String code;
-    private int type;
 
     public String getCode() {
         return code;
@@ -59,13 +58,5 @@ public class LoginBean {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 }

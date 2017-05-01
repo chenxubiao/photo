@@ -9,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "bbs_picture_attachment")
-public class PictureAttachment implements Serializable {
+public class Attachment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

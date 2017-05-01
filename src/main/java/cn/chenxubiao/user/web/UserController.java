@@ -9,9 +9,7 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.BBSMapping;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.BBSBaseController;
-import cn.chenxubiao.neo4j.domain.Person;
-import cn.chenxubiao.neo4j.repository.PersonRepository;
-import cn.chenxubiao.picture.service.PictureAttachmentService;
+import cn.chenxubiao.picture.service.AttachmentService;
 import cn.chenxubiao.redis.service.RedisService;
 import cn.chenxubiao.user.bean.LoginBean;
 import cn.chenxubiao.user.bean.RegisterBean;
@@ -33,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class UserController extends BBSBaseController {
     @Autowired
     private UserRoleService userRoleService;
     @Autowired
-    private PictureAttachmentService pictureAttachmentService;
+    private AttachmentService attachmentService;
     @Autowired
     private UserFollowService userFollowService;
     @Autowired
@@ -95,7 +94,7 @@ public class UserController extends BBSBaseController {
         UserSession userSession = buildUserSession(userInfo);
         session.setAttribute(BBSConsts.USER_SESSION_KEY, userSession);
         request.setAttribute(BBSConsts.USER_SESSION_KEY, userSession);
-        return ResponseEntity.success().set("data", userSession);
+        return ResponseEntity.success().set(BBSConsts.DATA, userSession);
     }
 
 
@@ -137,10 +136,19 @@ public class UserController extends BBSBaseController {
         userInfo.setModifyTime(userInfo.getCreateTime());
         userInfo.setUserRole(BBSConsts.CRM_NORMAL);
         userInfoService.save(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userInfo.getId());
+        userRole.setCreateTime(new Date());
+        userRole.setModifyTime(userRole.getCreateTime());
+        userRole.setRoleId(BBSConsts.UserRole.USER_IS_COMMON);
+        userRoleService.save(userRole);
+        List<UserRole> userRoleList = new ArrayList<>();
+        userRoleList.add(userRole);
+        userInfo.setUserRoleList(userRoleList);
         UserSession userSession = super.buildUserSession(userInfo);
         session.setAttribute(BBSConsts.USER_SESSION_KEY, userSession);
         request.setAttribute(BBSConsts.USER_SESSION_KEY, userSession);
-        return ResponseEntity.success().set("data", userInfo);
+        return ResponseEntity.success().set(BBSConsts.DATA, userInfo);
     }
 
     /**
@@ -158,7 +166,7 @@ public class UserController extends BBSBaseController {
         boolean isUserInfoModify = false;
         int avatarId = userProfile.getAvatarId();
         if (avatarId > 0) {
-            boolean isAvatarIdExist = pictureAttachmentService.isPictureExist(avatarId);
+            boolean isAvatarIdExist = attachmentService.isPictureExist(avatarId);
             if (isAvatarIdExist) {
                 userInfo.setAvatarId(avatarId);
                 isUserInfoModify = true;
@@ -177,26 +185,26 @@ public class UserController extends BBSBaseController {
             userInfo.setModifyTime(new Date());
             userInfoService.save(userInfo);
         }
-        String followIds = userProfile.getUserIds();
-        if (StringUtil.isNotBlank(followIds)) {
-            String[] followIdStrings = followIds.split(",");
-            if (followIdStrings != null) {
-                for (String followId : followIdStrings) {
-                    if (StringUtil.isNotBlank(followId)) {
-                        int startUserId = Integer.parseInt(followId.trim());
-                        userFollowService.followUser(startUserId, userInfo.getId());
-                    }
-                }
-            }
-        }
-        String tagIds = userProfile.getTagIds();
-        if (StringUtil.isNotBlank(tagIds)) {
-            String[] tagIdStrings = followIds.split(",");
-            if (tagIdStrings != null) {
-                for (String tagId : tagIdStrings) {
-                    if (StringUtil.isNotBlank(tagId)) {
-                        int startUserId = Integer.parseInt(tagId.trim());
-                        userHobbyService.like(startUserId, userInfo.getId());
+//        String followIds = userProfile.getUserIds();
+//        if (StringUtil.isNotBlank(followIds)) {
+//            String[] followIdStrings = followIds.split(",");
+//            if (followIdStrings != null) {
+//                for (String followId : followIdStrings) {
+//                    if (StringUtil.isNotBlank(followId)) {
+//                        int startUserId = Integer.parseInt(followId.trim());
+//                        userFollowService.followUser(startUserId, userInfo.getId());
+//                    }
+//                }
+//            }
+//        }
+        String categoryIds = userProfile.getCategoryIds();
+        if (StringUtil.isNotBlank(categoryIds)) {
+            String[] categoryIdStrings = categoryIds.split(",");
+            if (categoryIdStrings != null) {
+                for (String categoryIdString : categoryIdStrings) {
+                    if (StringUtil.isNotBlank(categoryIdString)) {
+                        int categoryId = Integer.parseInt(categoryIdString.trim());
+
                     }
                 }
             }
@@ -204,7 +212,7 @@ public class UserController extends BBSBaseController {
         return ResponseEntity.success();
     }
 
-    @RequestMapping(value = "/user/logout/data", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/logout/data", method = RequestMethod.POST)
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         session.setAttribute(BBSConsts.USER_SESSION_KEY, null);
         return ResponseEntity.success();
@@ -226,19 +234,5 @@ public class UserController extends BBSBaseController {
     public String setUserSession() {
 
         return null;
-    }
-
-    @Autowired
-    private PersonRepository personRepository;
-
-    @RequestMapping("/neo4j/test")
-    public Person set(String name) {
-
-//        personRepository.deleteAll();
-//        Person person = new Person(name);
-//        personRepository.like(person);
-//        System.out.println("*****");
-        Person person = personRepository.findByName(name);
-        return person;
     }
 }

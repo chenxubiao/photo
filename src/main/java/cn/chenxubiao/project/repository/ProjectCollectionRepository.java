@@ -1,6 +1,6 @@
 package cn.chenxubiao.project.repository;
 
-import cn.chenxubiao.project.domain.TrendProjectCollection;
+import cn.chenxubiao.project.domain.ProjectCollection;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public interface TrendProjectCollectionRepository extends PagingAndSortingRepository<TrendProjectCollection, Long> {
+public interface ProjectCollectionRepository extends PagingAndSortingRepository<ProjectCollection, Long> {
 }

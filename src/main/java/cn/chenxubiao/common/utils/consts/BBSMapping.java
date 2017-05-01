@@ -12,19 +12,18 @@ public class BBSMapping {
     public static final Map<Integer, String> USER_ROLE_MAPPING = new HashMap<>();
 
     static {
-        USER_ROLE_MAPPING.put(BBSConsts.UserRole.USER_IS_GUEST, "游客");
-        USER_ROLE_MAPPING.put(BBSConsts.UserRole.USER_IS_SIGN, "注册用户");
+        USER_ROLE_MAPPING.put(BBSConsts.UserRole.USER_IS_COMMON, "注册用户");
         USER_ROLE_MAPPING.put(BBSConsts.UserRole.USER_IS_OPERATOR, "系统管理员");
     }
 
-    public static final List<String> VALID_EXTENSIONS = new ArrayList<>();
+    public static final List<String> VALID_EXTENSIONS_LIST = new ArrayList<>();
 
     static {
-        VALID_EXTENSIONS.add(ConstStrings.PICTURE_BMP);
-        VALID_EXTENSIONS.add(ConstStrings.PICTURE_GIF);
-        VALID_EXTENSIONS.add(ConstStrings.PICTURE_JPEG);
-        VALID_EXTENSIONS.add(ConstStrings.PICTURE_JPG);
-        VALID_EXTENSIONS.add(ConstStrings.PICTURE_PNG);
+        VALID_EXTENSIONS_LIST.add(ConstStrings.PICTURE_BMP);
+        VALID_EXTENSIONS_LIST.add(ConstStrings.PICTURE_GIF);
+        VALID_EXTENSIONS_LIST.add(ConstStrings.PICTURE_JPEG);
+        VALID_EXTENSIONS_LIST.add(ConstStrings.PICTURE_JPG);
+        VALID_EXTENSIONS_LIST.add(ConstStrings.PICTURE_PNG);
     }
 
     public static final Map<Integer, String> USER_SEX_MAPPING = new LinkedHashMap<>();
@@ -34,4 +33,9 @@ public class BBSMapping {
         USER_SEX_MAPPING.put(BBSConsts.UserSex.SEX_FEMALE, "女");
     }
 
+    public static final List<String> PICTURE_PROJECT_LIST = new ArrayList<>();
+    static {
+        PICTURE_PROJECT_LIST.add(ConstStrings.PICTURE_JPEG);
+        PICTURE_PROJECT_LIST.add(ConstStrings.PICTURE_JPG);
+    }
 }

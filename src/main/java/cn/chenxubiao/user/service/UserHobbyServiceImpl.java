@@ -35,12 +35,12 @@ public class UserHobbyServiceImpl implements UserHobbyService {
         if (userInfo == null) {
             return false;
         }
-        int count = userHobbyRepository.countByTagIdAndUserId(tagId, userId);
-        if (count > 0) {
-            return false;
-        }
+//        int count = userHobbyRepository.countByTagIdAndUserId(tagId, userId);
+//        if (count > 0) {
+//            return false;
+//        }
         UserHobby userHobby = new UserHobby();
-        userHobby.setTagId(tagId);
+        userHobby.setCategoryId(tagId);
         userHobby.setUserId(userId);
         userHobby.setCreateTime(new Date());
         userHobby.setModifyTime(userHobby.getCreateTime());
@@ -53,7 +53,8 @@ public class UserHobbyServiceImpl implements UserHobbyService {
         if (tagId <= 0 || userId <= 0) {
             return false;
         }
-        return userHobbyRepository.countByTagIdAndUserId(tagId, userId) > 0;
+//        return userHobbyRepository.countByTagIdAndUserId(tagId, userId) > 0;
+        return false;
     }
 
 }
