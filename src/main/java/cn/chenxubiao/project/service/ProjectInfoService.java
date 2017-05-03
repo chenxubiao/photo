@@ -20,4 +20,6 @@ public interface ProjectInfoService {
     Page<ProjectInfo> findByPage(Pageable pageable);
 
     void save(ProjectInfo projectInfo);
+
+    List<ProjectInfo> findByUserAndPage(int userId, Pageable pageable);
 }

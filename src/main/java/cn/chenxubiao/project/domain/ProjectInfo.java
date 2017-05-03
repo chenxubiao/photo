@@ -19,6 +19,7 @@ public class ProjectInfo implements Serializable{
     private Integer id;
     private int userId;     //创建者id
     private int picId;      //图片id
+    private String title;   //图片标题
     private int categoryId; //分类id
     private String description; //介绍
     @Column(name = "createTime", updatable = false)
@@ -30,6 +31,7 @@ public class ProjectInfo implements Serializable{
 
     public ProjectInfo(ProjectInfoBean projectInfoBean) {
         this.id = projectInfoBean.getId();
+        this.title = projectInfoBean.getTitle();
         this.categoryId = projectInfoBean.getCategoryId();
         this.picId = projectInfoBean.getPicId();
         this.description = projectInfoBean.getDescription();
@@ -42,6 +44,14 @@ public class ProjectInfo implements Serializable{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getUserId() {

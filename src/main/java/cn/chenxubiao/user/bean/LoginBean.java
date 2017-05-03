@@ -10,13 +10,13 @@ import javax.validation.constraints.Size;
  * Created by chenxb on 17-3-7.
  */
 public class LoginBean {
-    @Size(min = 1, max = 32, message = Errors.USERNAME_NULL_ERROR)
+    @Size(min = 1, max = 32, message = Errors.USER_USERNAME_NULL)
     private String userName;
     @Pattern(regexp = ConstStrings.REGX_CELLPHONE, message = Errors.CELLPHONE_NULL_ERROR)
     private String cellphone;
     @Pattern(regexp = ConstStrings.REGX_EMAIL, message = Errors.NOT_EMAIL_ERROR)
     private String email;
-    @Size(min = 1, max = 32, message = Errors.PASSWORD_NULL_ERROR)
+    @Size(min = 1, max = 32, message = Errors.LOGIN_PASSWORD_NULL_ERROR)
     private String password;
     private String code;
 

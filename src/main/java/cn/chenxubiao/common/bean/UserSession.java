@@ -16,6 +16,8 @@ public class UserSession {
     private int backgroundId;
     private String userName;
     private String cellphone;
+    private String description;
+    private Date birthday;
     private int sex;
     private int userStatus;
 //    private String password;
@@ -33,18 +35,35 @@ public class UserSession {
     public UserSession(UserInfo userInfo) {
         this.userId = userInfo.getId();
         this.userName = userInfo.getUserName();
+        this.avatarId = userInfo.getAvatarId();
         this.backgroundId = userInfo.getBackgroundId();
         this.email = userInfo.getEmail();
         this.cellphone = userInfo.getCellphone();
         this.sex = userInfo.getSex();
+        this.birthday = userInfo.getBirthday();
         this.userRole = userInfo.getUserRole();
+        this.description = userInfo.getDescription();
         this.userStatus = userInfo.getStatus();
-        this.createTime = userInfo.getCreateTime();
-        this.modifyTime = userInfo.getModifyTime();
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public int getBackgroundId() {
         return backgroundId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setBackgroundId(int backgroundId) {

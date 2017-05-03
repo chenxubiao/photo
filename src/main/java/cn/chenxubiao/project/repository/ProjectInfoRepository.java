@@ -22,4 +22,6 @@ public interface ProjectInfoRepository extends PagingAndSortingRepository<Projec
     @Query(value = "select a from ProjectInfo a")
     Page<ProjectInfo> findByPage(Pageable pageable);
 
+    @Query(value = "select a from ProjectInfo a where a.userId = ?1")
+    Page<ProjectInfo> findByUserIdAndPage(int userId, Pageable pageable);
 }

@@ -1,8 +1,10 @@
 package cn.chenxubiao.picture.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
+import cn.chenxubiao.common.utils.ConstStrings;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
+import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.picture.domain.Attachment;
 import cn.chenxubiao.picture.service.AttachmentService;
 import cn.chenxubiao.picture.utils.DownloadUtil;
@@ -17,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by chenxb on 17-4-20.
  */
 @Controller
-public class PictureShowController extends CommonController {
+public class PictureShowController extends GuestBaseController {
 
     @Autowired
     private AttachmentService attachmentService;
@@ -34,8 +36,8 @@ public class PictureShowController extends CommonController {
             return null;
         }
         String relativePath = attachment.getRelativePath();
-        response.setContentType("image/jpeg");
-        response.setCharacterEncoding("utf-8");
+        response.setContentType(ConstStrings.CONTENT_TYPE_IMAGE);
+        response.setCharacterEncoding(ConstStrings.CHARACTER_ENCOING_UTF8);
         DownloadUtil.downloadPicture(response, relativePath);
         return null;
     }

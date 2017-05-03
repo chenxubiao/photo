@@ -3,9 +3,12 @@ package cn.chenxubiao.user.service;
 import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.user.domain.UserInfo;
+import cn.chenxubiao.user.domain.UserRole;
 import cn.chenxubiao.user.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by chenxb on 17-4-1.
@@ -14,13 +17,16 @@ import org.springframework.stereotype.Service;
 public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserInfoRepository userInfoRepository;
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public UserInfo loginByEmail(String email, String password) {
         if (StringUtil.isEmpty(email) || StringUtil.isEmpty(password)) {
             return null;
         }
-        return userInfoRepository.findByEmailAndPassword(email, password);
+        UserInfo userInfo = userInfoRepository.findByEmailAndPassword(email, password);
+        return setUserRoleList(userInfo);
     }
 
     @Override
@@ -28,7 +34,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (StringUtil.isEmpty(cellphone) || StringUtil.isEmpty(password)) {
             return null;
         }
-        return userInfoRepository.findByCellphoneAndPassword(cellphone, password);
+        UserInfo userInfo = userInfoRepository.findByCellphoneAndPassword(cellphone, password);
+        return setUserRoleList(userInfo);
     }
 
     @Override
@@ -36,7 +43,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (StringUtil.isEmpty(userName) || StringUtil.isEmpty(password)) {
             return null;
         }
-        return userInfoRepository.findByUserNameAndPassword(userName, password);
+        UserInfo userInfo = userInfoRepository.findByUserNameAndPassword(userName, password);
+        return setUserRoleList(userInfo);
     }
 
     @Override
@@ -44,7 +52,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userInfo == null) {
             return null;
         }
-        return userInfoRepository.save(userInfo);
+        userInfo = userInfoRepository.save(userInfo);
+        return setUserRoleList(userInfo);
     }
 
     @Override
@@ -76,7 +85,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (id <= 0) {
             return null;
         }
-        return userInfoRepository.findById(id);
+        UserInfo userInfo = userInfoRepository.findById(id);
+        if (userInfo == null) {
+            return null;
+        }
+        return setUserRoleList(userInfo);
     }
 
     @Override
@@ -84,7 +97,17 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (id <= 0) {
             return null;
         }
-        return userInfoRepository.findByIdAndStatus(id, BBSConsts.UserStatus.USER_IS_NORMAL);
+        UserInfo userInfo = userInfoRepository.findByIdAndStatus(id, BBSConsts.UserStatus.USER_IS_NORMAL);
+        return setUserRoleList(userInfo);
+    }
+
+    private UserInfo setUserRoleList(UserInfo userInfo) {
+        if (userInfo == null) {
+            return userInfo;
+        }
+        List<UserRole> userRoleList = userRoleService.findListByUserId(userInfo.getId());
+        userInfo.setUserRoleList(userRoleList);
+        return userInfo;
     }
 
 }

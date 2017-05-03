@@ -1,5 +1,6 @@
 package cn.chenxubiao.user.service;
 
+import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.tag.domain.TagInfo;
 import cn.chenxubiao.tag.service.TagInfoService;
 import cn.chenxubiao.user.domain.UserHobby;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by chenxb on 17-4-1.
@@ -55,6 +57,14 @@ public class UserHobbyServiceImpl implements UserHobbyService {
         }
 //        return userHobbyRepository.countByTagIdAndUserId(tagId, userId) > 0;
         return false;
+    }
+
+    @Override
+    public void saveAll(List<UserHobby> userHobbyList) {
+        if (CollectionUtil.isEmpty(userHobbyList)) {
+            return;
+        }
+        userHobbyRepository.save(userHobbyList);
     }
 
 }

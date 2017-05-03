@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "message": null,
+  "errorCode": 0,
+  "vars": {
+    "data": {
+      "id": 666,
+      "fileName": "bg",
+      "filePath": "2017/05/01",
+      "length": 201723,
+      "ext": "png",
+      "uid": "26965824",
+      "userId": 1,
+      "createTime": "2017-05-01 16:32:43",
+      "modifyTime": "2017-05-01 16:32:43",
+      "relativePath": "/2017/05/01/26965824.png"
+    }
+  }
+}

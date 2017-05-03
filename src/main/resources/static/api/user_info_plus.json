@@ -1,0 +1,18 @@
+{
+  "data": {
+    "userId": 1,
+    "avatarId": 0,
+    "backgroundId": 6,
+    "userName": "bbs",
+    "email": "bbs@bbs.cn",
+    "cellphone": "1232132131",
+    "sex": 1,
+    "birthday": "1995-10-29",
+    "description": "lalalal",
+    "categoryIds": "lalalal",
+    "cameraNames": "lalalal",
+    "lensNames": "lalalal",
+    "toolNames": "lalalal"
+
+  }
+}

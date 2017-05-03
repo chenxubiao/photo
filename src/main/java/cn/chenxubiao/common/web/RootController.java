@@ -69,13 +69,7 @@ public class RootController {
 
     public UserSession buildUserSession(UserInfo userInfo) {
         if (userInfo != null) {
-            UserSession userSession = new UserSession();
-            userSession.setUserId(userInfo.getId());
-            userSession.setAvatarId(userInfo.getAvatarId());
-            userSession.setUserName(userInfo.getUserName());
-            userSession.setEmail(userInfo.getEmail());
-            userSession.setUserRole(userInfo.getUserRole());
-            userSession.setUserStatus(userInfo.getStatus());
+            UserSession userSession = new UserSession(userInfo);
             List<UserRole> roles = userInfo.getUserRoleList();
             if (CollectionUtil.isNotEmpty(roles)) {
                 Set<Integer> roleSet = new HashSet<>();
@@ -87,6 +81,16 @@ public class RootController {
             return userSession;
         }
         return null;
+    }
+
+    public void setUserSession(HttpServletRequest request, UserSession userSession) {
+        if (request != null && userSession != null) {
+            request.getSession().setAttribute(BBSConsts.USER_SESSION_KEY, userSession);
+        }
+    }
+
+    public void deleteUserSession(HttpServletRequest request) {
+        request.getSession().setAttribute(BBSConsts.USER_SESSION_KEY, null);
     }
 
     public boolean checkLogin() {

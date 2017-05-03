@@ -1,3 +1,13 @@
 {
-  "userName": "海燕"
+  "data": {
+    "userId": 1,
+    "avatarId": 0,
+    "backgroundId": 11,
+    "userName": "bbs",
+    "email": "bbs@bbs.cn",
+    "cellphone": "",
+    "sex": 0,
+    "birthday": null,
+    "description": ""
+  }
 }

@@ -23,7 +23,7 @@ public class KaptchaConfig {
         properties.setProperty("kaptcha.image.width", "125");
         properties.setProperty("kaptcha.image.height", "45");
         properties.setProperty("kaptcha.session.key", "code");
-        properties.setProperty("kaptcha.textproducer.char.string", "0");
+        properties.setProperty("kaptcha.textproducer.char.string", "0123456789");
         properties.setProperty("kaptcha.textproducer.char.length", "4");
         properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
         Config config=new Config(properties);

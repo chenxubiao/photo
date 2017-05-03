@@ -15,4 +15,8 @@ public interface TagCategoryService {
     List<TagCategory> findAll();
 
     TagCategory findById(int id);
+
+    boolean isExist(int id);
+
+    int countById(int id);
 }

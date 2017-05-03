@@ -27,10 +27,9 @@ public class ProjectLikeController extends CommonController {
     @Autowired
     private ProjectInfoService projectInfoService;
 
-    @RequestMapping(value = "/project/like/data", method = RequestMethod.POST)
+    @RequestMapping(value = "/project/like/update", method = RequestMethod.POST)
     public ResponseEntity like(@RequestParam(value = "picId", defaultValue = "0") int picId,
-                               HttpServletRequest request,
-                               HttpSession session) {
+                               HttpServletRequest request) {
 
         if (picId <= 0) {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);

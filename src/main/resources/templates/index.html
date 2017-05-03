@@ -1,16 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="utf-8" />
-    <title>图片社区</title>
+    <title th:text="${htmlTitle}"></title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link href="/css/app.240fd13d3254be84f05fd49ed683574a.css" rel="stylesheet" />
+    <link href="/css/app.d66c9f7827468bfae4b6792b89a05c08.css" rel="stylesheet" />
 </head>
 <body>
 <div id="app"></div>
-<script type="text/javascript" src="/js/manifest.eea0ad1ff13adf4e7779.js"></script>
-<script type="text/javascript" src="/js/vendor.6a8e4e0cab5e9e5b5759.js"></script>
-<script type="text/javascript" src="/js/app.9f1baaf6880f80230cd3.js"></script>
+
+<script th:if="${isLogin}">
+    window.initState={
+        isLogin:true
+    }
+</script>
+<script th:if="${!isLogin}">
+    window.initState={
+        isLogin:false
+    }
+</script>
+<!--<script type="text/javascript" src="/js/manifest.eea0ad1ff13adf4e7779.js"></script>-->
+<!--<script type="text/javascript" src="/js/vendor.6a8e4e0cab5e9e5b5759.js"></script>-->
+<!--<script type="text/javascript" src="/js/app.9f1baaf6880f80230cd3.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+<script type="text/javascript" src="/js/manifest.a5133c4e25743207d112.js"></script>
+<script type="text/javascript" src="/js/app.d5e0a8676bbfcf2b9c84.js"></script>
 </body>
 </html>

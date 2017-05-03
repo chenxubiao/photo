@@ -2,7 +2,9 @@ package cn.chenxubiao.common.interceptor;
 
 
 import cn.chenxubiao.common.bean.UserSession;
+import cn.chenxubiao.common.utils.ConstStrings;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
+import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.RootController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -29,27 +31,22 @@ public class BBSInterceptor implements HandlerInterceptor {
                 if (controller.checkLogin()) {
                     UserSession userSession = (UserSession) request.getSession().getAttribute(BBSConsts.USER_SESSION_KEY);
                     if (userSession == null || !userSession.isLogin()) {
-                        String json = "{ \"success\": false, \"message\": \"403 Permission Denied !\", \"errorCode\": 1, \"vars\": null }";
-                        sendMessage(response, json);
+                        sendMessage(response, Errors.JSON_NOT_LOGIN);
                         return false;
                     }
                     if (!userSession.isAdmin() && userSession.getRoleSet() == null) {
-
-                        String json = "{ \"success\": false, \"message\": \"403 Permission Denied !\", \"errorCode\": 2, \"vars\": null }";
-                        sendMessage(response, json);
+                        sendMessage(response, Errors.JSON_NOT_HAVE_ROLES);
 //                        controller.redirect403(response);
                         return false;
                     }
                     if (userSession.isLocking() || userSession.isClose()) {
-                        String json = "{ \"success\": false, \"message\": \"403 Permission Denied !\", \"errorCode\": 2, \"vars\": null }";
-                        sendMessage(response, json);
+                        sendMessage(response, Errors.JSON_ACCOUNT_CLOSE);
 //                        controller.redirect403(response);
                         return false;
                     }
                     if (controller.checkAdmin()) {
                         if (!userSession.isAdmin()) {
-                            String json = "{ \"success\": false, \"message\": \"403 Permission Denied !\", \"errorCode\": 2, \"vars\": null }";
-                            sendMessage(response, json);
+                            sendMessage(response, Errors.JSON_NOT_ADMIN);
 //                            controller.redirect403(response);
                             return false;
                         }
@@ -71,12 +68,12 @@ public class BBSInterceptor implements HandlerInterceptor {
 
     private void sendMessage(HttpServletResponse response, String message) {
 
-        response.setContentType("application/json;charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType(ConstStrings.CONTENT_TYPE_JSON);
+        response.setCharacterEncoding(ConstStrings.CHARACTER_ENCOING_UTF8);
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.append("{ \"success\": false, \"message\": \"请先登录\", \"errorCode\": 1, \"vars\": null }");
+            out.append(message);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

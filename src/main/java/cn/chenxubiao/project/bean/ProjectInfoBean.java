@@ -7,6 +7,7 @@ public class ProjectInfoBean {
     private int id;
     private int userId;     //创建者id
     private int picId;      //图片id
+    private String title;   //图片标题
     private int categoryId; //分类id
     private String tagIds;  //标签id，以「,」分隔
     private String description; //介绍
@@ -45,6 +46,13 @@ public class ProjectInfoBean {
 
     public String getTagIds() {
         return tagIds;
+    }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setTagIds(String tagIds) {

@@ -1,9 +1,9 @@
 {
   "items":[{
-    "img":"/img/test.png",
+    "img":"http://bbs.chenxubiao.cn/img/test.png",
     "url": "test"
   },{
-    "img":"/img/test1.png",
+    "img":"http://bbs.chenxubiao.cn/img/test1.png",
     "url": "test1"
   }]
 }

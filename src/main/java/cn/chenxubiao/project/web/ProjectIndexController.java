@@ -4,6 +4,7 @@ import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.web.CommonController;
+import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.picture.bean.PicInfoBean;
 import cn.chenxubiao.project.service.ProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by chenxb on 17-4-28.
  */
 @RestController
-public class ProjectIndexController extends CommonController {
+public class ProjectIndexController extends GuestBaseController {
 
     @Autowired
     private ProjectInfoService projectInfoService;

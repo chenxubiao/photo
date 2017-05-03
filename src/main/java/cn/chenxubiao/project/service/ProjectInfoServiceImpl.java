@@ -95,4 +95,16 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         }
         projectInfoRepository.save(projectInfo);
     }
+
+    @Override
+    public List<ProjectInfo> findByUserAndPage(int userId, Pageable pageable) {
+
+        if (userId <= 0) {
+            return null;
+        }
+
+        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findByUserIdAndPage(userId, pageable);
+        return projectInfoPage.getContent();
+    }
+
 }

@@ -40,4 +40,20 @@ public class TagCategoryServiceImpl implements TagCategoryService {
         }
         return tagCategoryRepository.findById(id);
     }
+
+    @Override
+    public boolean isExist(int id) {
+        if (id <= 0) {
+            return false;
+        }
+        return countById(id) > 0;
+    }
+
+    @Override
+    public int countById(int id) {
+        if (id <= 0) {
+            return 0;
+        }
+        return tagCategoryRepository.countById(id);
+    }
 }

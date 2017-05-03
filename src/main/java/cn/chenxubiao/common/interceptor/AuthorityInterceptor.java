@@ -2,6 +2,7 @@ package cn.chenxubiao.common.interceptor;
 
 import cn.chenxubiao.common.annotation.Authority;
 import cn.chenxubiao.common.bean.UserSession;
+import cn.chenxubiao.common.utils.NumberUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -32,13 +33,7 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
             String privilege = annotation.privilege();
             Set<Integer> privilegeSet = null;
             if (privilege.length() > 0) {
-                privilegeSet = new HashSet<>();
-                String[] roleIds = privilege.split(",");
-                if (roleIds != null && roleIds.length > 0) {
-                    for (String id : roleIds) {
-                        privilegeSet.add(Integer.parseInt(id));
-                    }
-                }
+                privilegeSet = NumberUtil.parseToIntSet(privilege);
             }
 
             if (privilegeSet != null && privilegeSet.size() >0 && annotation.checkAuth()) {

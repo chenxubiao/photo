@@ -1,6 +1,7 @@
 package cn.chenxubiao.common.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
+import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSMapping;
 import cn.chenxubiao.common.utils.consts.Errors;
@@ -59,6 +60,15 @@ public class BBSBaseController extends RootController {
             redisService.set(key, bbsTimestamp);
         }
         return bbsTimestamp;
+    }
+
+    @ModelAttribute("isLogin")
+    public boolean isLogin(HttpServletRequest request) {
+        UserSession userSession = getUserSession(request);
+        if (userSession == null) {
+            return false;
+        }
+        return true;
     }
 
     public ResponseEntity success(HttpServletRequest request) {

@@ -14,7 +14,7 @@ CREATE TABLE `bbs_user_info` (
   `cellphone` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '手机号',
   `password` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '密码',
   `sex` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0：未知，1：男，2：女',
-  `description` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '关于我',
+  `description` VARCHAR(400) DEFAULT NULL COMMENT '关于我',
   `birthday` DATE DEFAULT NULL COMMENT '出生日期',
   `status` TINYINT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '用户状态,0：无效，1：有效',
   `userRole` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户角色，0普通用户，1超级管理员',
@@ -25,6 +25,17 @@ CREATE TABLE `bbs_user_info` (
   UNIQUE KEY `uk_userName` (`userName`),
   KEY `idx_password` (`password`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表';
+
+DROP TABLE IF EXISTS `bbs_user_login_log`;
+CREATE TABLE `bbs_user_login_log`(
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `ip` VARCHAR(15) NOT NULL DEFAULT '' COMMENT 'IP地址',
+  `logoutTime` DATETIME DEFAULT NULL COMMENT '退出时间',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登录记录表';
 
 DROP TABLE IF EXISTS `bbs_user_role`;
 CREATE TABLE `bbs_user_role` (
@@ -121,14 +132,14 @@ DROP TABLE IF EXISTS `bbs_picture_exif`;
 CREATE TABLE `bbs_picture_exif`(
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `picId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '附件id',
-  `camera` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '相机',
-  `lens` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '镜头',
-  `focalLength` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '焦距',
-  `shutterSpeed` VARCHAR(28) NOT NULL DEFAULT '' COMMENT '快门速度',
-  `aperture` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '光圈',
+  `camera` VARCHAR(128) DEFAULT NULL COMMENT '相机',
+  `lens` VARCHAR(128) DEFAULT NULL COMMENT '镜头',
+  `focalLength` VARCHAR(32) DEFAULT NULL COMMENT '焦距',
+  `shutterSpeed` VARCHAR(28) DEFAULT NULL COMMENT '快门速度',
+  `aperture` VARCHAR(10) DEFAULT NULL COMMENT '光圈',
   `width` INT(10) NOT NULL DEFAULT 0 COMMENT '宽度',
   `height` INT(10) NOT NULL DEFAULT 0 COMMENT '高度',
-  `iso` VARCHAR(10) NOT NULL DEFAULT '' COMMENT 'ISO',
+  `iso` VARCHAR(10) DEFAULT NULL COMMENT 'ISO',
   `taken` DATETIME DEFAULT NULL COMMENT '拍摄时间',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
@@ -140,6 +151,7 @@ CREATE TABLE `bbs_project_info`(
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `picId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片id',
+  `title` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '标题',
   `categoryId` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '分类id',
   `description` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '介绍',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
@@ -179,7 +191,7 @@ CREATE TABLE `bbs_project_collection`(
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  PRIMARY KEY `uk_userId_projectId_` (`userId`,`projectId`)
+  UNIQUE KEY `uk_userId_projectId_` (`userId`,`projectId`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户收藏记录表';
 
 DROP TABLE IF EXISTS `bbs_project_comment`;

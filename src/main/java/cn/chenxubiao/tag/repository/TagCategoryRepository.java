@@ -20,4 +20,6 @@ public interface TagCategoryRepository extends PagingAndSortingRepository<TagCat
     List<TagCategory> findAllTagCategory();
 
     TagCategory findById(int id);
+
+    int countById(int id);
 }
