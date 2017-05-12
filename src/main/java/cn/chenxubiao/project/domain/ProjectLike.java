@@ -22,6 +22,14 @@ public class ProjectLike implements Serializable {
     @Column(name = "modifyTime")
     private Date modifyTime;
 
+    public ProjectLike(){}
+
+
+    public ProjectLike(int userId, int projectId) {
+        this.userId = userId;
+        this.projectId = projectId;
+    }
+
     public Integer getId() {
         return id;
     }

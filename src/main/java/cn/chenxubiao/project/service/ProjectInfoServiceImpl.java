@@ -1,16 +1,21 @@
 package cn.chenxubiao.project.service;
 
 import cn.chenxubiao.common.utils.CollectionUtil;
+import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.picture.bean.PicInfoBean;
 import cn.chenxubiao.picture.domain.PictureExif;
 import cn.chenxubiao.picture.service.PictureExifService;
+import cn.chenxubiao.project.bean.ProjectBean;
+import cn.chenxubiao.project.bean.ProjectInfoBean;
 import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.project.repository.ProjectInfoRepository;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -85,15 +90,36 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
 
     @Override
-    public void save(ProjectInfo projectInfo) {
+    public ProjectInfo save(ProjectInfo projectInfo) {
         if (projectInfo == null) {
-            return;
+            return projectInfo;
         }
         ProjectInfo projectInfoDB = findByPicId(projectInfo.getPicId());
         if (projectInfoDB != null) {
-            return;
+            return projectInfoDB;
         }
-        projectInfoRepository.save(projectInfo);
+        return projectInfoRepository.save(projectInfo);
+    }
+
+    @Override
+    public ProjectInfo findProjectInDB(ProjectInfoBean projectInfoBean) {
+        if (projectInfoBean == null) {
+            return null;
+        }
+        ProjectInfo projectInfo;
+        if (projectInfoBean.getId() > 0) {
+            projectInfo = projectInfoRepository.findById(projectInfoBean.getId());
+            if (projectInfo != null) {
+                return projectInfo;
+            }
+        }
+        if (projectInfoBean.getPicId() > 0) {
+            projectInfo = projectInfoRepository.findByPicId(projectInfoBean.getPicId());
+            if (projectInfo != null) {
+                return projectInfo;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -105,6 +131,71 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
 
         Page<ProjectInfo> projectInfoPage = projectInfoRepository.findByUserIdAndPage(userId, pageable);
         return projectInfoPage.getContent();
+    }
+
+    @Override
+    public ProjectInfo findFormerProject(ProjectInfo projectInfo) {
+        if (projectInfo == null) {
+            return null;
+        }
+        Pageable pageable = new PageRequest(1, 1, Sort.Direction.DESC, "id");
+        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findFormerProjectInfo
+                (projectInfo.getId(), projectInfo.getUserId(), pageable);
+        List<ProjectInfo> projectInfoList = projectInfoPage.getContent();
+        if (CollectionUtil.isEmpty(projectInfoList)) {
+            return null;
+        }
+        return projectInfoList.get(0);
+    }
+
+    @Override
+    public ProjectInfo findLatterProject(ProjectInfo projectInfo) {
+        if (projectInfo == null) {
+            return null;
+        }
+        Pageable pageable = new PageRequest(1, 1, Sort.Direction.ASC, "id");
+        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findLatterProjectInfo
+                (projectInfo.getId(), projectInfo.getUserId(), pageable);
+        List<ProjectInfo> projectInfoList = projectInfoPage.getContent();
+        if (CollectionUtil.isEmpty(projectInfoList)) {
+            return null;
+        }
+        return projectInfoList.get(0);
+    }
+
+    @Override
+    public List<ProjectInfo> findByUserId(int userId) {
+        if (userId <= 0) {
+            return null;
+        }
+        return projectInfoRepository.findByUserId(userId);
+    }
+
+    @Override
+    public ProjectInfo findById(int id) {
+        if (id <= 0) {
+            return null;
+        }
+        return projectInfoRepository.findById(id);
+    }
+
+    @Override
+    public Page<ProjectInfo> findInUserIdAndPage(List<Integer> userIds, Pageable pageable) {
+        if (CollectionUtil.isEmpty(userIds)) {
+            return null;
+        }
+        return projectInfoRepository.findAllByUserIdIn(userIds, pageable);
+    }
+
+    @Override
+    public List<ProjectBean> search(String name, int sessonUserId) {
+        if (StringUtil.isBlank(name)) {
+            return null;
+        }
+        List<ProjectInfo> projectInfoList = projectInfoRepository
+                .findDistinctByTitleLikeOrDescriptionLike(name, name);
+
+        return null;
     }
 
 }

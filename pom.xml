@@ -98,18 +98,19 @@
             <version>2.6.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.im4java/im4java -->
+        <dependency>
+            <groupId>org.im4java</groupId>
+            <artifactId>im4java</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
 
     </dependencies>
 
 
-
-
-
-
-
-
     <build>
-        <finalName>bbs</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
             <!-- maven打包的时候告诉maven不需要web.xml,否刚会报找不到web.xml错误 -->
             <plugin>

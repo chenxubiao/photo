@@ -18,7 +18,7 @@ public class DownloadUtil {
         OutputStream outputStream = null;
         try {
             //读图片
-            inputStream = new FileInputStream(PROTECTED_BASE_PATH + relativePath);
+            inputStream = new FileInputStream(relativePath);
             int i = inputStream.available();
             byte[] data = new byte[i];
             inputStream.read(data);

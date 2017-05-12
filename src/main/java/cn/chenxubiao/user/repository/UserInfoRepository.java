@@ -6,12 +6,20 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by chenxb on 17-4-1.
  */
 @Repository
 @Transactional
 public interface UserInfoRepository extends PagingAndSortingRepository<UserInfo, Long> {
+
+    UserInfo findByEmail(String email);
+
+    UserInfo findByCellphone(String cellphone);
+
+    UserInfo findByUserName(String userName);
 
     UserInfo findByEmailAndPassword(String email, String password);
 
@@ -31,4 +39,12 @@ public interface UserInfoRepository extends PagingAndSortingRepository<UserInfo,
     UserInfo findById(int id);
 
     UserInfo findByIdAndStatus(int id, int status);
+
+    List<UserInfo> findDistinctByUserNameLikeOrDescriptionLikeOrEmailLike
+            (String userName, String description, String email);
+
+    List<UserInfo> findAllByIdIn(List<Integer> id);
+
+    List<UserInfo> findDistinctByUserNameLikeOrDescriptionLikeOrEmailLikeAndIdNotIn
+            (String userName, String desctiption, String email, List<Integer> id);
 }

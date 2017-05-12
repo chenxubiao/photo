@@ -1,0 +1,30 @@
+{
+  "data": {
+    "userId": 1,
+    "avatarId": 0,
+    "backgroundId": 2,
+    "userName": "bbs",
+    "email": "bbs@bbs.cn",
+    "cellphone": null,
+    "sex": 1,
+    "birthday": null,
+    "description": "",
+    "followers": 1,
+    "following": 1,
+    "views": 2,
+    "likes": 1,
+    "project": [
+      {
+        "projectId": 1,
+        "userId": 1,
+        "viewNum": 2,
+        "likeNum": 1,
+        "liked": 0,
+        "picId": 1,
+        "width": 1600,
+        "height": 1067,
+        "title": "hello"
+      }
+    ]
+  }
+}

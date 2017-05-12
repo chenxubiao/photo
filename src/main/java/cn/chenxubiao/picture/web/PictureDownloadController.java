@@ -1,6 +1,8 @@
 package cn.chenxubiao.picture.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
+import cn.chenxubiao.common.utils.ConstStrings;
+import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.web.CommonController;
 import cn.chenxubiao.picture.domain.Attachment;
 import cn.chenxubiao.picture.service.AttachmentService;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,8 +34,8 @@ public class PictureDownloadController extends CommonController {
         if (attachment == null) {
             return null;
         }
-        String relativePath = attachment.getRelativePath();
-        response.setContentType("application/octet-stream;charset=UTF-8");//图片下载
+        String relativePath = BBSConsts.PROTECTED_BASE_PATH + attachment.getRelativePath();
+        response.setContentType(ConstStrings.CONTENT_TYPE_DOWNLOAD);//图片下载
         DownloadUtil.downloadPicture(response, relativePath);
         return null;
     }

@@ -11,6 +11,8 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by chenxb on 17-4-27.
@@ -40,39 +42,53 @@ public class ExifUtil {
             if (pictureExif == null) {
                 pictureExif = new PictureExif();
             }
-            if(exif2.containsTag(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL)){
+            if (exif2.containsTag(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL)) {
                 pictureExif.setTaken(exif2.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL));
                 System.out.println("datetime:" + exif2.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL));
             }
-            if(exif2.containsTag(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT)){
+            if (exif2.containsTag(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT)) {
                 pictureExif.setIso(exif2.getDescription(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT));
                 System.out.println("iso:" + exif2.getDescription(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT));
             }
-            if(exif2.containsTag(ExifSubIFDDirectory.TAG_APERTURE)){
+            if (exif2.containsTag(ExifSubIFDDirectory.TAG_APERTURE)) {
                 pictureExif.setAperture(exif2.getDescription(ExifSubIFDDirectory.TAG_APERTURE));
                 System.out.println("F:" + exif2.getDescription(ExifSubIFDDirectory.TAG_APERTURE));
             }
-            if(exif2.containsTag(ExifSubIFDDirectory.TAG_SHUTTER_SPEED)){
+            if (exif2.containsTag(ExifSubIFDDirectory.TAG_SHUTTER_SPEED)) {
                 pictureExif.setShutterSpeed(exif2.getDescription(ExifSubIFDDirectory.TAG_SHUTTER_SPEED));
                 System.out.println("speed:" + exif2.getDescription(ExifSubIFDDirectory.TAG_SHUTTER_SPEED));
             }
-            if(exif2.containsTag(ExifSubIFDDirectory.TAG_FOCAL_LENGTH)){
+            if (exif2.containsTag(ExifSubIFDDirectory.TAG_FOCAL_LENGTH)) {
                 pictureExif.setFocalLength(exif2.getDescription(ExifSubIFDDirectory.TAG_FOCAL_LENGTH));
                 System.out.println("jiao ju:" + exif2.getDescription(ExifSubIFDDirectory.TAG_FOCAL_LENGTH));
             }
-            if(exif2.containsTag(ExifSubIFDDirectory.TAG_LENS_MODEL)){
+            if (exif2.containsTag(ExifSubIFDDirectory.TAG_LENS_MODEL)) {
                 pictureExif.setLens(exif2.getDescription(ExifSubIFDDirectory.TAG_LENS_MODEL));
                 System.out.println("lens:" + exif2.getDescription(ExifSubIFDDirectory.TAG_LENS_MODEL));
             }
         }
-        Image image= null;
+        Map<String, Integer> size = getPicSize(file);
+        Integer width = size.get("width");
+        Integer height = size.get("height");
+        if (width != null && width > 0) {
+            pictureExif.setWidth(width);
+        }
+        if (height != null && height > 0) {
+            pictureExif.setHeight(height);
+        }
+        return pictureExif;
+    }
+
+    public static Map<String, Integer> getPicSize(File file) {
+        Image image = null;
+        Map<String, Integer> map = new HashMap<>();
         try {
             image = javax.imageio.ImageIO.read(file);
-            pictureExif.setWidth(image.getWidth(null));
-            pictureExif.setHeight(image.getHeight(null));
+            map.put("width", image.getWidth(null));
+            map.put("height", image.getHeight(null));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return pictureExif;
+        return map;
     }
 }

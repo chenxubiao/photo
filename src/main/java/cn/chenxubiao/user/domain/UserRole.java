@@ -11,6 +11,7 @@ import java.util.Date;
 @Table(name = "bbs_user_role")
 public class UserRole implements Serializable{
 
+    private static final long serialVersionUID = 1182845887733870955L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

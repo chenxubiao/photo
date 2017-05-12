@@ -21,5 +21,6 @@ public class ConstStrings {
 
     public static final String CONTENT_TYPE_IMAGE = "image/jpeg";
     public static final String CONTENT_TYPE_JSON = "application/json;charset=UTF-8";
+    public static final String CONTENT_TYPE_DOWNLOAD = "application/octet-stream;charset=UTF-8";
     public static final String CHARACTER_ENCOING_UTF8 = "UTF-8";
 }

@@ -10,7 +10,7 @@ public class ProjectInfoBean {
     private String title;   //图片标题
     private int categoryId; //分类id
     private String tagIds;  //标签id，以「,」分隔
-    private String description; //介绍
+    private String description = ""; //介绍
 
     public int getId() {
         return id;
@@ -47,16 +47,17 @@ public class ProjectInfoBean {
     public String getTagIds() {
         return tagIds;
     }
+
+    public void setTagIds(String tagIds) {
+        this.tagIds = tagIds;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setTagIds(String tagIds) {
-        this.tagIds = tagIds;
     }
 
     public String getDescription() {

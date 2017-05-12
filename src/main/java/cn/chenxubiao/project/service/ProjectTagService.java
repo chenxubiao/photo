@@ -10,4 +10,8 @@ import java.util.List;
 public interface ProjectTagService {
 
     void saveAll(List<ProjectTag> projectTagList);
+
+    List<ProjectTag> findByProjectId(int projectId);
+
+    void deleteAll(List<ProjectTag> projectTagList);
 }

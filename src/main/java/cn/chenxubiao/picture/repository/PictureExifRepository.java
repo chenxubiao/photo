@@ -26,4 +26,6 @@ public interface PictureExifRepository extends PagingAndSortingRepository<Pictur
 
     @Query(value = "select a from PictureExif a where a.picId in ?1")
     List<PictureExif> findInPicIds(Set<Integer> picIds);
+
+    PictureExif findByPicId(int picId);
 }

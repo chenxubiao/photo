@@ -60,5 +60,13 @@ public class PictureExifServiceImpl implements PictureExifService {
         return pictureExifRepository.findInPicIds(picIds);
     }
 
+    @Override
+    public PictureExif findByPicId(int picId) {
+        if (picId <= 0) {
+            return null;
+        }
+        return pictureExifRepository.findByPicId(picId);
+    }
+
 
 }

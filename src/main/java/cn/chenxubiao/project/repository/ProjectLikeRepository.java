@@ -6,6 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by chenxb on 17-4-1.
  */
@@ -18,4 +20,8 @@ public interface ProjectLikeRepository extends PagingAndSortingRepository<Projec
 
     @Query(value = "select count(a) from ProjectLike a where a.userId = ?1 and a.projectId = ?2")
     int countByUserIdAndProjectId(int userId, int projectId);
+
+    int countByProjectId(int projectId);
+
+    int countByProjectIdIn(List<Integer> projectIds);
 }

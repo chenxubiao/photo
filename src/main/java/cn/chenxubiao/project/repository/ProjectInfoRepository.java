@@ -9,6 +9,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by chenxb on 17-4-1.
  */
@@ -24,4 +26,19 @@ public interface ProjectInfoRepository extends PagingAndSortingRepository<Projec
 
     @Query(value = "select a from ProjectInfo a where a.userId = ?1")
     Page<ProjectInfo> findByUserIdAndPage(int userId, Pageable pageable);
+
+    @Query(value = "select a from ProjectInfo a where a.userId = ?2 and a.id < ?1")
+    Page<ProjectInfo> findFormerProjectInfo(int id, int userId, Pageable pageable);
+
+    @Query(value = "select a from ProjectInfo a where a.userId = ?2 and a.id > ?1")
+    Page<ProjectInfo> findLatterProjectInfo(int id, int userId, Pageable pageable);
+
+    List<ProjectInfo> findByUserId(int userId);
+
+    ProjectInfo findById(int id);
+
+    Page<ProjectInfo> findAllByUserIdIn(List<Integer> userId, Pageable pageable);
+
+    List<ProjectInfo> findDistinctByTitleLikeOrDescriptionLike(String title, String description);
+
 }

@@ -2,6 +2,7 @@ package cn.chenxubiao.picture.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.utils.ConstStrings;
+import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
 import cn.chenxubiao.common.web.GuestBaseController;
@@ -35,7 +36,7 @@ public class PictureShowController extends GuestBaseController {
         if (attachment == null) {
             return null;
         }
-        String relativePath = attachment.getRelativePath();
+        String relativePath = BBSConsts.PROTECTED_PIC_DISPOSE_PTTH + attachment.getRelativePath();
         response.setContentType(ConstStrings.CONTENT_TYPE_IMAGE);
         response.setCharacterEncoding(ConstStrings.CHARACTER_ENCOING_UTF8);
         DownloadUtil.downloadPicture(response, relativePath);

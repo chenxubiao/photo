@@ -25,6 +25,8 @@ public interface UserFollowService {
      */
     boolean isFollowed(int startUserId, int endUserId);
 
+    int isFollow(int startUserId, int endUserId);
+
 
     UserFollow findByStartUserIdAndEndUserId(int startUserId, int endUserId);
 
@@ -33,16 +35,18 @@ public interface UserFollowService {
      * @param userId
      * @return
      */
-    int findFollowsCount(int userId);
+    int countFollows(int userId);
 
     /**
      * 计算用户关注了多少用户
      * @param userId
      * @return
      */
-    int findFollowingCount(int userId);
+    int countFollowing(int userId);
 
     List<UserFollow> findFollows(int userId, Pageable pageable);
 
     List<UserFollow> findFollowing(int userId, Pageable pageable);
+
+    List<UserFollow> findFollowing(int userId);
 }

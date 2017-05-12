@@ -26,7 +26,7 @@ public class UserInfo implements Serializable{
     private int sex;    //性别
     private int status;
     private String password;
-    private String description;
+    private String description = "";
     private int userRole;
     @Pattern(regexp = "^[a-zA-Z0-9_\\+\\-\\.]+(\\.[a-zA-Z0-9_\\+\\-]+)*@[a-zA-Z0-9]+(\\.?[a-zA-Z0-9\\-]+)*\\.([a-zA-Z]{2,4})$", message = "请输入正确邮件格式（邮件格式：myname@example.com）")
     private String email;

@@ -1,6 +1,5 @@
 package cn.chenxubiao.common.utils;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
@@ -44,5 +43,41 @@ public class NumberUtil {
             set.add(Integer.parseInt(string));
         }
         return set;
+    }
+
+    public static boolean is(String value) {
+        if(value != null && value.length() > 0) {
+            char[] chars = value.toCharArray();
+
+            for(int i = 0; i < chars.length; ++i) {
+                if(!Character.isDigit(chars[i])) {
+                    return false;
+                }
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static int parseIntQuietly(Object value) {
+        return parseIntQuietly(value, 0);
+    }
+
+    public static int parseIntQuietly(Object value, int def) {
+        if(value != null) {
+            if(value instanceof Number) {
+                return ((Number)value).intValue();
+            }
+
+            try {
+                return Integer.valueOf(value.toString()).intValue();
+            } catch (Throwable var3) {
+                ;
+            }
+        }
+
+        return def;
     }
 }

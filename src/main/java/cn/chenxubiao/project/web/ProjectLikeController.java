@@ -35,9 +35,6 @@ public class ProjectLikeController extends CommonController {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
         }
         UserSession userSession = getUserSession(request);
-        if (userSession == null) {
-            return ResponseEntity.failure(Errors.LOGIN_FIRST, 1);
-        }
         int userId = userSession.getUserId();
         ProjectInfo projectInfo = projectInfoService.findByPicId(picId);
         if (projectInfo == null) {

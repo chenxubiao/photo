@@ -19,4 +19,6 @@ public interface TagCategoryService {
     boolean isExist(int id);
 
     int countById(int id);
+
+    List<TagCategory> search(String name);
 }

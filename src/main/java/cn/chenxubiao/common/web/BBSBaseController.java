@@ -21,8 +21,8 @@ import static cn.chenxubiao.common.utils.consts.BBSConsts.REDIS_TIMESTAMP_KEY;
  */
 public class BBSBaseController extends RootController {
 
-    @Autowired
-    private RedisService redisService;
+//    @Autowired
+//    private RedisService redisService;
 
     @ModelAttribute("htmlTitle")
     public String getHtmlTitle() {
@@ -34,14 +34,14 @@ public class BBSBaseController extends RootController {
     @ModelAttribute("statTotal")
     public int getStatTotal() {
         String key = REDIS_STAT_TOTAL_KEY;
-        String statTotal = redisService.get(key);
-        if (StringUtil.isEmpty(statTotal)) {
-            statTotal = "1";
-            redisService.set(key, statTotal);
-        }
-        int totalDB = Integer.parseInt(statTotal);
-        STAT_TOTAL = ++totalDB;
-        redisService.set(key, String.valueOf(STAT_TOTAL));
+//        String statTotal = redisService.get(key);
+//        if (StringUtil.isEmpty(statTotal)) {
+//            statTotal = "1";
+//            redisService.set(key, statTotal);
+//        }
+//        int totalDB = Integer.parseInt(statTotal);
+//        STAT_TOTAL = ++totalDB;
+//        redisService.set(key, String.valueOf(STAT_TOTAL));
         return STAT_TOTAL;
     }
 
@@ -54,12 +54,13 @@ public class BBSBaseController extends RootController {
     @ModelAttribute("staticVersion")
     public String getStaticVersion() {
         String key = REDIS_TIMESTAMP_KEY;
-        String bbsTimestamp = redisService.get(key);
-        if (StringUtil.isEmpty(bbsTimestamp)) {
-            bbsTimestamp = String.valueOf(System.currentTimeMillis());
-            redisService.set(key, bbsTimestamp);
-        }
-        return bbsTimestamp;
+//        String bbsTimestamp = redisService.get(key);
+//        if (StringUtil.isEmpty(bbsTimestamp)) {
+//            bbsTimestamp = String.valueOf(System.currentTimeMillis());
+//            redisService.set(key, bbsTimestamp);
+//        }
+//        return bbsTimestamp;
+        return null;
     }
 
     @ModelAttribute("isLogin")
@@ -95,7 +96,7 @@ public class BBSBaseController extends RootController {
     }
 
     public String htmlTitle() {
-        return "摄影社区";
+        return "图片社区";
     }
 
 

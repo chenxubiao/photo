@@ -15,8 +15,11 @@ public class UserInfoBean {
     private String email;
     private String cellphone;   //被关注者id，以 , 隔开
     private int sex;            //性别
-    private Date birthday;    //出生日期
+    private Date birthday;      //出生日期
     private String description; //简介
+    private int follows;        //userId的粉丝
+    private int following;      //关注
+    private int isFollow;       //userSesion 是否关注
 
     public UserInfoBean() {
     }
@@ -103,5 +106,30 @@ public class UserInfoBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getFollows() {
+        return follows;
+    }
+
+    public void setFollows(int follows) {
+        this.follows = follows;
+    }
+
+    public int getIsFollow() {
+        return isFollow;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
+    }
+
+    public void setIsFollow(int isFollow) {
+
+        this.isFollow = isFollow;
     }
 }

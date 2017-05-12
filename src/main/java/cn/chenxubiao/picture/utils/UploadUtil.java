@@ -79,12 +79,14 @@ public class UploadUtil {
             boolean isImage = ImageUtil.checkImage(baseFile.toPath());
             if (!isImage) {
                 baseFile.delete();
+                System.out.println("not image");
                 map.put(BBSConsts.FALSE, Errors.FILE_TYPE_ERROR);
                 return map;
             }
             map.put(BBSConsts.TRUE, attachment);
             return map;
         }
+        System.out.println("request not instanceof MultipartHttpServletRequest");
         map.put(BBSConsts.FALSE, Errors.FILE_TYPE_ERROR);
         return map;
     }

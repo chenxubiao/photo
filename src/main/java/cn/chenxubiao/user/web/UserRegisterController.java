@@ -56,7 +56,13 @@ public class UserRegisterController extends GuestBaseController {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
         }
         String userName = registerBean.getUserName().trim();
+        if (StringUtil.isContainSpace(userName)) {
+            return ResponseEntity.failure(Errors.USER_USERNAME_IS_CHINESE);
+        }
         String password = registerBean.getPassword().trim();
+        if (password.length() > 32 || password.length() < 6) {
+//            return ResponseEntity.failure(Errors.PASSWORD_LENGTH_ERROR);
+        }
         String passwdHash = HashUtil.encrypt(password);
         String email = registerBean.getEmail().trim();
         boolean isEmailExist = userInfoService.isEmailExist(email);
@@ -74,6 +80,7 @@ public class UserRegisterController extends GuestBaseController {
         userInfo.setPassword(passwdHash);
         userInfo.setSex(BBSConsts.UserSex.SEX_UNKNOWN);
         userInfo.setStatus(BBSConsts.UserStatus.USER_IS_NORMAL);
+        userInfo.setBirthday(new Date(0L));
         userInfo.setCreateTime(new Date());
         userInfo.setModifyTime(userInfo.getCreateTime());
         userInfo.setUserRole(BBSConsts.CRM_NORMAL);
@@ -98,5 +105,6 @@ public class UserRegisterController extends GuestBaseController {
         UserInfoBean userInfoBean = new UserInfoBean(userInfo);
         return ResponseEntity.success().set(BBSConsts.DATA, userInfoBean);
     }
+
 
 }

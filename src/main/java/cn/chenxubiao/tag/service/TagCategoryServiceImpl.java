@@ -1,6 +1,7 @@
 package cn.chenxubiao.tag.service;
 
 import cn.chenxubiao.common.utils.CollectionUtil;
+import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.tag.domain.TagCategory;
 import cn.chenxubiao.tag.repository.TagCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,4 +57,13 @@ public class TagCategoryServiceImpl implements TagCategoryService {
         }
         return tagCategoryRepository.countById(id);
     }
+
+    @Override
+    public List<TagCategory> search(String name) {
+        if (StringUtil.isBlank(name)) {
+            return null;
+        }
+        return tagCategoryRepository.findDistinctByNameLike(name.trim());
+    }
+
 }

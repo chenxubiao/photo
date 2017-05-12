@@ -1,6 +1,5 @@
 package cn.chenxubiao.user.web;
 
-import cn.chenxubiao.common.bean.CommonBean;
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.CollectionUtil;
@@ -65,39 +64,56 @@ public class UserFollowController extends CommonController {
                                      @RequestParam(value = "type",defaultValue = "0") int type,
                                      Pageable pageable) {
 
+        UserSession userSession = getUserSession(request);
         UserInfo userInfo;
         if (userId > 0) {
             userInfo = userInfoService.findById(userId);
         } else {
-            UserSession userSession = getUserSession(request);
             userInfo = userInfoService.findById(userSession.getUserId());
         }
         if (userInfo == null) {
             return ResponseEntity.failure(Errors.USER_INFO_NOT_FOUND);
         }
+        userId = userInfo.getId();
         List<UserInfoBean> userInfoBeanList;
         if (type > 0) {
-            //显示此人关注的用户
+            //显示此人关注的用户 following
+            List<UserFollow> userFollowingList = userFollowService.findFollowing(userId, pageable);
+            if (CollectionUtil.isEmpty(userFollowingList)) {
+                return ResponseEntity.failure(Errors.NONE_FOLLOWING);
+            }
+            userInfoBeanList = new ArrayList<>();
+            for (UserFollow userFollowing : userFollowingList) {
+                UserInfo following = userInfoService.findById(userFollowing.getStartUserId());
+                boolean isFollow = userFollowService.isFollowed(following.getId(), userSession.getUserId());
+                int followsCount = userFollowService.countFollows(following.getId());
+                UserInfoBean userInfoBean = new UserInfoBean(following);
+                userInfoBean.setFollows(followsCount);
+                if (isFollow) {
+                    userInfoBean.setIsFollow(BBSConsts.UserFollow.FOLLOW);
+                }else {
+                    userInfoBean.setIsFollow(BBSConsts.UserFollow.NOT_FOLLOW);
+                }
+                userInfoBeanList.add(userInfoBean);
+            }
+        } else {
+            //显示谁关注了此用户 粉丝
             List<UserFollow> userFollowList = userFollowService.findFollows(userId, pageable);
             if (CollectionUtil.isEmpty(userFollowList)) {
-                return ResponseEntity.failure(Errors.USER_NOT_FOLLOW);
+                return ResponseEntity.failure(Errors.NONE_FOLLOWS);
             }
             userInfoBeanList = new ArrayList<>();
             for (UserFollow userFollow : userFollowList) {
                 UserInfo follow = userInfoService.findById(userFollow.getEndUserId());
                 UserInfoBean userInfoBean = new UserInfoBean(follow);
-                userInfoBeanList.add(userInfoBean);
-            }
-        } else {
-            //显示谁关注了此用户
-            List<UserFollow> userFollowList = userFollowService.findFollowing(userId, pageable);
-            if (CollectionUtil.isEmpty(userFollowList)) {
-                return ResponseEntity.failure(Errors.USER_NOT_FOLLOW);
-            }
-            userInfoBeanList = new ArrayList<>();
-            for (UserFollow userFollow : userFollowList) {
-                UserInfo following = userInfoService.findById(userFollow.getEndUserId());
-                UserInfoBean userInfoBean = new UserInfoBean(following);
+                boolean isFollow = userFollowService.isFollowed(follow.getId(), userSession.getUserId());
+                int followsCount = userFollowService.countFollows(follow.getId());
+                if (isFollow) {
+                    userInfoBean.setIsFollow(BBSConsts.UserFollow.FOLLOW);
+                }else {
+                    userInfoBean.setIsFollow(BBSConsts.UserFollow.NOT_FOLLOW);
+                }
+                userInfoBean.setFollows(followsCount);
                 userInfoBeanList.add(userInfoBean);
             }
         }

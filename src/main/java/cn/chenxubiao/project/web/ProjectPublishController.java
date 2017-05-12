@@ -2,6 +2,7 @@ package cn.chenxubiao.project.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
+import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.NumberUtil;
 import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
@@ -15,7 +16,9 @@ import cn.chenxubiao.project.domain.ProjectTag;
 import cn.chenxubiao.project.service.ProjectInfoService;
 import cn.chenxubiao.project.service.ProjectTagService;
 import cn.chenxubiao.tag.domain.TagCategory;
+import cn.chenxubiao.tag.domain.TagInfo;
 import cn.chenxubiao.tag.service.TagCategoryService;
+import cn.chenxubiao.tag.service.TagInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,10 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by chenxb on 17-4-29.
@@ -41,6 +41,8 @@ public class ProjectPublishController extends CommonController {
     private ProjectInfoService projectInfoService;
     @Autowired
     private ProjectTagService projectTagService;
+    @Autowired
+    private TagInfoService tagInfoService;
 
     @RequestMapping(value = "/project/publish/data", method = RequestMethod.POST)
     public ResponseEntity publishProject(ProjectInfoBean projectInfoBean, HttpSession session, HttpServletRequest request) {
@@ -52,7 +54,7 @@ public class ProjectPublishController extends CommonController {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
         }
         projectInfoBean.setUserId(userId);
-        projectInfoBean.setDescription(StringUtil.isBlank(projectInfoBean.getDescription()) == true ? ""
+        projectInfoBean.setDescription(projectInfoBean.getDescription() == null ? ""
                 : projectInfoBean.getDescription().trim());
 
         Attachment attachment = attachmentService.findById(projectInfoBean.getPicId());
@@ -67,14 +69,83 @@ public class ProjectPublishController extends CommonController {
         } else {
             projectInfoBean.setCategoryId(0);
         }
-        ProjectInfo projectInfo = new ProjectInfo(projectInfoBean);
-        projectInfo.setCreateTime(new Date());
-        projectInfo.setModifyTime(projectInfo.getCreateTime());
-        projectInfoService.save(projectInfo);
+        if (StringUtil.isBlank(projectInfoBean.getTitle())) {
+            projectInfoBean.setTitle(attachment.getFileName());
+        } else {
+            projectInfoBean.setTitle(projectInfoBean.getTitle().trim());
+        }
+        ProjectInfo projectInfo;
+        boolean isModify = false;
+        ProjectInfo projectInfoDB = projectInfoService.findProjectInDB(projectInfoBean);
+        if (projectInfoDB != null) {
+            isModify = true;
+            projectInfo = projectInfoDB;
+            boolean isProjectInfoDBModify = false;
+            if (!projectInfo.getTitle().equals(projectInfoBean.getTitle())) {
+                isProjectInfoDBModify = true;
+                projectInfo.setTitle(projectInfo.getTitle());
+            }
+            if (!projectInfo.getDescription().equals(projectInfoBean.getDescription())
+                    && StringUtil.isNotBlank(projectInfoBean.getDescription())) {
+
+                isProjectInfoDBModify = true;
+                String description = projectInfoBean.getDescription().trim();
+                projectInfo.setDescription(description);
+            }
+            if (isProjectInfoDBModify) {
+                projectInfo.setModifyTime(new Date());
+                projectInfoService.save(projectInfo);
+            }
+        }else {
+            projectInfo = new ProjectInfo(projectInfoBean);
+            projectInfo.setCreateTime(new Date());
+            projectInfo.setModifyTime(projectInfo.getCreateTime());
+            projectInfoService.save(projectInfo);
+        }
         List<ProjectTag> projectTagList = new ArrayList<>();
-        if (StringUtil.isNotBlank(projectInfoBean.getTagIds())) {
-            Set<Integer> tagIdSet = NumberUtil.parseToIntSet(projectInfoBean.getTagIds());
-            if (tagIdSet != null) {
+        String tagIds = projectInfoBean.getTagIds();
+        if (StringUtil.isNotBlank(tagIds)) {
+            String[] tagStrings = tagIds.split(",");
+            Set<Integer> tagIdSet = new HashSet<>();
+            for (String tagId : tagStrings) {
+                if (StringUtil.isNotBlank(tagId)) {
+                    if (NumberUtil.is(tagId)) {
+                        int id = NumberUtil.parseIntQuietly(tagId.trim());
+                        if (id > 0) {
+                            TagInfo tagInfo = tagInfoService.findById(id);
+                            if (tagInfo != null) {
+                                tagIdSet.add(id);
+                            }
+                        }
+                    } else {
+                        String tagName = tagId.trim();
+                        TagInfo tagInfo = new TagInfo();
+                        tagInfo.setName(tagName);
+                        tagInfo.setCreateTime(new Date());
+                        tagInfo.setModifyTime(tagInfo.getCreateTime());
+                        tagInfoService.save(tagInfo);
+                        tagIdSet.add(tagInfo.getId());
+                    }
+                    if (isModify) {
+                        List<ProjectTag> projectTagListDB = projectTagService.findByProjectId(projectInfo.getId());
+                        if (CollectionUtil.isNotEmpty(projectTagListDB) && CollectionUtil.isNotEmpty(tagIdSet)) {
+                            List<ProjectTag> projectTagsDB = new ArrayList<>();
+                            for (ProjectTag projectTag : projectTagListDB) {
+                                if (tagIdSet.contains(projectTag.getTagId())) {
+                                    tagIdSet.remove(projectTag.getTagId());
+                                }else {
+                                    projectTagsDB.add(projectTag);
+                                }
+                            }
+                            if (CollectionUtil.isNotEmpty(projectTagsDB)) {
+                                projectTagService.deleteAll(projectTagsDB);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tagIdSet.size() > 0) {
+
                 for (int id : tagIdSet) {
                     ProjectTag projectTag = new ProjectTag(userId, projectInfo.getId(), id);
                     projectTag.setCreateTime(new Date());

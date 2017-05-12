@@ -1,0 +1,15 @@
+{
+  "data": [
+    {
+      "userId": 2,
+      "avatarId": 0,
+      "backgroundId": 15,
+      "userName": "long",
+      "email": "long@bbs.cn",
+      "cellphone": "",
+      "sex": 0,
+      "birthday": null,
+      "description": ""
+    }
+  ]
+}

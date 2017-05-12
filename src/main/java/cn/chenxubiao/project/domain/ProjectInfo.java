@@ -16,18 +16,20 @@ public class ProjectInfo implements Serializable{
     private static final long serialVersionUID = 5587897889569281257L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private int id;
     private int userId;     //创建者id
     private int picId;      //图片id
     private String title;   //图片标题
     private int categoryId; //分类id
-    private String description; //介绍
+    private String description = ""; //介绍
     @Column(name = "createTime", updatable = false)
     private Date createTime;
     @Column(name = "modifyTime")
     private Date modifyTime;
 
-    public ProjectInfo(){}
+    public ProjectInfo(){
+
+    }
 
     public ProjectInfo(ProjectInfoBean projectInfoBean) {
         this.id = projectInfoBean.getId();
@@ -38,11 +40,11 @@ public class ProjectInfo implements Serializable{
         this.userId = projectInfoBean.getUserId();
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -8,6 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by chenxb on 17-4-1.
  */
@@ -27,4 +29,6 @@ public interface UserFollowRepository extends PagingAndSortingRepository<UserFol
     Page<UserFollow> findByStartUserId(int startUserId, Pageable pageable);
 
     Page<UserFollow> findByEndUserId(int endUserId, Pageable pageable);
+
+    List<UserFollow> findAllByEndUserId(int endUserId);
 }

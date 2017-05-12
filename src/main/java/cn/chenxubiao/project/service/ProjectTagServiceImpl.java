@@ -23,4 +23,19 @@ public class ProjectTagServiceImpl implements ProjectTagService {
         }
         projectTagRepository.save(projectTagList);
     }
+
+    @Override
+    public List<ProjectTag> findByProjectId(int projectId) {
+        if (projectId <= 0) {
+            return null;
+        }
+        return projectTagRepository.findByProjectId(projectId);
+    }
+
+    @Override
+    public void deleteAll(List<ProjectTag> projectTagList) {
+        if (CollectionUtil.isNotEmpty(projectTagList)) {
+            projectTagRepository.delete(projectTagList);
+        }
+    }
 }

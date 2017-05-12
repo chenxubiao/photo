@@ -1,0 +1,247 @@
+{
+  "success": true,
+  "message": null,
+  "errorCode": 0,
+  "vars": {
+    "data": {
+      "userId": 1,
+      "avatarId": 52,
+      "backgroundId": 44,
+      "userName": "bbs",
+      "email": "bbs@bbs.cn",
+      "cellphone": null,
+      "sex": 1,
+      "birthday": null,
+      "description": "hello world",
+      "follows": 0,
+      "following": 1,
+      "isFollow": 0,
+      "followers": 1,
+      "isSelf": 1,
+      "views": 18,
+      "likes": 5,
+      "project": [
+        {
+          "projectId": 1,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 17,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 1,
+          "width": 1600,
+          "height": 1067,
+          "title": "hello"
+        },
+        {
+          "projectId": 10,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 24,
+          "width": 3648,
+          "height": 5472,
+          "title": "haiyan"
+        },
+        {
+          "projectId": 11,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 1,
+          "liked": 0,
+          "picId": 26,
+          "width": 3648,
+          "height": 5472,
+          "title": "1234"
+        },
+        {
+          "projectId": 12,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 27,
+          "width": 2189,
+          "height": 1459,
+          "title": "1234"
+        },
+        {
+          "projectId": 13,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 28,
+          "width": 3648,
+          "height": 5472,
+          "title": "woe"
+        },
+        {
+          "projectId": 14,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 29,
+          "width": 1459,
+          "height": 2189,
+          "title": "1234"
+        },
+        {
+          "projectId": 16,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 1,
+          "likeNum": 2,
+          "liked": 0,
+          "picId": 31,
+          "width": 2189,
+          "height": 1459,
+          "title": "hello"
+        },
+        {
+          "projectId": 17,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 1,
+          "liked": 0,
+          "picId": 32,
+          "width": 2189,
+          "height": 1294,
+          "title": "1234"
+        },
+        {
+          "projectId": 18,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 1,
+          "liked": 0,
+          "picId": 33,
+          "width": 2189,
+          "height": 1294,
+          "title": "wo"
+        },
+        {
+          "projectId": 19,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 34,
+          "width": 2189,
+          "height": 1294,
+          "title": "qwer"
+        },
+        {
+          "projectId": 20,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 35,
+          "width": 2189,
+          "height": 1294,
+          "title": "asdf"
+        },
+        {
+          "projectId": 21,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 36,
+          "width": 1459,
+          "height": 2189,
+          "title": "asdf"
+        },
+        {
+          "projectId": 22,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 37,
+          "width": 1459,
+          "height": 2189,
+          "title": "asdf"
+        },
+        {
+          "projectId": 23,
+          "userId": 1,
+          "isSelf": 1,
+          "isFollow": 0,
+          "viewNum": 0,
+          "likeNum": 0,
+          "liked": 0,
+          "picId": 42,
+          "width": 1364,
+          "height": 2045,
+          "title": "123245"
+        }
+      ],
+      "userProfile": {
+        "userName": "bbs",
+        "avatarId": 52,
+        "sex": 1,
+        "birthday": null,
+        "description": "hello world",
+        "hobby": [
+          18,
+          19,
+          22,
+          25
+        ],
+        "categoryIds": null,
+        "cameraNames": "NIKON d810,EOS 70D",
+        "lensNames": "",
+        "toolNames": ""
+      }
+    },
+    "msg": {
+      "msgCount": 1,
+      "messages": [
+        {
+          "id": 1,
+          "type": 1,
+          "projectId": 1,
+          "sender": 2,
+          "receiver": 1,
+          "message": "long取消喜欢您的图片hello",
+          "status": 1,
+          "createTime": "2017-05-12 09:58:43",
+          "modifyTime": "2017-05-12 09:58:43",
+          "senderInfo": {
+            "userId": 2,
+            "avatarId": 50,
+            "userName": "long"
+          }
+        }
+      ]
+    }
+  }
+}

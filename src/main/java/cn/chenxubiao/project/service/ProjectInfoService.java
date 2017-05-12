@@ -1,6 +1,8 @@
 package cn.chenxubiao.project.service;
 
 import cn.chenxubiao.picture.bean.PicInfoBean;
+import cn.chenxubiao.project.bean.ProjectBean;
+import cn.chenxubiao.project.bean.ProjectInfoBean;
 import cn.chenxubiao.project.domain.ProjectInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,21 @@ public interface ProjectInfoService {
 
     Page<ProjectInfo> findByPage(Pageable pageable);
 
-    void save(ProjectInfo projectInfo);
+    ProjectInfo save(ProjectInfo projectInfo);
+
+    ProjectInfo findProjectInDB(ProjectInfoBean projectInfoBean);
 
     List<ProjectInfo> findByUserAndPage(int userId, Pageable pageable);
+
+    ProjectInfo findFormerProject(ProjectInfo projectInfo);
+
+    ProjectInfo findLatterProject(ProjectInfo projectInfo);
+
+    List<ProjectInfo> findByUserId(int userId);
+
+    ProjectInfo findById(int id);
+
+    Page<ProjectInfo> findInUserIdAndPage(List<Integer> userIds, Pageable pageable);
+
+    List<ProjectBean> search(String name, int sessonUserId);
 }

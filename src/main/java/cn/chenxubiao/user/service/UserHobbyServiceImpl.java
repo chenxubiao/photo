@@ -25,11 +25,11 @@ public class UserHobbyServiceImpl implements UserHobbyService {
     private UserInfoService userInfoService;
 
     @Override
-    public boolean like(int tagId, int userId) {
-        if (tagId <= 0 || userId <= 0) {
+    public boolean like(int categoryId, int userId) {
+        if (categoryId <= 0 || userId <= 0) {
             return false;
         }
-        TagInfo tagInfo = tagInfoService.findByIdAndNormal(tagId);
+        TagInfo tagInfo = tagInfoService.findById(categoryId);
         if (tagInfo == null) {
             return false;
         }
@@ -37,12 +37,12 @@ public class UserHobbyServiceImpl implements UserHobbyService {
         if (userInfo == null) {
             return false;
         }
-//        int count = userHobbyRepository.countByTagIdAndUserId(tagId, userId);
+//        int count = userHobbyRepository.countBycategoryIdAndUserId(categoryId, userId);
 //        if (count > 0) {
 //            return false;
 //        }
         UserHobby userHobby = new UserHobby();
-        userHobby.setCategoryId(tagId);
+        userHobby.setCategoryId(categoryId);
         userHobby.setUserId(userId);
         userHobby.setCreateTime(new Date());
         userHobby.setModifyTime(userHobby.getCreateTime());
@@ -51,12 +51,11 @@ public class UserHobbyServiceImpl implements UserHobbyService {
     }
 
     @Override
-    public boolean isExist(int tagId, int userId) {
-        if (tagId <= 0 || userId <= 0) {
+    public boolean isExist(int categoryId, int userId) {
+        if (categoryId <= 0 || userId <= 0) {
             return false;
         }
-//        return userHobbyRepository.countByTagIdAndUserId(tagId, userId) > 0;
-        return false;
+        return userHobbyRepository.countByCategoryIdAndUserId(categoryId, userId) > 0;
     }
 
     @Override
@@ -65,6 +64,30 @@ public class UserHobbyServiceImpl implements UserHobbyService {
             return;
         }
         userHobbyRepository.save(userHobbyList);
+    }
+
+    @Override
+    public List<UserHobby> findByUserId(int userId) {
+        if (userId <= 0) {
+            return null;
+        }
+        return userHobbyRepository.findByUserId(userId);
+    }
+
+    @Override
+    public void deleteNotInCategoryIds(int userId, List<Integer> categoryIds) {
+        if (userId <= 0 || CollectionUtil.isEmpty(categoryIds)) {
+            return;
+        }
+        userHobbyRepository.deleteAllByUserIdAndAndCategoryIdNotIn(userId, categoryIds);
+    }
+
+    @Override
+    public List<UserHobby> findInCategoryId(List<Integer> categoryIds) {
+        if (CollectionUtil.isEmpty(categoryIds)) {
+            return null;
+        }
+        return userHobbyRepository.findDistinctByCategoryIdIn(categoryIds);
     }
 
 }

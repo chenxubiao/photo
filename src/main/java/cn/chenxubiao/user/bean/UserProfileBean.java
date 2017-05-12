@@ -1,20 +1,36 @@
 package cn.chenxubiao.user.bean;
 
+import cn.chenxubiao.user.domain.UserInfo;
+
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by chenxb on 17-4-14.
  */
 public class UserProfileBean {
+    private String userName;
     private int avatarId;   //头像id
-    private int backgroundId;  //用户喜好，标签id，以 , 隔开
-    private String cellphone; //被关注者id，以 , 隔开
     private int sex;        //性别
-    private String birthday;//出生日期
+    private Date birthday;//出生日期
     private String description;
+    private List<Integer> hobby;    //cateogryId
     private String categoryIds;
-//    private int type;       //类型
     private String cameraNames;   //相机名称
     private String lensNames;   //镜头名称
     private String toolNames;   //工具名称
+
+    public UserProfileBean() {
+
+    }
+
+    public UserProfileBean(UserInfo userInfo) {
+        this.userName = userInfo.getUserName();
+        this.avatarId = userInfo.getAvatarId();
+        this.birthday = userInfo.getBirthday();
+        this.sex = userInfo.getSex();
+        this.description = userInfo.getDescription();
+    }
 
     public int getAvatarId() {
         return avatarId;
@@ -24,36 +40,12 @@ public class UserProfileBean {
         this.avatarId = avatarId;
     }
 
-    public int getBackgroundId() {
-        return backgroundId;
-    }
-
-    public void setBackgroundId(int backgroundId) {
-        this.backgroundId = backgroundId;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
-
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
-    }
-
     public int getSex() {
         return sex;
     }
 
     public void setSex(int sex) {
         this.sex = sex;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
     }
 
     public String getDescription() {
@@ -94,5 +86,29 @@ public class UserProfileBean {
 
     public void setToolNames(String toolNames) {
         this.toolNames = toolNames;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public List<Integer> getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(List<Integer> hobby) {
+        this.hobby = hobby;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

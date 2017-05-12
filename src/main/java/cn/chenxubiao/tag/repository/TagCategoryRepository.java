@@ -22,4 +22,6 @@ public interface TagCategoryRepository extends PagingAndSortingRepository<TagCat
     TagCategory findById(int id);
 
     int countById(int id);
+
+    List<TagCategory> findDistinctByNameLike(String name);
 }

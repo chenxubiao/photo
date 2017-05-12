@@ -15,14 +15,14 @@ public class PictureExif implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private int picId;
-    private String camera;
+    private String camera = "";
     private int width;
     private int height;
-    private String lens;
-    private String focalLength;
-    private String shutterSpeed ;
-    private String aperture;
-    private String iso;
+    private String lens = "";
+    private String focalLength = "";
+    private String shutterSpeed = "";
+    private String aperture = "";
+    private String iso = "";
     private String taken;
     @Column(name = "createTime", updatable = false)
     private Date createTime;

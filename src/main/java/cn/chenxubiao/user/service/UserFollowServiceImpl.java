@@ -1,6 +1,8 @@
 package cn.chenxubiao.user.service;
 
 import cn.chenxubiao.common.utils.consts.BBSConsts;
+import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.domain.UserFollow;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.repository.UserFollowRepository;
@@ -20,6 +22,8 @@ public class UserFollowServiceImpl implements UserFollowService {
     private UserFollowRepository userFollowRepository;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public boolean disposeFollowUser(int startUserId, int endUserId) {
@@ -38,9 +42,29 @@ public class UserFollowServiceImpl implements UserFollowService {
         }
         UserFollow userFollowDB = findByStartUserIdAndEndUserId(startUserId, endUserId);
         if (userFollowDB != null) {
+            Message message = new Message();
+            message.setType(BBSConsts.MessageType.USER_FOLLOW);
+            message.setSender(endUserInfo.getId());
+            message.setReceiver(startUserId);
+            message.setStatus(BBSConsts.MessageStatus.SEND);
+            message.setMessage(BBSConsts.UNFOLLOW);
+            message.setCreateTime(new Date());
+            message.setModifyTime(message.getCreateTime());
+            messageService.save(message);
             userFollowRepository.delete(userFollowDB);
             return true;
         }
+
+        Message message = new Message();
+        message.setType(BBSConsts.MessageType.USER_FOLLOW);
+        message.setSender(endUserInfo.getId());
+        message.setReceiver(startUserId);
+        message.setStatus(BBSConsts.MessageStatus.SEND);
+        message.setMessage(BBSConsts.FOLLOW);
+        message.setCreateTime(new Date());
+        message.setModifyTime(message.getCreateTime());
+        messageService.save(message);
+
         UserFollow userFollow = new UserFollow();
         userFollow.setStartUserId(startUserId);
         userFollow.setEndUserId(endUserId);
@@ -51,7 +75,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     }
 
     @Override
-    public int findFollowsCount(int userId) {
+    public int countFollows(int userId) {
         if (userId <= 0) {
             return 0;
         }
@@ -67,6 +91,14 @@ public class UserFollowServiceImpl implements UserFollowService {
     }
 
     @Override
+    public int isFollow(int startUserId, int endUserId) {
+        if (startUserId <= 0 || endUserId <= 0 || startUserId == endUserId) {
+            return 0;
+        }
+        return userFollowRepository.countByStartUserIdAndEndUserId(startUserId, endUserId);
+    }
+
+    @Override
     public UserFollow findByStartUserIdAndEndUserId(int startUserId, int endUserId) {
         if (startUserId <= 0 || endUserId <= 0) {
             return null;
@@ -75,7 +107,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     }
 
     @Override
-    public int findFollowingCount(int userId) {
+    public int countFollowing(int userId) {
         if (userId <= 0) {
             return 0;
         }
@@ -83,7 +115,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     }
 
     /**
-     * 应取 endUserId
+     * 求粉丝
      *
      * @param userId
      * @param pageable
@@ -99,6 +131,12 @@ public class UserFollowServiceImpl implements UserFollowService {
         return userFollowPage.getContent();
     }
 
+    /**
+     * 求他关注的用户
+     * @param userId
+     * @param pageable
+     * @return
+     */
     @Override
     public List<UserFollow> findFollowing(int userId, Pageable pageable) {
         if (userId <= 0) {
@@ -106,6 +144,14 @@ public class UserFollowServiceImpl implements UserFollowService {
         }
         Page<UserFollow> userFollowPage = userFollowRepository.findByEndUserId(userId, pageable);
         return userFollowPage.getContent();
+    }
+
+    @Override
+    public List<UserFollow> findFollowing(int userId) {
+        if (userId <= 0) {
+            return null;
+        }
+        return userFollowRepository.findAllByEndUserId(userId);
     }
 
 }

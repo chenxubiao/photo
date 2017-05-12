@@ -13,7 +13,8 @@ public class PicInfoBean {
     private int avatarId;   //用户头像id
     private int width;      //图片宽度
     private int height;     //图片高度
-    private int liked;      //图片名称
+    private int liked;      //是否点赞
+    private String picName; //图片名称
 
     public PicInfoBean(){
 
@@ -28,6 +29,15 @@ public class PicInfoBean {
         this.avatarId = user.getAvatarId();
         this.userName = user.getUserName();
     }
+
+    public String getPicName() {
+        return picName;
+    }
+
+    public void setPicName(String picName) {
+        this.picName = picName;
+    }
+
     public int getWidth() {
         return width;
     }

@@ -1,12 +1,10 @@
 package cn.chenxubiao.common.utils;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Path;
 
 /**
@@ -62,5 +60,23 @@ public class ImageUtil {
                 return false;
             }
         }
+    }
+
+    public static boolean isImage(File file) {
+        boolean flag = false;
+        try
+        {
+            ImageInputStream is = ImageIO.createImageInputStream(file);
+            if(null == is)
+            {
+                return flag;
+            }
+            is.close();
+            flag = true;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }

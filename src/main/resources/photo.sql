@@ -81,6 +81,29 @@ CREATE TABLE `bbs_user_follow`(
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户关注表';
 
+DROP TABLE IF EXISTS `bbs_user_account`;
+CREATE TABLE `bbs_user_account`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `money` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '总积分',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户表';
+
+DROP TABLE IF EXISTS `bbs_user_account_log`;
+CREATE TABLE `bbs_user_account_log`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `money` INT(11) NOT NULL DEFAULT 0 COMMENT '变动积分',
+  `type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '积分变动类型',
+  `projectId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '相关id',
+  `remark` VARCHAR(32) DEFAULT NULL COMMENT '备注',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户变更记录表';
+
 DROP TABLE IF EXISTS `bbs_tag_category`;
 CREATE TABLE `bbs_tag_category`(
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
@@ -95,7 +118,6 @@ DROP TABLE IF EXISTS `bbs_tag_meta`;
 CREATE TABLE `bbs_tag_meta`(
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '标签名称',
-  `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态,0:无效，1:有效',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -159,6 +181,17 @@ CREATE TABLE `bbs_project_info`(
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_picId` (`picId`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图片项目信息表';
+
+DROP TABLE IF EXISTS `bbs_project_view`;
+CREATE TABLE `bbs_project_view`(
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `viewer` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '查看者id',
+  `projectId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '项目id',
+  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片拥有者',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户查看图片项目记录表';
 
 DROP TABLE IF EXISTS `bbs_project_tag`;
 CREATE TABLE `bbs_project_tag`(
@@ -232,3 +265,17 @@ CREATE TABLE `bbs_illegal_solve`(
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员投诉处理表';
+
+DROP TABLE IF EXISTS `bbs_message`;
+CREATE TABLE `bbs_message`(
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `sender` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '发送者id,0: 系统',
+  `receiver` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '接收id',
+  `message` VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '消息内容',
+  `type` TINYINT(3) NOT NULL DEFAULT 0 COMMENT '类型，1：点赞，2：关注',
+  `projectId` INT(11) NOT NULL DEFAULT 0 COMMENT '当为点赞时，点赞的projectId',
+  `status` TINYINT(3) NOT NULL DEFAULT 0 COMMENT '消息状态，0：草稿，1：已发送，待查看，2：已查看',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息信息表';

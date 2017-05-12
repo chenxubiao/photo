@@ -16,7 +16,7 @@ public class UserHobby implements Serializable {
     private int categoryId;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private int id;
     @Column(name = "createTime", updatable = false)
     private Date createTime;
     @Column(name = "modifyTime")

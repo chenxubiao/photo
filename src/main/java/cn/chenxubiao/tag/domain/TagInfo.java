@@ -15,7 +15,6 @@ public class TagInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    private int status;
     @Column(name = "createTime", updatable = false)
     private Date createTime;
     @Column(name = "modifyTime")
@@ -51,13 +50,5 @@ public class TagInfo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }

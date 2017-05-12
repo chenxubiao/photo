@@ -4,18 +4,11 @@ import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.HashUtil;
 import cn.chenxubiao.common.utils.StringUtil;
-import cn.chenxubiao.common.utils.TimeUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
-import cn.chenxubiao.common.utils.consts.BBSMapping;
 import cn.chenxubiao.common.utils.consts.Errors;
-import cn.chenxubiao.common.web.BBSBaseController;
 import cn.chenxubiao.common.web.GuestBaseController;
-import cn.chenxubiao.picture.service.AttachmentService;
-import cn.chenxubiao.redis.service.RedisService;
 import cn.chenxubiao.user.bean.LoginBean;
-import cn.chenxubiao.user.bean.RegisterBean;
 import cn.chenxubiao.user.bean.UserInfoBean;
-import cn.chenxubiao.user.bean.UserProfileBean;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.domain.UserLoginLog;
 import cn.chenxubiao.user.domain.UserRole;
@@ -32,12 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static cn.chenxubiao.common.utils.consts.BBSConsts.REDIS_STAT_TOTAL_KEY;
-import static cn.chenxubiao.common.utils.consts.BBSConsts.REDIS_TIMESTAMP_KEY;
 
 /**
  * Created by chenxb on 17-3-31.
@@ -60,26 +49,52 @@ public class UserLoginController extends GuestBaseController {
                                 HttpServletRequest request,
                                 @Valid LoginBean loginBean, BindingResult result) {
 
+        if (StringUtil.isBlank(loginBean.getUserName())
+                || StringUtil.isBlank(loginBean.getPassword())
+                || StringUtil.isBlank(loginBean.getCode())) {
+
+            return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
+        }
+        String name = loginBean.getUserName().trim();
+
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("login userName = "+loginBean.getUserName());
+        System.out.println("login code = "+loginBean.getCode());
+        System.out.println("login passwd = "+loginBean.getPassword());
+        System.out.println("login email = "+loginBean.getEmail());
+        System.out.println("login phone = "+loginBean.getCellphone());
+        System.out.println("----------------------------------------------------------------");
         if (result.hasErrors()) {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
         }
         String code = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
         System.out.println("login session：" + String.valueOf(code) + " id = " + session.getId());
         code = StringUtil.isEmpty(code) ? "" : code;
+        System.out.println("code = " + code + "loginBean.getCode() = " + loginBean.getCode());
         if (!code.equals(loginBean.getCode())) {
             return ResponseEntity.failure(Errors.KAPTCHA_ERROR);
         }
-        String password = HashUtil.encrypt(loginBean.getPassword());
         UserInfo userInfo = null;
-        userInfo = userInfoService.loginByEmail(loginBean.getEmail(), password);
-        if (userInfo == null) {
-            userInfo = userInfoService.loginByCellphone(loginBean.getCellphone(), password);
+        if (StringUtil.isPhoneNumber(name)) {
+            userInfo = userInfoService.findByCellphone(name);
             if (userInfo == null) {
-                userInfo = userInfoService.loginByUserName(loginBean.getUserName(), password);
+                return ResponseEntity.failure(Errors.CELLPHONE_NULL_ERROR);
+            }
+        } else if (StringUtil.isEmail(name)) {
+            userInfo = userInfoService.findByEmail(name);
+            if (userInfo == null) {
+                return ResponseEntity.failure(Errors.EMAIL_NOT_FOUNT);
+            }
+        }else {
+            userInfo = userInfoService.findByUserName(name);
+            if (userInfo == null) {
+                return ResponseEntity.failure(Errors.ACCOUNT_NOT_FOUND);
             }
         }
-        if (userInfo == null) {
-            return ResponseEntity.failure(Errors.LOGIN_ERROR);
+
+        String passowrd = HashUtil.encrypt(loginBean.getPassword().trim());
+        if (!passowrd.equals(userInfo.getPassword())) {
+            return ResponseEntity.failure(Errors.PASSWORD_ERROR);
         }
         if (userInfo.getStatus() == BBSConsts.UserStatus.USER_IS_LOCKING ||
                 userInfo.getStatus() == BBSConsts.UserStatus.USER_IS_CLOSE) {

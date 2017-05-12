@@ -1,8 +1,6 @@
 package cn.chenxubiao.picture.service;
 
-import cn.chenxubiao.picture.bean.PicInfoBean;
 import cn.chenxubiao.picture.domain.PictureExif;
-import cn.chenxubiao.user.domain.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,5 +18,7 @@ public interface PictureExifService {
     Page<PictureExif> findByPage(Pageable pageable);
 
     List<PictureExif> findInPicIds(Set<Integer> picIds);
+
+    PictureExif findByPicId(int picId);
 
 }
