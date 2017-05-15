@@ -36,4 +36,13 @@ public class ProjectViewServiceImpl implements ProjectViewService {
         }
         return projectViewRepository.countViewNumByUserId(userId);
     }
+
+    @Override
+    public int countByViewer(int viewer) {
+        if (viewer <= 0) {
+
+            return 0;
+        }
+        return projectViewRepository.countByViewer(viewer);
+    }
 }

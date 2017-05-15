@@ -1,5 +1,9 @@
 package cn.chenxubiao.project.web;
 
+import cn.chenxubiao.account.domain.Account;
+import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.service.AccountLogService;
+import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.CollectionUtil;
@@ -9,7 +13,9 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
 import cn.chenxubiao.picture.domain.Attachment;
+import cn.chenxubiao.picture.domain.PictureExif;
 import cn.chenxubiao.picture.service.AttachmentService;
+import cn.chenxubiao.picture.service.PictureExifService;
 import cn.chenxubiao.project.bean.ProjectInfoBean;
 import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.project.domain.ProjectTag;
@@ -25,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -36,6 +41,8 @@ public class ProjectPublishController extends CommonController {
     @Autowired
     private AttachmentService attachmentService;
     @Autowired
+    private PictureExifService pictureExifService;
+    @Autowired
     private TagCategoryService tagCategoryService;
     @Autowired
     private ProjectInfoService projectInfoService;
@@ -43,9 +50,14 @@ public class ProjectPublishController extends CommonController {
     private ProjectTagService projectTagService;
     @Autowired
     private TagInfoService tagInfoService;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private AccountLogService accountLogService;
+
 
     @RequestMapping(value = "/project/publish/data", method = RequestMethod.POST)
-    public ResponseEntity publishProject(ProjectInfoBean projectInfoBean, HttpSession session, HttpServletRequest request) {
+    public ResponseEntity publishProject(ProjectInfoBean projectInfoBean, HttpServletRequest request) {
 
         UserSession userSession = getUserSession(request);
         int userId = userSession.getUserId();
@@ -59,6 +71,10 @@ public class ProjectPublishController extends CommonController {
 
         Attachment attachment = attachmentService.findById(projectInfoBean.getPicId());
         if (attachment == null) {
+            return ResponseEntity.failure(Errors.PICTURE_NOT_FOUND);
+        }
+        int picExif = pictureExifService.countByAttachmentId(attachment.getId());
+        if (picExif <= 0) {
             return ResponseEntity.failure(Errors.PICTURE_NOT_FOUND);
         }
         if (projectInfoBean.getCategoryId() > 0) {
@@ -100,7 +116,32 @@ public class ProjectPublishController extends CommonController {
             projectInfo = new ProjectInfo(projectInfoBean);
             projectInfo.setCreateTime(new Date());
             projectInfo.setModifyTime(projectInfo.getCreateTime());
+
+            int pay = 10;
+            Account account = accountService.findByUserId(userId);
+            int total = account.getTotalMoney();
+            if (total < pay) {
+                return ResponseEntity.failure(Errors.ACCOUNT_BALANCE);
+            }
+            projectInfo.setAuth(projectInfoBean.getAuth() == BBSConsts.ProjectAuth.AUTH ? 1 : 0);
+            if (projectInfo.getAuth() == BBSConsts.ProjectAuth.AUTH) {
+                if (projectInfoBean.getMoney() <= 0) {
+                    return ResponseEntity.failure(Errors.PUBLISH_MONEY_ERROR);
+                }
+                projectInfo.setMoney(projectInfoBean.getMoney());
+            }
+
+            total = total - pay;
+            account.setTotalMoney(total);
+            account.setModifyTime(new Date());
+            accountService.save(account);
             projectInfoService.save(projectInfo);
+
+            AccountLog accountLog = new AccountLog
+                    (userId, BBSConsts.AccountLogType.DEL_UPLOAD, -pay, projectInfo.getId(), "图片发布", account);
+            accountLog.setCreateTime(new Date());
+            accountLog.setModifyTime(accountLog.getCreateTime());
+            accountLogService.save(accountLog);
         }
         List<ProjectTag> projectTagList = new ArrayList<>();
         String tagIds = projectInfoBean.getTagIds();

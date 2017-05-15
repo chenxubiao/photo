@@ -1,5 +1,6 @@
 package cn.chenxubiao.project.domain;
 
+import cn.chenxubiao.common.utils.DateStringFormatUtil;
 import cn.chenxubiao.project.bean.ProjectInfoBean;
 
 import javax.persistence.*;
@@ -21,11 +22,15 @@ public class ProjectInfo implements Serializable{
     private int picId;      //图片id
     private String title;   //图片标题
     private int categoryId; //分类id
+    private int auth;
+    private int money;
     private String description = ""; //介绍
     @Column(name = "createTime", updatable = false)
     private Date createTime;
     @Column(name = "modifyTime")
     private Date modifyTime;
+    @Transient
+    private String time;
 
     public ProjectInfo(){
 
@@ -38,6 +43,22 @@ public class ProjectInfo implements Serializable{
         this.picId = projectInfoBean.getPicId();
         this.description = projectInfoBean.getDescription();
         this.userId = projectInfoBean.getUserId();
+    }
+
+    public int getAuth() {
+        return auth;
+    }
+
+    public void setAuth(int auth) {
+        this.auth = auth;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     public int getId() {
@@ -102,5 +123,9 @@ public class ProjectInfo implements Serializable{
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public String getTime() {
+        return DateStringFormatUtil.format(this.createTime);
     }
 }

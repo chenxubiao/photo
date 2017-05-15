@@ -15,7 +15,6 @@ public class Errors {
     public static final String NOT_EMAIL_ERROR = "请输入正确邮件格式（邮件格式：myname@example.com）";
     public static final String CELLPHONE_NULL_ERROR = "手机号格式不正确";
     public static final String KAPTCHA_ERROR = "验证码错误";
-    public static final String PASSWORD_LENGTH_ERROR = "密码长度应在6～32之间";
 
     public static final String UPLOAD_ERROR = "上传时发生错误";
     public static final String PICTURE_NOT_FOUND = "图片不存在";
@@ -26,10 +25,13 @@ public class Errors {
     public static final String USER_IS_LOCKING = "账户未激活";
     public static final String ACCOUNT_NOT_FOUND = "未找到账户";
     public static final String PASSWORD_ERROR = "密码错误";
+    public static final String PASSWORD_LENGTH_ERROR = "密码长度应在6～32之间";
+    public static final String PASSWORD_OLD_ERROR = "旧密码错误";
+    public static final String PASSWOED_OLD_EQUAL_NEW = "原密码与新密码相同";
 
     public static final String USER_INFO_NOT_FOUND = "用户不存在";
     public static final String USER_USERNAME_NULL = "用户名不能为空";
-    public static final String USER_USERNAME_IS_CHINESE = "不允许出现中文字符";
+    public static final String USER_USERNAME_IS_CHINESE = "不允许出现中文字符、空格且长度位于2～32之间";
     public static final String USER_USERNAME_HAS_SPACE = "用户名不允许出现空格";
     public static final String NONE_FOLLOWS = "无粉丝信息";
     public static final String NONE_FOLLOWING = "无用户关注信息";
@@ -45,7 +47,7 @@ public class Errors {
     public static final String LOGIN_FIRST = "请先登录";
     public static final String EMAIL_NOT_FOUNT = "未找到注册邮箱";
 
-    public static final String FOLLOWING_NOT_UPLOAD_PROJECT = "关注者暂未发布任何动态";
+    public static final String FOLLOWING_NOT_UPLOAD_PROJECT = "您关注的用户暂未分享图片";
     public static final String PROJECT_NOT_FOUND = "图片项目信息未找到";
 
     public static final String TAG_CATEGORY_NOT_FOUND = "分类不存在";
@@ -53,4 +55,7 @@ public class Errors {
 
     public static final String MESSAGE_NONE_UNLOOK = "没有未查看的消息";
     public static final String MESSAGE_NONE_RECEIVE = "没有新消息";
+
+    public static final String ACCOUNT_BALANCE = "账户余额不足";
+    public static final String PUBLISH_MONEY_ERROR = "设置下载金额不合法";
 }

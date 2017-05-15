@@ -1,10 +1,8 @@
 package cn.chenxubiao.message.domain;
 
+import cn.chenxubiao.common.utils.DateStringFormatUtil;
+import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.message.bean.SenderInfo;
-import cn.chenxubiao.project.domain.ProjectInfo;
-import cn.chenxubiao.user.bean.UserInfoBean;
-import cn.chenxubiao.user.domain.UserInfo;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -31,7 +29,23 @@ public class Message implements Serializable {
     @Column(name = "modifyTime")
     private Date modifyTime;
     @Transient
+    private String time;
+    @Transient
     private SenderInfo senderInfo;
+
+    public Message() {
+
+    }
+
+    public Message(int type, int receiver, int projectId, String message) {
+        this.status = BBSConsts.MessageStatus.SEND;
+        this.type = type;
+        this.receiver = receiver;
+        this.projectId = projectId;
+        this.message = message;
+        this.createTime = new Date();
+    }
+
 
     public int getId() {
         return id;
@@ -111,5 +125,9 @@ public class Message implements Serializable {
 
     public void setSenderInfo(SenderInfo senderInfo) {
         this.senderInfo = senderInfo;
+    }
+
+    public String getTime() {
+        return DateStringFormatUtil.format(this.createTime);
     }
 }

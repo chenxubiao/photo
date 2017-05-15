@@ -131,6 +131,14 @@ public class UserFollowServiceImpl implements UserFollowService {
         return userFollowPage.getContent();
     }
 
+    @Override
+    public List<UserFollow> findFollows(int userId) {
+        if (userId <= 0) {
+            return null;
+        }
+        return userFollowRepository.findAllByStartUserId(userId);
+    }
+
     /**
      * 求他关注的用户
      * @param userId

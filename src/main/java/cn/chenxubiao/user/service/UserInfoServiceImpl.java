@@ -3,6 +3,7 @@ package cn.chenxubiao.user.service;
 import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
+import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.tag.domain.TagCategory;
 import cn.chenxubiao.tag.service.TagCategoryService;
 import cn.chenxubiao.user.bean.UserInfoBean;
@@ -11,6 +12,8 @@ import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.domain.UserRole;
 import cn.chenxubiao.user.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -208,6 +211,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoBean.setIsFollow(userFollowService.isFollow(userInfo.getId(), userId));
         return userInfoBean;
     }
+
 
     private UserInfo setUserRoleList(UserInfo userInfo) {
         if (userInfo == null) {

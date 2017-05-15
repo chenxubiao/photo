@@ -3,12 +3,14 @@ package cn.chenxubiao.test;
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.utils.Im4javaUtil;
 import cn.chenxubiao.common.utils.StringUtil;
+import cn.chenxubiao.common.utils.TimeUtil;
 import cn.chenxubiao.common.web.GuestBaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +22,9 @@ public class Test extends GuestBaseController {
     @RequestMapping(value = "/admin/font/list")
     public ResponseEntity test() {
 
+        String dateString = "2017:05:06 16:45:20";
+        Date date = TimeUtil.parse(dateString, "yyyy:MM:dd HH:mm:ss");
+        System.out.println(date);
         GraphicsEnvironment eq = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String[] fontsName = eq.getAvailableFontFamilyNames();
         List<String> stringList = new ArrayList<>();

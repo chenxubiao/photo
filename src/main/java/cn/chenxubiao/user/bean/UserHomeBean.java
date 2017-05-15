@@ -13,29 +13,14 @@ public class UserHomeBean extends UserInfoBean {
     private int following;  //正在关注
     private int isSelf;     //是否为自己
     private int isFollow;   //如果不是自己，是否关注了ta
-    private int views;  //被多少人查看
-    private int likes;  //被多少人喜欢
+    private int views;      //被多少人查看
+    private int likes;      //被多少人喜欢
     private List<ProjectBean> project;
     private UserProfileBean userProfile;
 
     public UserHomeBean() {
 
     }
-
-//    public UserHomeBean(int views, int following, int followers, UserSession userSession, List<ProjectBean> project) {
-//        this.views = views;
-//        this.followers = followers;
-//        this.following = following;
-//        super.setUserId(userSession.getUserId());
-//        super.setAvatarId(userSession.getAvatarId());
-//        super.setBackgroundId(userSession.getBackgroundId());
-//        super.setSex(userSession.getSex());
-//        super.setDescription(userSession.getDescription());
-//        super.setEmail(userSession.getEmail());
-//        super.setBirthday(userSession.getBirthday());
-//        super.setUserName(userSession.getUserName());
-//        this.project = project;
-//    }
 
     public UserHomeBean(int likes, int views, int following, int followers, UserInfo userInfo, List<ProjectBean> project) {
         this.likes = likes;

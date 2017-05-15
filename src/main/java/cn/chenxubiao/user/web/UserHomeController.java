@@ -19,7 +19,6 @@ import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.project.service.ProjectInfoService;
 import cn.chenxubiao.project.service.ProjectLikeService;
 import cn.chenxubiao.project.service.ProjectViewService;
-import cn.chenxubiao.tag.domain.TagCategory;
 import cn.chenxubiao.user.bean.UserHomeBean;
 import cn.chenxubiao.user.bean.UserProfileBean;
 import cn.chenxubiao.user.domain.UserHobby;
@@ -30,7 +29,6 @@ import cn.chenxubiao.user.service.UserHobbyService;
 import cn.chenxubiao.user.service.UserInfoService;
 import cn.chenxubiao.user.service.UserToolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,8 +36,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +99,6 @@ public class UserHomeController extends CommonController {
             }
         }
 
-
         List<UserHobby> userHobbyList = userHobbyService.findByUserId(userId);
         List<Integer> categoryIds = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(userHobbyList)) {
@@ -159,7 +154,7 @@ public class UserHomeController extends CommonController {
             messageBean.setMessages(messageList);
         }
 
-        List<ProjectInfo> projectInfoList = projectInfoService.findByUserAndPage(userId, pageable);
+        List<ProjectInfo> projectInfoList = projectInfoService.findByUserId(userId);
         List<ProjectBean> projectBeanList = null;
         if (CollectionUtil.isNotEmpty(projectInfoList)) {
             projectBeanList = new ArrayList<>();
@@ -175,6 +170,8 @@ public class UserHomeController extends CommonController {
                     Attachment attachment = attachmentService.findById(projectInfo.getId());
                     projectBean.setTitle(attachment.getFileName());
                 }
+                int liked = projectLikeService.isLiked(userSession.getUserId(), projectInfo.getId());
+                projectBean.setLiked(liked);
                 projectBean.setIsFollow(userHomeBean.getIsFollow());
                 projectBean.setIsSelf(userHomeBean.getIsSelf());
                 projectBeanList.add(projectBean);
@@ -186,7 +183,7 @@ public class UserHomeController extends CommonController {
         return ResponseEntity.success().set(BBSConsts.DATA, userHomeBean).set("msg", messageBean);
     }
 
-    @RequestMapping(value = "/user/info/data", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/project/data", method = RequestMethod.GET)
     public ResponseEntity getUserInfo(@RequestParam(value = "userId", defaultValue = "0") int userId,
                                       HttpServletRequest request, Pageable pageable) {
 

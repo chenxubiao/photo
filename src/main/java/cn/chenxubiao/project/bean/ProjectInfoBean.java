@@ -11,6 +11,8 @@ public class ProjectInfoBean {
     private int categoryId; //分类id
     private String tagIds;  //标签id，以「,」分隔
     private String description = ""; //介绍
+    private int auth;   //是否授权图片社区下载，0：不允许下载，1：允许下载，默认0,若允许，必须设置图片授权金额
+    private int money;  //金额 >0
 
     public int getId() {
         return id;
@@ -66,5 +68,21 @@ public class ProjectInfoBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getAuth() {
+        return auth;
+    }
+
+    public void setAuth(int auth) {
+        this.auth = auth;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }

@@ -10,6 +10,7 @@ import cn.chenxubiao.project.repository.ProjectLikeRepository;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class ProjectLikeServiceImpl implements ProjectLikeService {
     }
 
     @Override
-    public int countByUserIdAndProjectId(int userId, int projectId) {
+    public int isLiked(int userId, int projectId) {
         if (userId <= 0 || projectId <= 0) {
             return 0;
         }
@@ -114,5 +115,11 @@ public class ProjectLikeServiceImpl implements ProjectLikeService {
             projectIds.add(projectInfo.getId());
         }
         return projectLikeRepository.countByProjectIdIn(projectIds);
+    }
+
+    @Override
+    public List<ProjectLike> findPopular(Pageable pageable) {
+//        return projectLikeRepository.find
+        return null;
     }
 }

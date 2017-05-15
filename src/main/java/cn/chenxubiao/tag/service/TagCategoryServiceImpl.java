@@ -6,6 +6,7 @@ import cn.chenxubiao.tag.domain.TagCategory;
 import cn.chenxubiao.tag.repository.TagCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by chenxb on 17-4-29.
  */
 @Service
+@Transactional
 public class TagCategoryServiceImpl implements TagCategoryService {
     @Autowired
     private TagCategoryRepository tagCategoryRepository;

@@ -1,7 +1,6 @@
 package cn.chenxubiao.project.repository;
 
 import cn.chenxubiao.project.domain.ProjectInfo;
-import cn.chenxubiao.project.domain.TrendProject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -21,8 +20,9 @@ public interface ProjectInfoRepository extends PagingAndSortingRepository<Projec
     @Query(value = "select a from ProjectInfo a where a.picId = ?1")
     ProjectInfo findByPicId(int picId);
 
-    @Query(value = "select a from ProjectInfo a")
+    @Query(value = "select a from ProjectInfo a order by a.id desc ")
     Page<ProjectInfo> findByPage(Pageable pageable);
+
 
     @Query(value = "select a from ProjectInfo a where a.userId = ?1")
     Page<ProjectInfo> findByUserIdAndPage(int userId, Pageable pageable);
@@ -37,8 +37,13 @@ public interface ProjectInfoRepository extends PagingAndSortingRepository<Projec
 
     ProjectInfo findById(int id);
 
-    Page<ProjectInfo> findAllByUserIdIn(List<Integer> userId, Pageable pageable);
+    Page<ProjectInfo> findAllByUserIdInOrderByIdDesc(List<Integer> userId, Pageable pageable);
 
-    List<ProjectInfo> findDistinctByTitleLikeOrDescriptionLike(String title, String description);
+    List<ProjectInfo> findDistinctByTitleLikeOrDescriptionLikeOrderByIdDesc(String title, String description);
 
+    int countByUserId(int userId);
+
+    ProjectInfo findFirstByUserIdAndIdBeforeOrderByIdDesc(int userId, int id);
+
+    ProjectInfo findFirstByUserIdAndIdAfter(int userId, int id);
 }

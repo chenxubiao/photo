@@ -1,5 +1,9 @@
 package cn.chenxubiao.user.web;
 
+import cn.chenxubiao.account.domain.Account;
+import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.service.AccountLogService;
+import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.HashUtil;
@@ -7,8 +11,9 @@ import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.GuestBaseController;
+import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.bean.RegisterBean;
-import cn.chenxubiao.user.bean.UserInfoBean;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.domain.UserLoginLog;
 import cn.chenxubiao.user.domain.UserRole;
@@ -16,12 +21,11 @@ import cn.chenxubiao.user.service.UserInfoService;
 import cn.chenxubiao.user.service.UserLoginLogService;
 import cn.chenxubiao.user.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,13 +43,21 @@ public class UserRegisterController extends GuestBaseController {
     private UserRoleService userRoleService;
     @Autowired
     private UserLoginLogService userLoginLogService;
+    @Autowired
+    private UserHomeController userHomeController;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private AccountLogService accountLogService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * 用户注册接口
      */
     @RequestMapping(value = "user/register/data", method = RequestMethod.POST)
     public ResponseEntity regester(HttpServletRequest request, HttpSession session,
-                                   HttpServletResponse response, RegisterBean registerBean) {
+                                   Pageable pageable, RegisterBean registerBean) {
 
         if (registerBean == null
                 || StringUtil.isBlank(registerBean.getUserName())
@@ -55,13 +67,15 @@ public class UserRegisterController extends GuestBaseController {
 
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
         }
-        String userName = registerBean.getUserName().trim();
-        if (StringUtil.isContainSpace(userName)) {
+        String userName = registerBean.getUserName().trim().toLowerCase();
+        if (StringUtil.isContainSpace(userName) || StringUtil.isContainChinese(userName)
+                || userName.length() < 3 || userName.length() > 32) {
+
             return ResponseEntity.failure(Errors.USER_USERNAME_IS_CHINESE);
         }
         String password = registerBean.getPassword().trim();
-        if (password.length() > 32 || password.length() < 6) {
-//            return ResponseEntity.failure(Errors.PASSWORD_LENGTH_ERROR);
+        if (!isPasswordGood(password)) {
+            return ResponseEntity.failure(Errors.PASSWORD_LENGTH_ERROR);
         }
         String passwdHash = HashUtil.encrypt(password);
         String email = registerBean.getEmail().trim();
@@ -85,6 +99,8 @@ public class UserRegisterController extends GuestBaseController {
         userInfo.setModifyTime(userInfo.getCreateTime());
         userInfo.setUserRole(BBSConsts.CRM_NORMAL);
         userInfoService.save(userInfo);
+
+        //userRole
         UserRole userRole = new UserRole();
         userRole.setUserId(userInfo.getId());
         userRole.setCreateTime(new Date());
@@ -96,14 +112,51 @@ public class UserRegisterController extends GuestBaseController {
         userInfo.setUserRoleList(userRoleList);
         UserSession userSession = super.buildUserSession(userInfo);
         super.setUserSession(request, userSession);
+
+        //Account
+        int totalMoney = 100;
+        Account account = new Account();
+        account.setUserId(userInfo.getId());
+        account.setTotalMoney(totalMoney);
+        account.setCreateTime(new Date());
+        account.setModifyTime(account.getCreateTime());
+        accountService.save(account);
+
+        AccountLog accountLog = new AccountLog();
+        accountLog.setAccount(account);
+        accountLog.setCreateTime(new Date());
+        accountLog.setModifyTime(accountLog.getCreateTime());
+        accountLog.setUserId(userInfo.getId());
+        accountLog.setMoney(totalMoney);
+        accountLog.setType(BBSConsts.AccountLogType.ADD_REGESTER);
+        accountLog.setRemark("注册奖励：" + totalMoney);
+        accountLogService.save(accountLog);
+
+        //userLoginLog
         UserLoginLog userLoginLog = new UserLoginLog();
         userLoginLog.setUserId(userInfo.getId());
         userLoginLog.setIp(request.getRemoteAddr());
+        userLoginLog.setLoginTime(1);
         userLoginLog.setCreateTime(new Date());
         userLoginLog.setModifyTime(userLoginLog.getCreateTime());
         userLoginLogService.save(userLoginLog);
-        UserInfoBean userInfoBean = new UserInfoBean(userInfo);
-        return ResponseEntity.success().set(BBSConsts.DATA, userInfoBean);
+
+        Message message = new Message();
+        message.setReceiver(userInfo.getId());
+        message.setStatus(BBSConsts.MessageStatus.SEND);
+        message.setType(BBSConsts.MessageType.USER_REGESTER);
+        message.setCreateTime(new Date());
+        message.setModifyTime(message.getCreateTime());
+        message.setMessage("hi～" + userInfo.getUserName()
+                + ",欢迎来到...(还没想好0.0)，请吃饭请联系：hfutchenxb@163.com，提交bug请联系本人私人助理：haiyan@bbs.cn");
+        Message messageAccount = new Message
+                (BBSConsts.MessageType.ACCOUNT_CHANGE, userInfo.getId(), 0, "注册奖励：" + totalMoney);
+        message.setCreateTime(new Date());
+        message.setModifyTime(message.getCreateTime());
+        messageService.save(message);
+        messageService.save(messageAccount);
+
+        return userHomeController.getUserHomeData(0, request, pageable);
     }
 
 

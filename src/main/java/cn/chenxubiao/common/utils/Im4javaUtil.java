@@ -43,7 +43,7 @@ public class Im4javaUtil {
      */
     private static Image watermarkImage = null;
 
-    private static String FONT_STRING = "Ubuntu";
+    private static String FONT_STRING = "Ubuntu Mono";
 
     static {
         try {
@@ -496,7 +496,6 @@ public class Im4javaUtil {
         int left = 0;
         int top = textHeight;
 
-//todo
         left = width - textWidth - distence;
         top = height - textHeight - distence;
 
@@ -537,10 +536,10 @@ public class Im4javaUtil {
             ImageIO.write(bimage, "JPEG", out);
             out.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+            //  Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            //  Auto-generated catch block
             e.printStackTrace();
         }
     }

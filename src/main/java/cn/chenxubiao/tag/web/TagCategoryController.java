@@ -1,6 +1,9 @@
 package cn.chenxubiao.tag.web;
 
+import cn.chenxubiao.account.domain.Account;
+import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
+import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.web.CommonController;
 import cn.chenxubiao.tag.domain.TagCategory;
@@ -22,22 +25,41 @@ import java.util.List;
 public class TagCategoryController extends CommonController {
     @Autowired
     private TagCategoryService tagCategoryService;
+    @Autowired
+    private AccountService accountService;
 
     @RequestMapping(value = "/tag/category/list/data", method = RequestMethod.GET)
     public ResponseEntity getCategoryList(HttpServletRequest request) {
         List<TagCategory> tagCategoryList = tagCategoryService.findAll();
-        return ResponseEntity.success().set(BBSConsts.DATA, tagCategoryList);
+        List<TagCategory> categoryList = new ArrayList<>();
+        TagCategory category = new TagCategory();
+        category.setId(0);
+        category.setName("未知分类");
+        category.setCreateTime(new Date());
+        category.setModifyTime(category.getCreateTime());
+        categoryList.add(category);
+        if (CollectionUtil.isNotEmpty(tagCategoryList)) {
+            categoryList.addAll(tagCategoryList);
+        }
+        return ResponseEntity.success().set(BBSConsts.DATA, categoryList);
     }
 
     @RequestMapping(value = "/tag/category/init")
     public ResponseEntity initTagCategory() {
-
 
         int count = tagCategoryService.count();
         if (count > 0) {
             List<TagCategory> tagCategoryListDB = tagCategoryService.findAll();
             return ResponseEntity.success().set(BBSConsts.DATA, tagCategoryListDB);
         }
+
+        Account account = new Account();
+        account.setUserId(0);
+        account.setCreateTime(new Date());
+        account.setModifyTime(account.getCreateTime());
+        account.setTotalMoney(10000);
+        accountService.save(account);
+
         List<String> categoryList = new ArrayList<>();
         categoryList.add("动物");
         categoryList.add("黑白");

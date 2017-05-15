@@ -18,6 +18,8 @@ public class BBSConsts {
     public static final String PROTECTED_BASE_PATH = "/var/upload/bbs/pictures";
     public static final String PROTECTED_PIC_DISPOSE_PTTH = "/var/upload/bbs/pics";
     public static final long PICTURE_UPLOAD_MAX_SIZE = 3145728L;    //3M
+    public static final String BBS_NAME = "图片社区";
+    public static final String PAGINATION = "pagination";
 
     public static final String FOLLOW = "关注了您";
     public static final String UNFOLLOW = "取消关注您";
@@ -61,16 +63,15 @@ public class BBSConsts {
         public static final int TOOL = 3;
     }
 
-    public static final class PictureBanner {
-        public static final int FIRST_BANNER = 1;
-        public static final int SECOND_BANNER = 2;
-        public static final int THIRD_BANNER = 3;
-        public static final int FOURTH_BANNER = 4;
-        public static final int FIFTH_BANNER = 5;
-        public static final int SIXTH_BANNER = 6;
-        public static final int SEVENTH_BANNER = 7;
-        public static final int EIGHTH_BANNER = 8;
-        public static final int NINTH_BANNER = 9;
+    public static final class AccountLogType {
+
+        public static final int ADD_REGESTER = 1;   //注册奖励
+        public static final int ADD_PAY_SUCCESS = 2;//充值成功
+        public static final int DEL_PAY_FAILURE = 3;//充值失败
+        public static final int ADD_LOGIN = 4;      //连续登录
+        public static final int DEL_UPLOAD = 5;     //上传花费积分
+        public static final int ADD_DOWNLOAD = 6;   //被别人下载获得
+        public static final int DEL_DOWNLOAD = 7;   //下载扣除
     }
 
     public static final class MessageStatus{
@@ -81,6 +82,14 @@ public class BBSConsts {
     public static final class MessageType {
         public static final int PROJECT_LIKE = 1;
         public static final int USER_FOLLOW = 2;
+        public static final int USER_REGESTER = 3;
+        public static final int ACCOUNT_CHANGE = 4;
+        public static final int LOGIN_ALWOYS = 5;
+    }
+
+    public static final class ProjectAuth {
+        public static final int NONE_AUTH = 0;
+        public static final int AUTH = 1;
     }
 
 }

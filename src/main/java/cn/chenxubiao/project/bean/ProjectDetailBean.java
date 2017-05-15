@@ -21,10 +21,13 @@ public class ProjectDetailBean {
     private int liked;      //是否喜欢
     private int likeNum;    //获得喜欢数
     private int follow;     //是否关注
+    private int viewNum;    //图片被产看多少次
     private CommonBean category;
     private List<CommonBean> tag;
     private String description; //说明
     private PictureExif exif;   //图片信息
+    private int auth;
+    private int money;
 
     public int getProjectId() {
         return projectId;
@@ -153,5 +156,29 @@ public class ProjectDetailBean {
 
     public void setAvatarId(int avatarId) {
         this.avatarId = avatarId;
+    }
+
+    public int getViewNum() {
+        return viewNum;
+    }
+
+    public void setViewNum(int viewNum) {
+        this.viewNum = viewNum;
+    }
+
+    public int getAuth() {
+        return auth;
+    }
+
+    public void setAuth(int auth) {
+        this.auth = auth;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }

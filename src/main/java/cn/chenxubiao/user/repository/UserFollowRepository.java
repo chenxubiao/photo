@@ -28,6 +28,8 @@ public interface UserFollowRepository extends PagingAndSortingRepository<UserFol
 
     Page<UserFollow> findByStartUserId(int startUserId, Pageable pageable);
 
+    List<UserFollow> findAllByStartUserId(int startUserId);
+
     Page<UserFollow> findByEndUserId(int endUserId, Pageable pageable);
 
     List<UserFollow> findAllByEndUserId(int endUserId);

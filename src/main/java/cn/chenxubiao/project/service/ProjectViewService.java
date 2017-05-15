@@ -11,4 +11,6 @@ public interface ProjectViewService {
     int countByProjectId(int projectId);
 
     int countUserPicViewNum(int userId);
+
+    int countByViewer(int viewer);
 }

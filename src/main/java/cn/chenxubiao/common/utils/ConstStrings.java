@@ -18,6 +18,7 @@ public class ConstStrings {
     public static final String PICTURE_GIF = "gif";
 
     public static final String DATE_PATTERN = "yyyy/MM/dd";
+    public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     public static final String CONTENT_TYPE_IMAGE = "image/jpeg";
     public static final String CONTENT_TYPE_JSON = "application/json;charset=UTF-8";

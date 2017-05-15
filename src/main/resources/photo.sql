@@ -31,6 +31,7 @@ CREATE TABLE `bbs_user_login_log`(
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `ip` VARCHAR(15) NOT NULL DEFAULT '' COMMENT 'IP地址',
+  `loginTime` INT(5) NOT NULL DEFAULT 0 COMMENT '连续登录次数，每天值增加一次',
   `logoutTime` DATETIME DEFAULT NULL COMMENT '退出时间',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
@@ -81,28 +82,44 @@ CREATE TABLE `bbs_user_follow`(
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户关注表';
 
-DROP TABLE IF EXISTS `bbs_user_account`;
-CREATE TABLE `bbs_user_account`(
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
-  `money` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '总积分',
-  `createTime` DATETIME NOT NULL COMMENT '创建时间',
-  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户表';
 
-DROP TABLE IF EXISTS `bbs_user_account_log`;
-CREATE TABLE `bbs_user_account_log`(
+DROP TABLE IF EXISTS `bbs_account_log`;
+CREATE TABLE `bbs_account_log`(
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `money` INT(11) NOT NULL DEFAULT 0 COMMENT '变动积分',
-  `type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '积分变动类型',
+  `type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '积分变动类型,1:注册奖励：2:充值成功，3：充值失败，4：连续登录，5:上传花费积分，6：被别人下载获得，7：下载扣除',
   `projectId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '相关id',
+  #   `accountId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '账户id',
   `remark` VARCHAR(32) DEFAULT NULL COMMENT '备注',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户变更记录表';
+
+DROP TABLE IF EXISTS `bbs_account`;
+CREATE TABLE `bbs_account`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `totalMoney` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '总积分',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userId` (`userId`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户表';
+
+
+DROP TABLE IF EXISTS `bbs_account_pay`;
+CREATE TABLE `bbs_account_pay`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `payer` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `money` INT(11) NOT NULL DEFAULT 0 COMMENT '变动积分',
+  `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '1:已支付，待充值，2：充值成功，3：充值失败，退款中，4：已退款',
+  `remark` VARCHAR(32) DEFAULT NULL COMMENT '备注',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户充值记录表';
 
 DROP TABLE IF EXISTS `bbs_tag_category`;
 CREATE TABLE `bbs_tag_category`(
@@ -168,12 +185,25 @@ CREATE TABLE `bbs_picture_exif`(
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图片EXIF信息表';
 
+DROP TABLE IF EXISTS `bbs_picture_download_log`;
+CREATE TABLE `bbs_picture_download_log`(
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `picId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片id',
+  `ownerId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '上传者id',
+  `downloader` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '下载者id',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图片下载表';
+
 DROP TABLE IF EXISTS `bbs_project_info`;
 CREATE TABLE `bbs_project_info`(
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `picId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片id',
   `title` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '标题',
+  `auth` TINYINT(2) NOT NULL DEFAULT 0 COMMENT '是否授权可以下载，0不可以，1：授权下载',
+  `money` INT(11) NOT NULL DEFAULT 0 COMMENT '下载金额',
   `categoryId` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '分类id',
   `description` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '介绍',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -30,12 +29,12 @@ public class MessageController extends CommonController {
 
         UserSession userSession = super.getUserSession(request);
         List<Message> messageList = messageService.findUnLookMsg(userSession.getUserId());
-        if (CollectionUtil.isEmpty(messageList)) {
-            return ResponseEntity.failure(Errors.MESSAGE_NONE_RECEIVE);
+        MessageBean messageBean = null;
+        if (CollectionUtil.isNotEmpty(messageList)) {
+            messageBean = new MessageBean();
+            messageBean.setMsgCount(messageList.size());
+            messageBean.setMessages(messageList);
         }
-        MessageBean messageBean = new MessageBean();
-        messageBean.setMsgCount(messageList.size());
-        messageBean.setMessages(messageList);
         return ResponseEntity.success().set(BBSConsts.DATA, messageBean);
     }
 

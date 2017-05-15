@@ -78,7 +78,7 @@ public class UserFollowController extends CommonController {
         List<UserInfoBean> userInfoBeanList;
         if (type > 0) {
             //显示此人关注的用户 following
-            List<UserFollow> userFollowingList = userFollowService.findFollowing(userId, pageable);
+            List<UserFollow> userFollowingList = userFollowService.findFollowing(userId);
             if (CollectionUtil.isEmpty(userFollowingList)) {
                 return ResponseEntity.failure(Errors.NONE_FOLLOWING);
             }
@@ -98,7 +98,7 @@ public class UserFollowController extends CommonController {
             }
         } else {
             //显示谁关注了此用户 粉丝
-            List<UserFollow> userFollowList = userFollowService.findFollows(userId, pageable);
+            List<UserFollow> userFollowList = userFollowService.findFollows(userId);
             if (CollectionUtil.isEmpty(userFollowList)) {
                 return ResponseEntity.failure(Errors.NONE_FOLLOWS);
             }

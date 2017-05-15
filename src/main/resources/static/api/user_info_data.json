@@ -1,0 +1,14 @@
+{
+  "data": {
+    "userId": 2,
+    "avatarId": 0,
+    "userName": "long",
+    "following": 1,
+    "follows": 1,
+    "viewOthers": 1,
+    "otherViews": 1,
+    "picNum": 8,
+    "likeNum": 3,
+    "money": 20
+  }
+}

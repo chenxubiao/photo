@@ -45,6 +45,7 @@ public interface UserFollowService {
     int countFollowing(int userId);
 
     List<UserFollow> findFollows(int userId, Pageable pageable);
+    List<UserFollow> findFollows(int userId);
 
     List<UserFollow> findFollowing(int userId, Pageable pageable);
 

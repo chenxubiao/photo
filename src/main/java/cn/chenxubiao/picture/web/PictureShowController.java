@@ -3,8 +3,6 @@ package cn.chenxubiao.picture.web;
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.utils.ConstStrings;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
-import cn.chenxubiao.common.utils.consts.Errors;
-import cn.chenxubiao.common.web.CommonController;
 import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.picture.domain.Attachment;
 import cn.chenxubiao.picture.service.AttachmentService;

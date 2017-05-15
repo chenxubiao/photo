@@ -13,9 +13,7 @@ import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -76,7 +74,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             }
             int isLiked = 0;
             if (userId > 0) {
-                isLiked = projectLikeService.countByUserIdAndProjectId(userId, projectInfo.getId());
+                isLiked = projectLikeService.isLiked(userId, projectInfo.getId());
             }
             PicInfoBean picInfoBean = new PicInfoBean(pictureExif, isLiked, user);
             picInfoBeanList.add(picInfoBean);
@@ -138,14 +136,15 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectInfo == null) {
             return null;
         }
-        Pageable pageable = new PageRequest(1, 1, Sort.Direction.DESC, "id");
-        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findFormerProjectInfo
-                (projectInfo.getId(), projectInfo.getUserId(), pageable);
-        List<ProjectInfo> projectInfoList = projectInfoPage.getContent();
-        if (CollectionUtil.isEmpty(projectInfoList)) {
-            return null;
-        }
-        return projectInfoList.get(0);
+        return projectInfoRepository.findFirstByUserIdAndIdBeforeOrderByIdDesc(projectInfo.getUserId(), projectInfo.getId());
+//        Pageable pageable = new PageRequest(1, 1, Sort.Direction.DESC, "id");
+//        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findFormerProjectInfo
+//                (projectInfo.getId(), projectInfo.getUserId(), pageable);
+//        List<ProjectInfo> projectInfoList = projectInfoPage.getContent();
+//        if (CollectionUtil.isEmpty(projectInfoList)) {
+//            return null;
+//        }
+//        return projectInfoList.get(0);
     }
 
     @Override
@@ -153,14 +152,16 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectInfo == null) {
             return null;
         }
-        Pageable pageable = new PageRequest(1, 1, Sort.Direction.ASC, "id");
-        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findLatterProjectInfo
-                (projectInfo.getId(), projectInfo.getUserId(), pageable);
-        List<ProjectInfo> projectInfoList = projectInfoPage.getContent();
-        if (CollectionUtil.isEmpty(projectInfoList)) {
-            return null;
-        }
-        return projectInfoList.get(0);
+        return projectInfoRepository.findFirstByUserIdAndIdAfter(projectInfo.getUserId(), projectInfo.getId());
+//
+//        Pageable pageable = new PageRequest(1, 1, Sort.Direction.ASC, "id");
+//        Page<ProjectInfo> projectInfoPage = projectInfoRepository.findLatterProjectInfo
+//                (projectInfo.getId(), projectInfo.getUserId(), pageable);
+//        List<ProjectInfo> projectInfoList = projectInfoPage.getContent();
+//        if (CollectionUtil.isEmpty(projectInfoList)) {
+//            return null;
+//        }
+//        return projectInfoList.get(0);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (CollectionUtil.isEmpty(userIds)) {
             return null;
         }
-        return projectInfoRepository.findAllByUserIdIn(userIds, pageable);
+        return projectInfoRepository.findAllByUserIdInOrderByIdDesc(userIds, pageable);
     }
 
     @Override
@@ -193,9 +194,23 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             return null;
         }
         List<ProjectInfo> projectInfoList = projectInfoRepository
-                .findDistinctByTitleLikeOrDescriptionLike(name, name);
+                .findDistinctByTitleLikeOrDescriptionLikeOrderByIdDesc(name, name);
 
         return null;
+    }
+
+    @Override
+    public int countProjectNum(int userId) {
+        if (userId <= 0) {
+            return 0;
+        }
+
+        return projectInfoRepository.countByUserId(userId);
+    }
+
+    @Override
+    public Page<ProjectInfo> findLatest(Pageable pageable) {
+        return projectInfoRepository.findByPage(pageable);
     }
 
 }

@@ -45,12 +45,25 @@ public class MessageServiceImpl implements MessageService {
         if (userId <= 0) {
             return null;
         }
-        List<Message> messageList = messageRepository.findAllByReceiverAndStatus(userId, BBSConsts.MessageStatus.SEND);
+        List<Message> messageList = messageRepository.findAllByReceiverAndStatusOrderByIdDesc(userId, BBSConsts.MessageStatus.SEND);
         if (CollectionUtil.isNotEmpty(messageList)) {
             for (Message message : messageList) {
-                UserInfo userInfo = userInfoService.findById(message.getSender());
-                SenderInfo senderInfo = new SenderInfo(userInfo);
-                message.setSenderInfo(senderInfo);
+                if (message.getSender() > 0) {
+                    UserInfo userInfo = userInfoService.findById(message.getSender());
+                    if (userInfo != null) {
+                        SenderInfo senderInfo = new SenderInfo(userInfo);
+                        message.setSenderInfo(senderInfo);
+                    }
+                } else {
+                    if (message.getType() == BBSConsts.MessageType.ACCOUNT_CHANGE) {
+                        message.setMessage("账户变动通知：" + message.getMessage() + "朵小红花,欢迎使用～");
+                    }
+                    SenderInfo senderInfo = new SenderInfo();
+                    senderInfo.setAvatarId(0);
+                    senderInfo.setUserId(0);
+                    senderInfo.setUserName(BBSConsts.BBS_NAME);
+                    message.setSenderInfo(senderInfo);
+                }
             }
         }
         return messageList;
@@ -61,7 +74,7 @@ public class MessageServiceImpl implements MessageService {
         if (userId <= 0) {
             return;
         }
-        List<Message> messageSendList = messageRepository.findAllByReceiverAndStatus(userId, BBSConsts.MessageStatus.SEND);
+        List<Message> messageSendList = messageRepository.findAllByReceiverAndStatusOrderByIdDesc(userId, BBSConsts.MessageStatus.SEND);
         if (CollectionUtil.isNotEmpty(messageSendList)) {
             List<Message> messageViewList = new ArrayList<>();
             for (Message message : messageSendList) {
@@ -72,4 +85,5 @@ public class MessageServiceImpl implements MessageService {
             messageRepository.save(messageViewList);
         }
     }
+
 }

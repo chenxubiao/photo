@@ -27,7 +27,6 @@ import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,24 +60,24 @@ public class ProjectDetailController extends CommonController {
     private ProjectLikeService projectLikeService;
 
     @RequestMapping(value = "/project/detail/data", method = RequestMethod.GET)
-    public ResponseEntity getProjectDetail(int picId, int projectId,
-                                           HttpServletRequest request) {
+    public ResponseEntity getProjectDetail(int picId, HttpServletRequest request) {
 
-        if (picId <= 0 || projectId <= 0) {
+        if (picId <= 0) {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
         }
 
         ProjectInfo projectInfo = projectInfoService.findByPicId(picId);
         if (projectInfo == null) {
-            projectInfo = projectInfoService.findById(projectId);
-            if (projectInfo == null) {
-                return ResponseEntity.failure(Errors.PICTURE_NOT_FOUND);
-            }
+            return ResponseEntity.failure(Errors.PICTURE_NOT_FOUND);
         }
 
         ProjectDetailBean projectDetailBean = new ProjectDetailBean();
         //用户看了谁的照片记录
         UserSession userSession = super.getUserSession(request);
+
+        int viewNum = projectViewService.countByProjectId(projectInfo.getId());
+        projectDetailBean.setViewNum(viewNum);
+
         if (userSession.getUserId() != projectInfo.getUserId()) {
             ProjectView projectView = new ProjectView(projectInfo, userSession.getUserId());
             projectView.setCreateTime(new Date());
@@ -103,11 +102,13 @@ public class ProjectDetailController extends CommonController {
             projectDetailBean.setAvatarId(userSession.getAvatarId());
         }
 
+        projectDetailBean.setAuth(projectInfo.getAuth());
+        projectDetailBean.setMoney(projectInfo.getMoney());
         projectDetailBean.setProjectId(projectInfo.getId());
         projectDetailBean.setDescription(projectInfo.getDescription());
         projectDetailBean.setUserId(projectInfo.getUserId());
         projectDetailBean.setPicId(picId);
-        int liked = projectLikeService.countByUserIdAndProjectId(userSession.getUserId(), projectInfo.getId());
+        int liked = projectLikeService.isLiked(userSession.getUserId(), projectInfo.getId());
         int likeNum = projectLikeService.countProjectLikeNum(projectInfo.getId());
         projectDetailBean.setLiked(liked);
         projectDetailBean.setLikeNum(likeNum);
@@ -125,13 +126,17 @@ public class ProjectDetailController extends CommonController {
         } else {
             projectDetailBean.setEndPicId(latter.getPicId());
         }
+        CommonBean category = null;
         if (projectInfo.getCategoryId() > 0) {
             TagCategory tagCategory = tagCategoryService.findById(projectInfo.getCategoryId());
             if (tagCategory != null) {
-                CommonBean category = new CommonBean(tagCategory.getId(), tagCategory.getName());
-                projectDetailBean.setCategory(category);
+                category = new CommonBean(tagCategory.getId(), tagCategory.getName());
             }
         }
+        if (category == null) {
+            category = new CommonBean(0, "未知分类");
+        }
+        projectDetailBean.setCategory(category);
         List<ProjectTag> projectTagList = projectTagService.findByProjectId(projectInfo.getId());
         if (CollectionUtil.isNotEmpty(projectTagList)) {
             List<Integer> tagIds = new ArrayList<>();
@@ -148,6 +153,7 @@ public class ProjectDetailController extends CommonController {
                 projectDetailBean.setTag(tag);
             }
         }
+
         return ResponseEntity.success().set(BBSConsts.DATA, projectDetailBean);
     }
 

@@ -103,4 +103,14 @@ public class BBSBaseController extends RootController {
     public boolean checkLogin() {
         return false;
     }
+
+    public boolean isPasswordGood(String password) {
+        if (StringUtil.isBlank(password)) {
+            return false;
+        }
+        if (password.length() > 32 || password.length() < 6) {
+//TODO           return false;
+        }
+        return true;
+    }
 }

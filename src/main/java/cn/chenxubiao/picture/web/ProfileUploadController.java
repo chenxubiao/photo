@@ -9,7 +9,6 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.BBSMapping;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
-import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.picture.domain.Attachment;
 import cn.chenxubiao.picture.service.AttachmentService;
 import cn.chenxubiao.picture.utils.UploadUtil;
@@ -19,10 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import static cn.chenxubiao.common.utils.consts.BBSConsts.PROTECTED_BASE_PATH;

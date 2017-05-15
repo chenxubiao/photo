@@ -19,6 +19,7 @@ import cn.chenxubiao.user.service.UserToolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -287,6 +288,30 @@ public class UserSettingController extends CommonController {
             userHobbyList.add(userHobby);
         }
         return userHobbyList;
+    }
+
+    @RequestMapping(value = "/user/profile/passsword/update", method = RequestMethod.POST)
+    public ResponseEntity updatePassword(HttpServletRequest request,
+                                         @RequestParam(name = "oldPasswd", value = "") String oldPasswd,
+                                         @RequestParam(name = "newPasswd", value = "") String newPasswd) {
+
+        if (!super.isPasswordGood(oldPasswd) || !super.isPasswordGood(newPasswd)) {
+            return ResponseEntity.failure(Errors.PASSWORD_LENGTH_ERROR);
+        }
+        oldPasswd = HashUtil.encrypt(oldPasswd.trim());
+
+        UserSession userSession = super.getUserSession(request);
+        UserInfo userInfo = userInfoService.findById(userSession.getUserId());
+        if (!oldPasswd.equals(userInfo.getPassword())) {
+            return ResponseEntity.failure(Errors.PASSWORD_OLD_ERROR);
+        }
+        newPasswd = HashUtil.encrypt(newPasswd.trim());
+        if (newPasswd.equals(userInfo.getPassword())) {
+            return ResponseEntity.failure(Errors.PASSWOED_OLD_EQUAL_NEW);
+        }
+        userInfo.setPassword(newPasswd);
+        userInfoService.save(userInfo);
+        return ResponseEntity.success();
     }
 
 }

@@ -1,5 +1,9 @@
 package cn.chenxubiao.user.web;
 
+import cn.chenxubiao.account.domain.Account;
+import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.service.AccountLogService;
+import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
 import cn.chenxubiao.common.utils.HashUtil;
@@ -7,8 +11,9 @@ import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.GuestBaseController;
+import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.bean.LoginBean;
-import cn.chenxubiao.user.bean.UserInfoBean;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.domain.UserLoginLog;
 import cn.chenxubiao.user.domain.UserRole;
@@ -40,6 +45,13 @@ public class UserLoginController extends GuestBaseController {
     private UserRoleService userRoleService;
     @Autowired
     private UserLoginLogService userLoginLogService;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private AccountLogService accountLogService;
+
 
     /**
      * 用户登录接口
@@ -58,11 +70,9 @@ public class UserLoginController extends GuestBaseController {
         String name = loginBean.getUserName().trim();
 
         System.out.println("----------------------------------------------------------------");
-        System.out.println("login userName = "+loginBean.getUserName());
-        System.out.println("login code = "+loginBean.getCode());
-        System.out.println("login passwd = "+loginBean.getPassword());
-        System.out.println("login email = "+loginBean.getEmail());
-        System.out.println("login phone = "+loginBean.getCellphone());
+        System.out.println("login userName = " + loginBean.getUserName());
+        System.out.println("login code = " + loginBean.getCode());
+        System.out.println("login passwd = " + loginBean.getPassword());
         System.out.println("----------------------------------------------------------------");
         if (result.hasErrors()) {
             return ResponseEntity.failure(Errors.PARAMETER_ILLEGAL);
@@ -85,7 +95,7 @@ public class UserLoginController extends GuestBaseController {
             if (userInfo == null) {
                 return ResponseEntity.failure(Errors.EMAIL_NOT_FOUNT);
             }
-        }else {
+        } else {
             userInfo = userInfoService.findByUserName(name);
             if (userInfo == null) {
                 return ResponseEntity.failure(Errors.ACCOUNT_NOT_FOUND);
@@ -104,20 +114,50 @@ public class UserLoginController extends GuestBaseController {
         userInfo.setUserRoleList(userRoleList);
         UserSession userSession = buildUserSession(userInfo);
         super.setUserSession(request, userSession);
+
+        int loginTime = 1;
         UserLoginLog userLoginLog = new UserLoginLog();
+        UserLoginLog todayLog = userLoginLogService.findTodayLoginLog(userInfo.getId());
+        if (todayLog != null) {
+            userLoginLog.setLoginTime(todayLog.getLoginTime());
+        } else {
+            UserLoginLog yesterdayLoginLog = userLoginLogService.findYesterdayLoginLog(userInfo.getId());
+            if (yesterdayLoginLog == null) {
+                userLoginLog.setLoginTime(loginTime);
+            } else {
+                loginTime = yesterdayLoginLog.getLoginTime() + loginTime;
+                Message message = new Message
+                        (BBSConsts.MessageType.LOGIN_ALWOYS, userInfo.getId(), 0, "恭喜连续登录第+" + loginTime + "天");
+                message.setModifyTime(message.getCreateTime());
+                messageService.save(message);
+                Account account = accountService.findByUserId(userInfo.getId());
+                AccountLog accountLog = new AccountLog();
+                account.setTotalMoney(account.getTotalMoney() + loginTime * 5);
+                account.setModifyTime(new Date());
+                accountService.save(account);
+
+                accountLog.setAccount(account);
+                accountLog.setModifyTime(new Date());
+                accountLog.setRemark("登录奖励，次数" + loginTime);
+                accountLog.setType(BBSConsts.AccountLogType.ADD_LOGIN);
+                accountLog.setUserId(userInfo.getId());
+                accountLogService.save(accountLog);
+
+                userLoginLog.setLoginTime(loginTime);
+            }
+        }
         String ip = request.getHeader("X-Real-IP") == null ? "" : request.getHeader("X-Real-IP");
         userLoginLog.setIp(ip);
         userLoginLog.setUserId(userInfo.getId());
         userLoginLog.setCreateTime(new Date());
         userLoginLog.setModifyTime(userLoginLog.getCreateTime());
         userLoginLogService.save(userLoginLog);
-        UserInfoBean userInfoBean = new UserInfoBean(userInfo);
+
         try {
             response.sendRedirect("/user/home/data");
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
-//        return ResponseEntity.success().set(BBSConsts.DATA, userInfoBean);
     }
 }

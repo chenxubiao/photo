@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "userId": 1,
+      "avatarId": 3,
+      "userName": "chenxb",
+      "isSelf": 0,
+      "follows": 1,
+      "following": 1,
+      "isLiked": 0,
+      "isFollow": 1,
+      "picId": 5,
+      "width": 2189,
+      "height": 1459,
+      "title": "IMG_3767-96",
+      "time": "3小时前"
+    },
+    {
+      "userId": 1,
+      "avatarId": 3,
+      "userName": "chenxb",
+      "isSelf": 0,
+      "follows": 1,
+      "following": 1,
+      "isLiked": 0,
+      "isFollow": 1,
+      "picId": 4,
+      "width": 1459,
+      "height": 2189,
+      "title": "chenxb",
+      "time": "4小时前"
+    }
+  ],
+  "pagination": {
+    "totalPage": 1,
+    "totalCount": 2,
+    "page": 0,
+    "size": 20
+  }
+}

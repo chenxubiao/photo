@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Created by chenxb on 17-3-30.
  */
 @SpringBootApplication
-@EntityScan(basePackages = {"cn.chenxubiao.message.domain", "cn.chenxubiao.user.domain", "cn.chenxubiao.picture.domain", "cn.chenxubiao.tag.domain", "cn.chenxubiao.project.domain"})
+@EntityScan(basePackages = {"cn.chenxubiao.account.domain", "cn.chenxubiao.message.domain", "cn.chenxubiao.user.domain", "cn.chenxubiao.picture.domain", "cn.chenxubiao.tag.domain", "cn.chenxubiao.project.domain"})
 @ServletComponentScan
 @ComponentScan(basePackages = "cn.chenxubiao")
 @EnableTransactionManagement

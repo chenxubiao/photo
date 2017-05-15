@@ -13,4 +13,6 @@ public interface ProjectViewRepository extends PagingAndSortingRepository<Projec
     int countViewNumByProjectId(int projectId);
 
     int countViewNumByUserId(int userId);
+
+    int countByViewer(int viewer);
 }

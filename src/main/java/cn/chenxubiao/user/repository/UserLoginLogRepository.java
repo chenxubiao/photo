@@ -8,6 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * Created by chenxb on 17-4-1.
  */
@@ -18,4 +20,9 @@ public interface UserLoginLogRepository extends PagingAndSortingRepository<UserL
     @Query(value = "select a from UserLoginLog a where a.userId = ?1")
     Page<UserLoginLog> findByUserId(int userId, Pageable pageable);
 
+    UserLoginLog findFirstByUserIdOrderByIdDesc(int userId);
+
+    int countByUserIdAndCreateTimeBetween(int userId, Date startTime, Date endTime);
+
+    UserLoginLog findFirstByUserIdAndAndCreateTimeBetweenOrderByIdAsc(int userId, Date startDate, Date endDate);
 }

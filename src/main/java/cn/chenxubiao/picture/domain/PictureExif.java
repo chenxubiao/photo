@@ -23,7 +23,7 @@ public class PictureExif implements Serializable {
     private String shutterSpeed = "";
     private String aperture = "";
     private String iso = "";
-    private String taken;
+    private Date taken;
     @Column(name = "createTime", updatable = false)
     private Date createTime;
     @Column(name = "modifyTime")
@@ -125,11 +125,11 @@ public class PictureExif implements Serializable {
         this.modifyTime = modifyTime;
     }
 
-    public String getTaken() {
+    public Date getTaken() {
         return taken;
     }
 
-    public void setTaken(String taken) {
+    public void setTaken(Date taken) {
         this.taken = taken;
     }
 }

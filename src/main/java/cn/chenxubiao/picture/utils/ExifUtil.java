@@ -1,5 +1,7 @@
 package cn.chenxubiao.picture.utils;
 
+import cn.chenxubiao.common.utils.StringUtil;
+import cn.chenxubiao.common.utils.TimeUtil;
 import cn.chenxubiao.picture.domain.PictureExif;
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
@@ -11,6 +13,7 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +46,13 @@ public class ExifUtil {
                 pictureExif = new PictureExif();
             }
             if (exif2.containsTag(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL)) {
-                pictureExif.setTaken(exif2.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL));
+                String dateString = exif2.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                if (StringUtil.isNotBlank(dateString)) {
+                    Date taken = TimeUtil.parse(dateString,"yyyy:MM:dd HH:mm:ss");
+                    if (taken != null) {
+                        pictureExif.setTaken(taken);
+                    }
+                }
                 System.out.println("datetime:" + exif2.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL));
             }
             if (exif2.containsTag(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT)) {

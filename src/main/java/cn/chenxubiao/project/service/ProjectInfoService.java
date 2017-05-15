@@ -27,6 +27,7 @@ public interface ProjectInfoService {
 
     List<ProjectInfo> findByUserAndPage(int userId, Pageable pageable);
 
+
     ProjectInfo findFormerProject(ProjectInfo projectInfo);
 
     ProjectInfo findLatterProject(ProjectInfo projectInfo);
@@ -38,4 +39,8 @@ public interface ProjectInfoService {
     Page<ProjectInfo> findInUserIdAndPage(List<Integer> userIds, Pageable pageable);
 
     List<ProjectBean> search(String name, int sessonUserId);
+
+    int countProjectNum(int userId);
+
+    Page<ProjectInfo> findLatest(Pageable pageable);
 }

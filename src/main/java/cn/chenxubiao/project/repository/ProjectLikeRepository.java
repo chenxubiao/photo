@@ -24,4 +24,6 @@ public interface ProjectLikeRepository extends PagingAndSortingRepository<Projec
     int countByProjectId(int projectId);
 
     int countByProjectIdIn(List<Integer> projectIds);
+
+//    List<ProjectLike> findPopular(Pageable pageable);
 }
