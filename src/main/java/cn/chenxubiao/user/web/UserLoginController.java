@@ -137,7 +137,8 @@ public class UserLoginController extends GuestBaseController {
                 accountService.save(account);
 
                 accountLog.setAccount(account);
-                accountLog.setModifyTime(new Date());
+                accountLog.setCreateTime(new Date());
+                accountLog.setModifyTime(accountLog.getCreateTime());
                 accountLog.setRemark("登录奖励，次数" + loginTime);
                 accountLog.setType(BBSConsts.AccountLogType.ADD_LOGIN);
                 accountLog.setUserId(userInfo.getId());
