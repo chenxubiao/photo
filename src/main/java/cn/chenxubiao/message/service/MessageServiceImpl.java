@@ -54,15 +54,6 @@ public class MessageServiceImpl implements MessageService {
                         SenderInfo senderInfo = new SenderInfo(userInfo);
                         message.setSenderInfo(senderInfo);
                     }
-                } else {
-                    if (message.getType() == BBSConsts.MessageType.ACCOUNT_CHANGE) {
-                        message.setMessage("账户变动通知：" + message.getMessage() + "朵小红花,欢迎使用～");
-                    }
-                    SenderInfo senderInfo = new SenderInfo();
-                    senderInfo.setAvatarId(0);
-                    senderInfo.setUserId(0);
-                    senderInfo.setUserName(BBSConsts.BBS_NAME);
-                    message.setSenderInfo(senderInfo);
                 }
             }
         }

@@ -2,6 +2,7 @@ package cn.chenxubiao.project.web;
 
 import cn.chenxubiao.account.domain.Account;
 import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.enums.AccountLogTypeEnum;
 import cn.chenxubiao.account.service.AccountLogService;
 import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
@@ -12,6 +13,9 @@ import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
+import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
+import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.picture.domain.Attachment;
 import cn.chenxubiao.picture.domain.PictureExif;
 import cn.chenxubiao.picture.service.AttachmentService;
@@ -54,6 +58,8 @@ public class ProjectPublishController extends CommonController {
     private AccountService accountService;
     @Autowired
     private AccountLogService accountLogService;
+    @Autowired
+    private MessageService messageService;
 
 
     @RequestMapping(value = "/project/publish/data", method = RequestMethod.POST)
@@ -138,10 +144,17 @@ public class ProjectPublishController extends CommonController {
             projectInfoService.save(projectInfo);
 
             AccountLog accountLog = new AccountLog
-                    (userId, BBSConsts.AccountLogType.DEL_UPLOAD, -pay, projectInfo.getId(), "图片发布", account);
+                    (userId, AccountLogTypeEnum.DEL_PIC_UPLOAD.getCode(), pay, projectInfo.getId(), projectInfo.getTitle(), account);
+            accountLog.setBalance(total);
             accountLog.setCreateTime(new Date());
             accountLog.setModifyTime(accountLog.getCreateTime());
             accountLogService.save(accountLog);
+
+            Message message = new Message
+                    (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, userId, accountLog.getId(), accountLog.getMessage());
+            message.setCreateTime(new Date());
+            message.setModifyTime(message.getCreateTime());
+            messageService.save(message);
         }
         List<ProjectTag> projectTagList = new ArrayList<>();
         String tagIds = projectInfoBean.getTagIds();

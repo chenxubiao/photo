@@ -1,5 +1,7 @@
 package cn.chenxubiao.account.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -33,8 +35,12 @@ public class Account implements Serializable {
     private Date modifyTime;
     private int userId;
     private int totalMoney;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
+    @JsonIgnore
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY, mappedBy = "account")
     Set<AccountLog> logs = new LinkedHashSet<>();
+    @JsonIgnore
+    @OneToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY, mappedBy = "account")
+    Set<AccountPay> payLogs = new LinkedHashSet<>();
 
     public int getId() {
         return id;
@@ -87,7 +93,7 @@ public class Account implements Serializable {
     /**
      * 添加订单项
      *
-     * @param student
+     * @param
      */
     public void addAccountLog(AccountLog log) {
         if (!this.logs.contains(log)) {
@@ -99,12 +105,26 @@ public class Account implements Serializable {
     /**
      * 删除订单项
      *
-     * @param student
+     * @param
      */
     public void removeAccountLog(AccountLog log) {
         if (this.logs.contains(log)) {
             log.setAccount(null);
             this.logs.remove(log);
+        }
+    }
+
+    public void addPayLog(AccountPay pay) {
+        if (!this.payLogs.contains(pay)) {
+            this.payLogs.add(pay);
+            pay.setAccount(this);
+        }
+    }
+
+    public void removePayLog(AccountPay pay) {
+        if (this.payLogs.contains(pay)) {
+            pay.setAccount(null);
+            this.payLogs.remove(pay);
         }
     }
 }

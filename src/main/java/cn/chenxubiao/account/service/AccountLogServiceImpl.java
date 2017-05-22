@@ -37,6 +37,14 @@ public class AccountLogServiceImpl implements AccountLogService {
     }
 
     @Override
+    public List<AccountLog> findByAccount(Account account) {
+        if (account == null) {
+            return null;
+        }
+        return accountLogRepository.findAllByAccountOrderByIdDesc(account);
+    }
+
+    @Override
     public void saveAll(List<AccountLog> accountLogList) {
         if (CollectionUtil.isEmpty(accountLogList)) {
             return;

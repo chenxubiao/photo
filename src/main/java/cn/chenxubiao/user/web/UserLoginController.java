@@ -2,6 +2,7 @@ package cn.chenxubiao.user.web;
 
 import cn.chenxubiao.account.domain.Account;
 import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.enums.AccountLogTypeEnum;
 import cn.chenxubiao.account.service.AccountLogService;
 import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
@@ -12,6 +13,7 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.bean.LoginBean;
 import cn.chenxubiao.user.domain.UserInfo;
@@ -127,20 +129,23 @@ public class UserLoginController extends GuestBaseController {
             } else {
                 loginTime = yesterdayLoginLog.getLoginTime() + loginTime;
                 Message message = new Message
-                        (BBSConsts.MessageType.LOGIN_ALWOYS, userInfo.getId(), 0, "恭喜连续登录第+" + loginTime + "天");
+                        (MessageTypeEnum.LOGIN.getCode(), 1, userInfo.getId(), 0, "恭喜连续登录第+" + loginTime + "天");
                 message.setModifyTime(message.getCreateTime());
                 messageService.save(message);
                 Account account = accountService.findByUserId(userInfo.getId());
-                AccountLog accountLog = new AccountLog();
                 account.setTotalMoney(account.getTotalMoney() + loginTime * 5);
                 account.setModifyTime(new Date());
                 accountService.save(account);
 
+                AccountLog accountLog = new AccountLog();
+                accountLog.setBalance(account.getTotalMoney());
+                accountLog.setMoney(loginTime * 5);
                 accountLog.setAccount(account);
                 accountLog.setCreateTime(new Date());
+                accountLog.setProjectId(loginTime);
                 accountLog.setModifyTime(accountLog.getCreateTime());
                 accountLog.setRemark("登录奖励，次数" + loginTime);
-                accountLog.setType(BBSConsts.AccountLogType.ADD_LOGIN);
+                accountLog.setType(AccountLogTypeEnum.ADD_LOGIN.getCode());
                 accountLog.setUserId(userInfo.getId());
                 accountLogService.save(accountLog);
 

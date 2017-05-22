@@ -1,8 +1,10 @@
 package cn.chenxubiao.message.domain;
 
 import cn.chenxubiao.common.utils.DateStringFormatUtil;
-import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.message.bean.SenderInfo;
+import cn.chenxubiao.message.enums.MessageStatusEnum;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,7 +21,7 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int type;
-    private int projectId;
+    private int projectId;  //相关id
     private int sender;     //发送者
     private int receiver;   //接收者
     private String message; //信息
@@ -32,13 +34,16 @@ public class Message implements Serializable {
     private String time;
     @Transient
     private SenderInfo senderInfo;
+    @Transient
+    private SenderInfo receiverInfo;
 
     public Message() {
 
     }
 
-    public Message(int type, int receiver, int projectId, String message) {
-        this.status = BBSConsts.MessageStatus.SEND;
+    public Message(int type, int sender, int receiver, int projectId, String message) {
+        this.sender = sender;
+        this.status = MessageStatusEnum.SEND.getCode();
         this.type = type;
         this.receiver = receiver;
         this.projectId = projectId;
@@ -72,6 +77,23 @@ public class Message implements Serializable {
     }
 
     public String getMessage() {
+        if (this.type == MessageTypeEnum.TASK_PUBLISH.getCode()) {
+            this.message = "「" + this.message + "」发布成功，请及时关注任务状态。";
+        } else if (this.type == MessageTypeEnum.TASK_DEADTIME_OVER.getCode()) {
+            this.message = "「" + this.message + "」任务已超期，请及时关注任务状态。";
+        } else if (this.type == MessageTypeEnum.TASK_RECEIVED_TO_SENDER.getCode()) {
+            this.message = "「" + this.message + "」已被接单，请及时关注任务状态。";
+        } else if (this.type == MessageTypeEnum.TASK_RECEIVED_TO_RECEIVER.getCode()) {
+            this.message = "「" + this.message + "」接单成功，请及时完成任务。";
+        } else if (this.type == MessageTypeEnum.TASK_DONE.getCode()) {
+            this.message = "「" + this.message + "」任务已完成，欢迎下次使用。";
+        }else if (this.type == MessageTypeEnum.TASK_DONE_VERIFY.getCode()) {
+            this.message = "「" + this.message + "」任务已被完成，请确认。";
+        } else if (this.type == MessageTypeEnum.USER_AUTH_SUCCESS.getCode()) {
+            this.message = "您的" + message + "认证，认证成功。";
+        } else if (this.type == MessageTypeEnum.USER_AUTH_FAILED.getCode()) {
+            this.message = "您的" + message + "认证，认证失败。";
+        }
         return message;
     }
 
@@ -129,5 +151,13 @@ public class Message implements Serializable {
 
     public String getTime() {
         return DateStringFormatUtil.format(this.createTime);
+    }
+
+    public SenderInfo getReceiverInfo() {
+        return receiverInfo;
+    }
+
+    public void setReceiverInfo(SenderInfo receiverInfo) {
+        this.receiverInfo = receiverInfo;
     }
 }

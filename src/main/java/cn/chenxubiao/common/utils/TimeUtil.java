@@ -12,6 +12,7 @@ public class TimeUtil {
 
     public static int DATE_TYPE_BEFORE = 0;
     public static int DATE_TYPE_AFTER = 1;
+    public static final String DATE_FORMAT_CHINESE = "MM月dd日HH时mm分";
 
     public static String format(Date date) {
         return format(date, "yyyy-MM-dd HH:mm:ss");
@@ -105,6 +106,25 @@ public class TimeUtil {
         } else {
             //几天前
             c.set(Calendar.DATE, DATE - day);
+        }
+        return c.getTime();
+    }
+
+    public static Date disposeMin(Date date, int min, int type) {
+        if (date == null) {
+            date = new Date();
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+
+        int DATE = c.get(Calendar.MINUTE);
+
+        //几天后
+        if (type == DATE_TYPE_AFTER) {
+            c.set(Calendar.MINUTE, DATE + min);
+        } else {
+            //几天前
+            c.set(Calendar.MINUTE, DATE - min);
         }
         return c.getTime();
     }

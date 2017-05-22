@@ -2,6 +2,7 @@ package cn.chenxubiao.user.web;
 
 import cn.chenxubiao.account.domain.Account;
 import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.enums.AccountLogTypeEnum;
 import cn.chenxubiao.account.service.AccountLogService;
 import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.ResponseEntity;
@@ -12,6 +13,7 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.bean.RegisterBean;
 import cn.chenxubiao.user.domain.UserInfo;
@@ -125,10 +127,11 @@ public class UserRegisterController extends GuestBaseController {
         AccountLog accountLog = new AccountLog();
         accountLog.setAccount(account);
         accountLog.setCreateTime(new Date());
+        accountLog.setBalance(totalMoney);
         accountLog.setModifyTime(accountLog.getCreateTime());
         accountLog.setUserId(userInfo.getId());
         accountLog.setMoney(totalMoney);
-        accountLog.setType(BBSConsts.AccountLogType.ADD_REGESTER);
+        accountLog.setType(AccountLogTypeEnum.ADD_REGESTER.getCode());
         accountLog.setRemark("注册奖励：" + totalMoney);
         accountLogService.save(accountLog);
 
@@ -144,13 +147,13 @@ public class UserRegisterController extends GuestBaseController {
         Message message = new Message();
         message.setReceiver(userInfo.getId());
         message.setStatus(BBSConsts.MessageStatus.SEND);
-        message.setType(BBSConsts.MessageType.USER_REGESTER);
+        message.setType(MessageTypeEnum.REGEISTER.getCode());
         message.setCreateTime(new Date());
         message.setModifyTime(message.getCreateTime());
         message.setMessage("hi～" + userInfo.getUserName()
                 + ",欢迎来到...(还没想好0.0)，请吃饭请联系：hfutchenxb@163.com，提交bug请联系本人私人助理：haiyan@bbs.cn");
         Message messageAccount = new Message
-                (BBSConsts.MessageType.ACCOUNT_CHANGE, userInfo.getId(), 0, "注册奖励：" + totalMoney);
+                (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, userInfo.getId(), accountLog.getId(), accountLog.getMessage());
         message.setCreateTime(new Date());
         message.setModifyTime(message.getCreateTime());
         messageService.save(message);

@@ -2,6 +2,7 @@ package cn.chenxubiao.picture.web;
 
 import cn.chenxubiao.account.domain.Account;
 import cn.chenxubiao.account.domain.AccountLog;
+import cn.chenxubiao.account.enums.AccountLogTypeEnum;
 import cn.chenxubiao.account.service.AccountLogService;
 import cn.chenxubiao.account.service.AccountService;
 import cn.chenxubiao.common.bean.UserSession;
@@ -9,6 +10,9 @@ import cn.chenxubiao.common.utils.ConstStrings;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
+import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
+import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.picture.domain.Attachment;
 import cn.chenxubiao.picture.domain.DownloadLog;
 import cn.chenxubiao.picture.service.AttachmentService;
@@ -44,6 +48,8 @@ public class PictureDownloadController extends CommonController {
     private ProjectInfoService projectInfoService;
     @Autowired
     private DownloadLogService downloadLogService;
+    @Autowired
+    private MessageService messageService;
 
 
     @RequestMapping(value = "/picture/download", method = RequestMethod.GET)
@@ -72,7 +78,7 @@ public class PictureDownloadController extends CommonController {
         if (userSession.getUserId() != attachment.getUserId()) {
             Account accountReduce = accountService.findByUserId(userSession.getUserId());
             AccountLog auth = accountLogService.findByPicAuth
-                    (accountReduce.getUserId(), BBSConsts.AccountLogType.DEL_DOWNLOAD, projectInfo.getId(), accountReduce);
+                    (accountReduce.getUserId(), AccountLogTypeEnum.DEL_PIC_DOWNLOAD.getCode(), projectInfo.getId(), accountReduce);
             if (auth == null) {
                 if (accountReduce.getTotalMoney() < projectInfo.getMoney()) {
                     map.put("message", Errors.ACCOUNT_BALANCE);
@@ -81,12 +87,15 @@ public class PictureDownloadController extends CommonController {
                 List<AccountLog> accountLogList = new ArrayList<>();
                 int pay = projectInfo.getMoney();
                 AccountLog reduceLog = new AccountLog
-                        (userSession.getUserId(), BBSConsts.AccountLogType.DEL_DOWNLOAD, -pay, projectInfo.getId(),
-                                "下载图片id=" + projectInfo.getPicId(), accountReduce);
+                        (userSession.getUserId(), AccountLogTypeEnum.DEL_PIC_DOWNLOAD.getCode(), pay, projectInfo.getId(),
+                                projectInfo.getTitle(), accountReduce);
+                reduceLog.setBalance(accountReduce.getTotalMoney() - pay);
                 reduceLog.setCreateTime(new Date());
                 reduceLog.setModifyTime(reduceLog.getCreateTime());
                 accountReduce.setTotalMoney(accountReduce.getTotalMoney() - pay);
                 accountReduce.setModifyTime(new Date());
+                accountService.save(accountReduce);
+
                 accountLogList.add(reduceLog);
 
                 Account accountAdd = accountService.findByUserId(attachment.getUserId());
@@ -94,12 +103,26 @@ public class PictureDownloadController extends CommonController {
                 accountAdd.setModifyTime(new Date());
                 accountService.save(accountAdd);
                 AccountLog addLog = new AccountLog
-                        (attachment.getUserId(), BBSConsts.AccountLogType.ADD_DOWNLOAD, pay, projectInfo.getId(),
-                                "图片授权获得，picId=" + projectInfo.getPicId(), accountAdd);
+                        (attachment.getUserId(), AccountLogTypeEnum.ADD_PIC_DOWNLOAD.getCode(), pay, projectInfo.getId(),
+                                projectInfo.getTitle(), accountAdd);
+                addLog.setBalance(accountAdd.getTotalMoney());
                 addLog.setCreateTime(new Date());
                 addLog.setModifyTime(addLog.getCreateTime());
                 accountLogList.add(addLog);
                 accountLogService.saveAll(accountLogList);
+
+                Message message = new Message
+                        (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, accountAdd.getUserId(), addLog.getId(), addLog.getMessage());
+                message.setCreateTime(new Date());
+                message.setModifyTime(message.getCreateTime());
+                messageService.save(message);
+
+
+                Message msg = new Message
+                        (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, reduceLog.getUserId(), reduceLog.getId(), reduceLog.getMessage());
+                msg.setCreateTime(new Date());
+                msg.setModifyTime(message.getCreateTime());
+                messageService.save(msg);
             }
         }
 

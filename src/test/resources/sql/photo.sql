@@ -89,25 +89,14 @@ CREATE TABLE `bbs_account_log`(
   `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `money` INT(11) NOT NULL DEFAULT 0 COMMENT '变动积分',
   `type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '积分变动类型,1:注册奖励：2:充值成功，3：充值失败，4：连续登录，5:上传花费积分，6：被别人下载获得，7：下载扣除',
-  `projectId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '相关id',
+  `projectId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '相关id,eg:连续登录天数',
+  `balance` INT(11) NOT NULL DEFAULT 0 COMMENT '余额',
   #   `accountId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '账户id',
   `remark` VARCHAR(32) DEFAULT NULL COMMENT '备注',
   `createTime` DATETIME NOT NULL COMMENT '创建时间',
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户变更记录表';
-
-DROP TABLE IF EXISTS `bbs_account`;
-CREATE TABLE `bbs_account`(
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
-  `totalMoney` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '总积分',
-  `createTime` DATETIME NOT NULL COMMENT '创建时间',
-  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `userId` (`userId`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户表';
-
 
 DROP TABLE IF EXISTS `bbs_account_pay`;
 CREATE TABLE `bbs_account_pay`(
@@ -120,6 +109,18 @@ CREATE TABLE `bbs_account_pay`(
   `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户充值记录表';
+
+DROP TABLE IF EXISTS `bbs_account`;
+CREATE TABLE `bbs_account`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `userId` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `totalMoney` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '总积分',
+  `createTime` DATETIME NOT NULL COMMENT '创建时间',
+  `modifyTime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userId` (`userId`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账户表';
+
 
 DROP TABLE IF EXISTS `bbs_tag_category`;
 CREATE TABLE `bbs_tag_category`(
