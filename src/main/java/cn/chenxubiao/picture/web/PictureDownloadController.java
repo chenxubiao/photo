@@ -121,7 +121,7 @@ public class PictureDownloadController extends CommonController {
                 Message msg = new Message
                         (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, reduceLog.getUserId(), reduceLog.getId(), reduceLog.getMessage());
                 msg.setCreateTime(new Date());
-                msg.setModifyTime(message.getCreateTime());
+                msg.setModifyTime(msg.getCreateTime());
                 messageService.save(msg);
             }
         }

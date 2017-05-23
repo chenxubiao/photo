@@ -4,6 +4,7 @@ import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.message.bean.SenderInfo;
 import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageStatusEnum;
 import cn.chenxubiao.message.repository.MessageRepository;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.service.UserInfoService;
@@ -37,7 +38,7 @@ public class MessageServiceImpl implements MessageService {
         if (userId <= 0) {
             return 0;
         }
-        return messageRepository.countByReceiverAndStatus(userId, BBSConsts.MessageStatus.SEND);
+        return messageRepository.countByReceiverAndStatus(userId, MessageStatusEnum.SEND.getCode());
     }
 
     @Override
@@ -45,7 +46,7 @@ public class MessageServiceImpl implements MessageService {
         if (userId <= 0) {
             return null;
         }
-        List<Message> messageList = messageRepository.findAllByReceiverAndStatusOrderByIdDesc(userId, BBSConsts.MessageStatus.SEND);
+        List<Message> messageList = messageRepository.findAllByReceiverAndStatusOrderByIdDesc(userId, MessageStatusEnum.SEND.getCode());
         if (CollectionUtil.isNotEmpty(messageList)) {
             for (Message message : messageList) {
                 if (message.getSender() > 0) {
@@ -65,11 +66,11 @@ public class MessageServiceImpl implements MessageService {
         if (userId <= 0) {
             return;
         }
-        List<Message> messageSendList = messageRepository.findAllByReceiverAndStatusOrderByIdDesc(userId, BBSConsts.MessageStatus.SEND);
+        List<Message> messageSendList = messageRepository.findAllByReceiverAndStatusOrderByIdDesc(userId, MessageStatusEnum.SEND.getCode());
         if (CollectionUtil.isNotEmpty(messageSendList)) {
             List<Message> messageViewList = new ArrayList<>();
             for (Message message : messageSendList) {
-                message.setStatus(BBSConsts.MessageStatus.VIEWD);
+                message.setStatus(MessageStatusEnum.VIEWED.getCode());
                 message.setModifyTime(new Date());
                 messageViewList.add(message);
             }

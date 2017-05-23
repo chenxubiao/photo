@@ -128,10 +128,10 @@ public class UserLoginController extends GuestBaseController {
                 userLoginLog.setLoginTime(loginTime);
             } else {
                 loginTime = yesterdayLoginLog.getLoginTime() + loginTime;
-                Message message = new Message
-                        (MessageTypeEnum.LOGIN.getCode(), 1, userInfo.getId(), 0, "恭喜连续登录第+" + loginTime + "天");
-                message.setModifyTime(message.getCreateTime());
-                messageService.save(message);
+//                Message message = new Message
+//                        (MessageTypeEnum.LOGIN.getCode(), 1, userInfo.getId(), 0, "恭喜连续登录第+" + loginTime + "天");
+//                message.setModifyTime(message.getCreateTime());
+//                messageService.save(message);
                 Account account = accountService.findByUserId(userInfo.getId());
                 account.setTotalMoney(account.getTotalMoney() + loginTime * 5);
                 account.setModifyTime(new Date());
@@ -148,6 +148,11 @@ public class UserLoginController extends GuestBaseController {
                 accountLog.setType(AccountLogTypeEnum.ADD_LOGIN.getCode());
                 accountLog.setUserId(userInfo.getId());
                 accountLogService.save(accountLog);
+
+                Message messageAcc = new Message
+                        (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, userInfo.getId(), loginTime, accountLog.getMessage());
+                messageAcc.setModifyTime(messageAcc.getCreateTime());
+                messageService.save(messageAcc);
 
                 userLoginLog.setLoginTime(loginTime);
             }

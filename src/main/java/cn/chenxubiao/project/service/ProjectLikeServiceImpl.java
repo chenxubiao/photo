@@ -3,6 +3,8 @@ package cn.chenxubiao.project.service;
 import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageStatusEnum;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.project.domain.ProjectLike;
@@ -51,12 +53,12 @@ public class ProjectLikeServiceImpl implements ProjectLikeService {
 
             if (userInfo.getId() != projectInfo.getUserId()) {
                 Message message = new Message();
-                message.setType(BBSConsts.MessageType.PROJECT_LIKE);
+                message.setType(MessageTypeEnum.PROJECT_LIKE.getCode());
                 message.setSender(userInfo.getId());
                 message.setProjectId(projectId);
                 message.setReceiver(projectInfo.getUserId());
-                message.setStatus(BBSConsts.MessageStatus.SEND);
-                message.setMessage(BBSConsts.LIKED + projectInfo.getTitle());
+                message.setStatus(MessageStatusEnum.SEND.getCode());
+                message.setMessage(projectInfo.getTitle());
                 message.setCreateTime(new Date());
                 message.setModifyTime(message.getCreateTime());
                 messageService.save(message);
@@ -71,11 +73,11 @@ public class ProjectLikeServiceImpl implements ProjectLikeService {
             if (userInfo.getId() != projectInfo.getUserId()) {
                 Message message = new Message();
                 message.setSender(userInfo.getId());
-                message.setType(BBSConsts.MessageType.PROJECT_LIKE);
+                message.setType(MessageTypeEnum.PROJECT_UNLIKE.getCode());
                 message.setProjectId(projectId);
                 message.setReceiver(projectInfo.getUserId());
-                message.setStatus(BBSConsts.MessageStatus.SEND);
-                message.setMessage(BBSConsts.UNLIKE + projectInfo.getTitle());
+                message.setStatus(MessageStatusEnum.SEND.getCode());
+                message.setMessage(projectInfo.getTitle());
                 message.setCreateTime(new Date());
                 message.setModifyTime(message.getCreateTime());
                 messageService.save(message);

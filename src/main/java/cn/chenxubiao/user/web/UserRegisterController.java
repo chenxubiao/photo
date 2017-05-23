@@ -13,6 +13,7 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageStatusEnum;
 import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.bean.RegisterBean;
@@ -152,12 +153,12 @@ public class UserRegisterController extends GuestBaseController {
 
         Message message = new Message();
         message.setReceiver(userInfo.getId());
-        message.setStatus(BBSConsts.MessageStatus.SEND);
+        message.setStatus(MessageStatusEnum.SEND.getCode());
         message.setType(MessageTypeEnum.REGEISTER.getCode());
         message.setCreateTime(new Date());
         message.setModifyTime(message.getCreateTime());
-        message.setMessage("hi～" + userInfo.getUserName()
-                + ",欢迎来到...(还没想好0.0)，请吃饭请联系：hfutchenxb@163.com，提交bug请联系本人私人助理：haiyan@bbs.cn");
+        message.setSender(1);
+        message.setMessage(userInfo.getUserName());
         Message messageAccount = new Message
                 (MessageTypeEnum.ACCOUNT_CHANGE.getCode(), 1, userInfo.getId(), accountLog.getId(), accountLog.getMessage());
         message.setCreateTime(new Date());

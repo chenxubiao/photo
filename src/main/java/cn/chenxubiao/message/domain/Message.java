@@ -77,22 +77,16 @@ public class Message implements Serializable {
     }
 
     public String getMessage() {
-        if (this.type == MessageTypeEnum.TASK_PUBLISH.getCode()) {
-            this.message = "「" + this.message + "」发布成功，请及时关注任务状态。";
-        } else if (this.type == MessageTypeEnum.TASK_DEADTIME_OVER.getCode()) {
-            this.message = "「" + this.message + "」任务已超期，请及时关注任务状态。";
-        } else if (this.type == MessageTypeEnum.TASK_RECEIVED_TO_SENDER.getCode()) {
-            this.message = "「" + this.message + "」已被接单，请及时关注任务状态。";
-        } else if (this.type == MessageTypeEnum.TASK_RECEIVED_TO_RECEIVER.getCode()) {
-            this.message = "「" + this.message + "」接单成功，请及时完成任务。";
-        } else if (this.type == MessageTypeEnum.TASK_DONE.getCode()) {
-            this.message = "「" + this.message + "」任务已完成，欢迎下次使用。";
-        }else if (this.type == MessageTypeEnum.TASK_DONE_VERIFY.getCode()) {
-            this.message = "「" + this.message + "」任务已被完成，请确认。";
-        } else if (this.type == MessageTypeEnum.USER_AUTH_SUCCESS.getCode()) {
-            this.message = "您的" + message + "认证，认证成功。";
-        } else if (this.type == MessageTypeEnum.USER_AUTH_FAILED.getCode()) {
-            this.message = "您的" + message + "认证，认证失败。";
+        if (this.type == MessageTypeEnum.PROJECT_LIKE.getCode()) {
+            this.message = MessageTypeEnum.PROJECT_LIKE.getValue() + this.message;
+        } else if (this.type == MessageTypeEnum.PROJECT_UNLIKE.getCode()) {
+            this.message = MessageTypeEnum.PROJECT_UNLIKE.getValue() + this.message;
+        } else if (this.type == MessageTypeEnum.USER_FOLLOW.getCode()) {
+            this.message = MessageTypeEnum.USER_FOLLOW.getValue();
+        } else if (this.type == MessageTypeEnum.USER_UNFOLLOW.getCode()) {
+            this.message = MessageTypeEnum.USER_UNFOLLOW.getValue();
+        }else if (this.type == MessageTypeEnum.REGEISTER.getCode()) {
+            this.message = "hi～" + this.message + ",欢迎来到图片社区，请吃饭请联系：hfutchenxb@163.com";
         }
         return message;
     }

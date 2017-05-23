@@ -2,6 +2,8 @@ package cn.chenxubiao.user.service;
 
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.message.domain.Message;
+import cn.chenxubiao.message.enums.MessageStatusEnum;
+import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.user.domain.UserFollow;
 import cn.chenxubiao.user.domain.UserInfo;
@@ -43,11 +45,11 @@ public class UserFollowServiceImpl implements UserFollowService {
         UserFollow userFollowDB = findByStartUserIdAndEndUserId(startUserId, endUserId);
         if (userFollowDB != null) {
             Message message = new Message();
-            message.setType(BBSConsts.MessageType.USER_FOLLOW);
+            message.setType(MessageTypeEnum.USER_UNFOLLOW.getCode());
             message.setSender(endUserInfo.getId());
             message.setReceiver(startUserId);
-            message.setStatus(BBSConsts.MessageStatus.SEND);
-            message.setMessage(BBSConsts.UNFOLLOW);
+            message.setStatus(MessageStatusEnum.SEND.getCode());
+            message.setMessage("");
             message.setCreateTime(new Date());
             message.setModifyTime(message.getCreateTime());
             messageService.save(message);
@@ -56,11 +58,11 @@ public class UserFollowServiceImpl implements UserFollowService {
         }
 
         Message message = new Message();
-        message.setType(BBSConsts.MessageType.USER_FOLLOW);
+        message.setType(MessageTypeEnum.USER_FOLLOW.getCode());
         message.setSender(endUserInfo.getId());
         message.setReceiver(startUserId);
-        message.setStatus(BBSConsts.MessageStatus.SEND);
-        message.setMessage(BBSConsts.FOLLOW);
+        message.setStatus(MessageStatusEnum.SEND.getCode());
+        message.setMessage("");
         message.setCreateTime(new Date());
         message.setModifyTime(message.getCreateTime());
         messageService.save(message);

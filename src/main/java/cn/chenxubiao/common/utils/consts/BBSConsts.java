@@ -21,12 +21,6 @@ public class BBSConsts {
     public static final String BBS_NAME = "图片社区";
     public static final String PAGINATION = "pagination";
 
-    public static final String FOLLOW = "关注了您";
-    public static final String UNFOLLOW = "取消关注您";
-
-    public static final String LIKED = "喜欢了您的图片";
-    public static final String UNLIKE = "取消喜欢您的图片";
-
     public static final int CRM_NORMAL = 0;
     public static final int CRM_ADMIN = 1;
 
@@ -61,30 +55,6 @@ public class BBSConsts {
         public static final int CAMERA = 1;
         public static final int LEN = 2;
         public static final int TOOL = 3;
-    }
-
-//    public static final class AccountLogType {
-//
-//        public static final int ADD_REGESTER = 1;   //注册奖励
-//        public static final int ADD_PAY_SUCCESS = 2;//充值成功
-//        public static final int DEL_PAY_FAILURE = 3;//充值失败
-//        public static final int ADD_LOGIN = 4;      //连续登录
-//        public static final int DEL_UPLOAD = 5;     //上传花费积分
-//        public static final int ADD_DOWNLOAD = 6;   //被别人下载获得
-//        public static final int DEL_DOWNLOAD = 7;   //下载扣除
-//    }
-
-    public static final class MessageStatus{
-        public static final int SEND = 1;   //1：已发送，待查看，2：已查看
-        public static final int VIEWD = 2;
-    }
-
-    public static final class MessageType {
-        public static final int PROJECT_LIKE = 1;
-        public static final int USER_FOLLOW = 2;
-        public static final int USER_REGESTER = 3;
-        public static final int ACCOUNT_CHANGE = 4;
-        public static final int LOGIN_ALWOYS = 5;
     }
 
     public static final class ProjectAuth {
