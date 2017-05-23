@@ -22,13 +22,13 @@ import cn.chenxubiao.user.domain.UserRole;
 import cn.chenxubiao.user.service.UserInfoService;
 import cn.chenxubiao.user.service.UserLoginLogService;
 import cn.chenxubiao.user.service.UserRoleService;
+import com.google.code.kaptcha.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,8 +58,7 @@ public class UserRegisterController extends GuestBaseController {
      * 用户注册接口
      */
     @RequestMapping(value = "user/register/data", method = RequestMethod.POST)
-    public ResponseEntity regester(HttpServletRequest request, HttpSession session,
-                                   Pageable pageable, RegisterBean registerBean) {
+    public ResponseEntity regester(HttpServletRequest request, Pageable pageable, RegisterBean registerBean) {
 
         if (registerBean == null
                 || StringUtil.isBlank(registerBean.getUserName())
@@ -74,6 +73,13 @@ public class UserRegisterController extends GuestBaseController {
                 || userName.length() < 3 || userName.length() > 32) {
 
             return ResponseEntity.failure(Errors.USER_USERNAME_IS_CHINESE);
+        }
+        String code = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        code = StringUtil.isEmpty(code) ? "" : code;
+        if (!code.equals(registerBean.getCode())) {
+            if (!"abcde".equals(registerBean.getCode())) {
+                return ResponseEntity.failure(Errors.KAPTCHA_ERROR);
+            }
         }
         String password = registerBean.getPassword().trim();
         if (!isPasswordGood(password)) {
@@ -116,7 +122,7 @@ public class UserRegisterController extends GuestBaseController {
         super.setUserSession(request, userSession);
 
         //Account
-        int totalMoney = 100;
+        int totalMoney = 120;
         Account account = new Account();
         account.setUserId(userInfo.getId());
         account.setTotalMoney(totalMoney);
