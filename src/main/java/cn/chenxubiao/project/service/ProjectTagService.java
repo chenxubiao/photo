@@ -14,4 +14,6 @@ public interface ProjectTagService {
     List<ProjectTag> findByProjectId(int projectId);
 
     void deleteAll(List<ProjectTag> projectTagList);
+
+    List<ProjectTag> findByTagIdIn(List<Integer> tagIds);
 }

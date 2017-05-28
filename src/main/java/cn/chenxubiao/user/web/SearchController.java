@@ -2,13 +2,15 @@ package cn.chenxubiao.user.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
+import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.GuestBaseController;
-import cn.chenxubiao.picture.service.PictureExifService;
+import cn.chenxubiao.project.bean.PicInfo;
+import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.project.service.ProjectInfoService;
-import cn.chenxubiao.project.service.ProjectTagService;
+import cn.chenxubiao.project.web.ProjectIndexController;
 import cn.chenxubiao.user.bean.UserInfoBean;
 import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by chenxb on 17-5-11.
@@ -27,13 +29,12 @@ import java.util.List;
 public class SearchController extends GuestBaseController {
 
     @Autowired
-    private UserInfoService userInfoService;
-    @Autowired
-    private PictureExifService pictureExifService;
-    @Autowired
-    private ProjectTagService projectTagService;
+    private ProjectIndexController projectIndexController;
     @Autowired
     private ProjectInfoService projectInfoService;
+    @Autowired
+    private UserInfoService userInfoService;
+
 
 
     @RequestMapping(value = "/search/data", method = RequestMethod.GET)
@@ -50,7 +51,38 @@ public class SearchController extends GuestBaseController {
         List<UserInfoBean> userInfoBeanList = userInfoService.search(name, userId);
 
         //project
-        projectInfoService.search(name, userId);
-        return ResponseEntity.success().set("user", userInfoBeanList);
+        List<ProjectInfo> projectBeanList = projectInfoService.search(name, userId);
+        Set<Integer> projectIdSet = null;
+        Map<Integer, ProjectInfo> mapName = null;
+        if (CollectionUtil.isNotEmpty(projectBeanList)) {
+            projectIdSet = new HashSet<>();
+            mapName = new HashMap<>();
+            for (ProjectInfo projectBean : projectBeanList) {
+                projectIdSet.add(projectBean.getId());
+                mapName.put(projectBean.getId(), projectBean);
+            }
+        }
+
+        if (CollectionUtil.isEmpty(projectIdSet)) {
+            projectBeanList = projectInfoService.searchByTag(name);
+        }else {
+            List<ProjectInfo> projectBeans = projectInfoService.searchByTag(name);
+            if (CollectionUtil.isNotEmpty(projectBeans)) {
+                Map<Integer, ProjectInfo> mapTag = new HashMap<>();
+                for (ProjectInfo projectBean : projectBeans) {
+                    mapTag.put(projectBean.getId(), projectBean);
+                }
+                mapName.putAll(mapTag);
+            }
+            List<Integer> keys = new ArrayList<>(mapName.keySet());
+            Collections.sort(keys);
+            projectBeanList = new ArrayList<>();
+            for (int id : keys) {
+                projectBeanList.add(mapName.get(id));
+            }
+        }
+
+        List<PicInfo> picInfoList = projectIndexController.getPicInfoList(projectBeanList, userId);
+        return ResponseEntity.success().set("user", userInfoBeanList).set(BBSConsts.DATA, picInfoList);
     }
 }

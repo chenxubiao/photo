@@ -24,6 +24,9 @@ public class ProjectLike implements Serializable {
 
     public ProjectLike(){}
 
+    public ProjectLike(int userId) {
+        this.userId = userId;
+    }
 
     public ProjectLike(int userId, int projectId) {
         this.userId = userId;

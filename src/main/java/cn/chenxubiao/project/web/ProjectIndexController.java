@@ -10,6 +10,7 @@ import cn.chenxubiao.common.web.CommonController;
 import cn.chenxubiao.picture.domain.PictureExif;
 import cn.chenxubiao.picture.service.PictureExifService;
 import cn.chenxubiao.project.bean.PicInfo;
+import cn.chenxubiao.project.bean.ProjectBean;
 import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.project.service.ProjectInfoService;
 import cn.chenxubiao.project.service.ProjectLikeService;
@@ -85,7 +86,7 @@ public class ProjectIndexController extends CommonController {
         return ResponseEntity.success().set(BBSConsts.DATA, picInfoList).set(BBSConsts.PAGINATION, pagination);
     }
 
-    private List<PicInfo> getPicInfoList(List<ProjectInfo> projectInfoList, int userId) {
+    public List<PicInfo> getPicInfoList(List<ProjectInfo> projectInfoList, int userId) {
 
         if (CollectionUtil.isEmpty(projectInfoList)) {
             return null;

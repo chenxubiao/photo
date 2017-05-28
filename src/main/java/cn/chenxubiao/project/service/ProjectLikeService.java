@@ -17,5 +17,8 @@ public interface ProjectLikeService {
 
     int countByPicOwner(int userId);
 
-    List<ProjectLike> findPopular(Pageable pageable);
+    @Deprecated
+    List<Integer> findPopular();
+
+    List<ProjectLike> findAll();
 }

@@ -1,6 +1,7 @@
 package cn.chenxubiao.tag.service;
 
 import cn.chenxubiao.common.utils.CollectionUtil;
+import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.tag.domain.TagInfo;
 import cn.chenxubiao.tag.repository.TagInfoRepository;
@@ -48,5 +49,13 @@ public class TagInfoServiceImpl implements TagInfoService {
     @Override
     public List<TagInfo> findAll() {
         return tagInfoRepository.findAllTagInfo();
+    }
+
+    @Override
+    public List<TagInfo> search(String name) {
+        if (StringUtil.isEmpty(name)) {
+            return null;
+        }
+        return tagInfoRepository.findAllByNameLike(name);
     }
 }

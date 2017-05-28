@@ -166,8 +166,7 @@ public class UserRegisterController extends GuestBaseController {
         messageService.save(message);
         messageService.save(messageAccount);
 
-        return userHomeController.getUserHomeData(0, request, pageable);
+        return userHomeController.getUserHomeData(userInfo.getId(), request, pageable);
     }
-
 
 }

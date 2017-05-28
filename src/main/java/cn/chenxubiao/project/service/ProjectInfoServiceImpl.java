@@ -8,7 +8,12 @@ import cn.chenxubiao.picture.service.PictureExifService;
 import cn.chenxubiao.project.bean.ProjectBean;
 import cn.chenxubiao.project.bean.ProjectInfoBean;
 import cn.chenxubiao.project.domain.ProjectInfo;
+import cn.chenxubiao.project.domain.ProjectTag;
 import cn.chenxubiao.project.repository.ProjectInfoRepository;
+import cn.chenxubiao.tag.domain.TagCategory;
+import cn.chenxubiao.tag.domain.TagInfo;
+import cn.chenxubiao.tag.service.TagCategoryService;
+import cn.chenxubiao.tag.service.TagInfoService;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +36,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     private UserInfoService userInfoService;
     @Autowired
     private ProjectLikeService projectLikeService;
+    @Autowired
+    private TagInfoService tagInfoService;
+    @Autowired
+    private TagCategoryService tagCategoryService;
+    @Autowired
+    private ProjectTagService projectTagService;
 
     @Override
     public ProjectInfo findByPicId(int picId) {
@@ -189,14 +200,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
 
     @Override
-    public List<ProjectBean> search(String name, int sessonUserId) {
+    public List<ProjectInfo> search(String name, int sessonUserId) {
         if (StringUtil.isBlank(name)) {
             return null;
         }
-        List<ProjectInfo> projectInfoList = projectInfoRepository
+        return projectInfoRepository
                 .findDistinctByTitleLikeOrDescriptionLikeOrderByIdDesc(name, name);
-
-        return null;
     }
 
     @Override
@@ -211,6 +220,66 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public Page<ProjectInfo> findLatest(Pageable pageable) {
         return projectInfoRepository.findByPage(pageable);
+    }
+
+    @Override
+    public List<ProjectInfo> searchByTag(String name) {
+        List<TagCategory> tagCategoryList = tagCategoryService.search(name);
+        Set<Integer> categoryIds = null;
+        List<ProjectInfo> projectInfoList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(tagCategoryList)) {
+            categoryIds = new HashSet<>();
+            for (TagCategory tagCategory : tagCategoryList) {
+                categoryIds.add(tagCategory.getId());
+            }
+        }
+        if (CollectionUtil.isNotEmpty(categoryIds)) {
+            projectInfoList = projectInfoRepository.findAllByCategoryIdInOrderByIdDesc(new ArrayList<>(categoryIds));
+        }
+        Set<Integer> tagIds = null;
+        List<TagInfo> tagInfoList = tagInfoService.search(name);
+        if (CollectionUtil.isNotEmpty(tagInfoList)) {
+            tagIds = new HashSet<>();
+            for (TagInfo tagInfo : tagInfoList) {
+                tagIds.add(tagInfo.getId());
+            }
+        }
+        if (CollectionUtil.isNotEmpty(tagIds)) {
+            List<ProjectTag> projectTagList = projectTagService.findByTagIdIn(new ArrayList<>(tagIds));
+            if (CollectionUtil.isNotEmpty(projectTagList)) {
+                Set<Integer> projectIds = new HashSet<>();
+                for (ProjectTag projectTag : projectTagList) {
+                    projectIds.add(projectTag.getProjectId());
+                }
+                if (CollectionUtil.isNotEmpty(categoryIds)) {
+                    List<ProjectInfo> projectTagUnCategoryList = projectInfoRepository
+                            .findAllByCategoryIdNotInAndIdInOrderByIdDesc
+                                    (new ArrayList<>(categoryIds), new ArrayList<>(projectIds));
+                    projectInfoList.addAll(projectTagUnCategoryList);
+                }else {
+                    List<ProjectInfo> projectTagInList = projectInfoRepository
+                            .findAllByIdInOrderByIdDesc(new ArrayList<>(projectIds));
+
+                    projectInfoList.addAll(projectTagInList);
+                }
+            }
+        }
+
+        return projectInfoList;
+    }
+
+    private List<ProjectBean> getProjectBean(List<ProjectInfo> projectInfoList) {
+        if (CollectionUtil.isEmpty(projectInfoList)) {
+            return null;
+        }
+        List<ProjectBean> projectBeanList = new ArrayList<>();
+        for (ProjectInfo projectInfo : projectInfoList) {
+            PictureExif pictureExif = pictureExifService.findByPicId(projectInfo.getPicId());
+            int likeNum = projectLikeService.countProjectLikeNum(projectInfo.getId());
+            ProjectBean projectBean = new ProjectBean(projectInfo, likeNum, 0, pictureExif);
+            projectBeanList.add(projectBean);
+        }
+        return projectBeanList;
     }
 
 }

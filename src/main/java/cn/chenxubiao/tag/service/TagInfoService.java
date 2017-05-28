@@ -15,4 +15,6 @@ public interface TagInfoService {
     TagInfo save(TagInfo tagInfo);
 
     List<TagInfo> findAll();
+
+    List<TagInfo> search(String name);
 }

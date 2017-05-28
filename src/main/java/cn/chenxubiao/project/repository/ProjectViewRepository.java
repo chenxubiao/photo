@@ -4,6 +4,8 @@ import cn.chenxubiao.project.domain.ProjectView;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by chenxb on 17-5-9.
  */
@@ -15,4 +17,6 @@ public interface ProjectViewRepository extends PagingAndSortingRepository<Projec
     int countViewNumByUserId(int userId);
 
     int countByViewer(int viewer);
+
+    List<ProjectView> findAllByUserIdIsNot(int userId);
 }

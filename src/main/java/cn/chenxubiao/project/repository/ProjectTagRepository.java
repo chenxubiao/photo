@@ -18,4 +18,6 @@ public interface ProjectTagRepository extends PagingAndSortingRepository<Project
     @Query(value = "select a from ProjectTag a where a.projectId = ?1")
     List<ProjectTag> findByProjectId(int projectId);
 
+
+    List<ProjectTag> findAllByTagIdIn(List<Integer> tagIds);
 }

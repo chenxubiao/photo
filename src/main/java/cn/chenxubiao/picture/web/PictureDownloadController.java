@@ -53,7 +53,6 @@ public class PictureDownloadController extends CommonController {
 
 
     @RequestMapping(value = "/picture/download", method = RequestMethod.GET)
-
     public String downloadPicture(@RequestParam(value = "id", defaultValue = "0") int id,
                                   HttpServletResponse response, HttpServletRequest request,
                                   Map<String, Object> map) {

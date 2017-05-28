@@ -38,9 +38,11 @@ public interface ProjectInfoService {
 
     Page<ProjectInfo> findInUserIdAndPage(List<Integer> userIds, Pageable pageable);
 
-    List<ProjectBean> search(String name, int sessonUserId);
+    List<ProjectInfo> search(String name, int sessonUserId);
 
     int countProjectNum(int userId);
 
     Page<ProjectInfo> findLatest(Pageable pageable);
+
+    List<ProjectInfo> searchByTag(String name);
 }

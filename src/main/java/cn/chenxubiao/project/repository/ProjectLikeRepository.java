@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -25,5 +26,10 @@ public interface ProjectLikeRepository extends PagingAndSortingRepository<Projec
 
     int countByProjectIdIn(List<Integer> projectIds);
 
-//    List<ProjectLike> findPopular(Pageable pageable);
+    @Query(value = "select distinct a.userId ,COUNT(a.projectId) as b from ProjectLike as a GROUP BY a.userId order by b desc")
+    List<Object[]> findPopular();
+
+    @Query(value = "select a from ProjectLike a")
+    List<ProjectLike> findAll();
+
 }

@@ -30,7 +30,7 @@ public class ExifUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PictureExif pictureExif = null;
+        PictureExif pictureExif = new PictureExif();
         Directory exif = metadata.getDirectory(ExifIFD0Directory.class);
         if (exif != null) {
             if (exif.containsTag(ExifIFD0Directory.TAG_MODEL)) {

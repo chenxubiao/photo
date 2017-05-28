@@ -3,6 +3,7 @@ package cn.chenxubiao.project.service;
 import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.project.domain.ProjectTag;
 import cn.chenxubiao.project.repository.ProjectTagRepository;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,13 @@ public class ProjectTagServiceImpl implements ProjectTagService {
         if (CollectionUtil.isNotEmpty(projectTagList)) {
             projectTagRepository.delete(projectTagList);
         }
+    }
+
+    @Override
+    public List<ProjectTag> findByTagIdIn(List<Integer> tagIds) {
+        if (CollectionUtil.isEmpty(tagIds)) {
+            return null;
+        }
+        return projectTagRepository.findAllByTagIdIn(tagIds);
     }
 }

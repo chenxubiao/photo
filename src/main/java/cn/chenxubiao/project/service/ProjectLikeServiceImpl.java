@@ -1,7 +1,6 @@
 package cn.chenxubiao.project.service;
 
 import cn.chenxubiao.common.utils.CollectionUtil;
-import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.message.domain.Message;
 import cn.chenxubiao.message.enums.MessageStatusEnum;
 import cn.chenxubiao.message.enums.MessageTypeEnum;
@@ -12,9 +11,10 @@ import cn.chenxubiao.project.repository.ProjectLikeRepository;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,8 +120,20 @@ public class ProjectLikeServiceImpl implements ProjectLikeService {
     }
 
     @Override
-    public List<ProjectLike> findPopular(Pageable pageable) {
-//        return projectLikeRepository.find
-        return null;
+    public List<Integer> findPopular() {
+        List<Object[]> objectList = projectLikeRepository.findPopular();
+        if (CollectionUtil.isEmpty(objectList)) {
+            return null;
+        }
+        List<Integer> ids = new ArrayList<>();
+        for (Object o : objectList) {
+            ids.add(Integer.parseInt(o + ""));
+        }
+        return ids;
+    }
+
+    @Override
+    public List<ProjectLike> findAll() {
+        return projectLikeRepository.findAll();
     }
 }

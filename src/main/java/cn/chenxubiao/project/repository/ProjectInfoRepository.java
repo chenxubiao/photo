@@ -46,4 +46,10 @@ public interface ProjectInfoRepository extends PagingAndSortingRepository<Projec
     ProjectInfo findFirstByUserIdAndIdBeforeOrderByIdDesc(int userId, int id);
 
     ProjectInfo findFirstByUserIdAndIdAfter(int userId, int id);
+
+    List<ProjectInfo> findAllByCategoryIdInOrderByIdDesc(List<Integer> categoryIds);
+
+    List<ProjectInfo> findAllByCategoryIdNotInAndIdInOrderByIdDesc(List<Integer> cateogryIds, List<Integer> ids);
+
+    List<ProjectInfo> findAllByIdInOrderByIdDesc(List<Integer> ids);
 }

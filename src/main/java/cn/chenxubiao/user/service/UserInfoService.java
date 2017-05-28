@@ -1,10 +1,7 @@
 package cn.chenxubiao.user.service;
 
-import cn.chenxubiao.project.domain.ProjectInfo;
 import cn.chenxubiao.user.bean.UserInfoBean;
 import cn.chenxubiao.user.domain.UserInfo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -52,6 +49,7 @@ public interface UserInfoService {
      */
     UserInfoBean convertToUserInfoBean(UserInfo userInfo, int userId);
 
+    List<UserInfo> findPopular(int removeUserId);
 
-
+    List<UserInfo> findIdNotIn(List<Integer> ids);
 }

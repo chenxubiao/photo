@@ -23,4 +23,6 @@ public interface TagInfoRepository extends PagingAndSortingRepository<TagInfo, L
     @Query(value = "select a from TagInfo a where a.id>0")
     List<TagInfo> findAllTagInfo();
 
+    List<TagInfo> findAllByNameLike(String name);
+
 }

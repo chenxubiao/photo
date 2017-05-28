@@ -4,6 +4,11 @@ import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.StringUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.project.domain.ProjectInfo;
+import cn.chenxubiao.project.domain.ProjectLike;
+import cn.chenxubiao.project.domain.ProjectView;
+import cn.chenxubiao.project.service.ProjectInfoService;
+import cn.chenxubiao.project.service.ProjectLikeService;
+import cn.chenxubiao.project.service.ProjectViewService;
 import cn.chenxubiao.tag.domain.TagCategory;
 import cn.chenxubiao.tag.service.TagCategoryService;
 import cn.chenxubiao.user.bean.UserInfoBean;
@@ -36,6 +41,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     private TagCategoryService tagCategoryService;
     @Autowired
     private UserHobbyService userHobbyService;
+    @Autowired
+    private ProjectLikeService projectLikeService;
+    @Autowired
+    private ProjectInfoService projectInfoService;
+    @Autowired
+    private ProjectViewService projectViewService;
 
     @Override
     public UserInfo findByEmail(String email) {
@@ -210,6 +221,38 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoBean.setFollowing(userFollowService.countFollowing(userInfo.getId()));
         userInfoBean.setIsFollow(userFollowService.isFollow(userInfo.getId(), userId));
         return userInfoBean;
+    }
+
+    @Override
+    public List<UserInfo> findPopular(int removeUserId) {
+        Set<Integer> userIds = new HashSet<>();
+        List<ProjectLike> projectLikeList = projectLikeService.findAll();
+        if (CollectionUtil.isNotEmpty(projectLikeList)) {
+            for (ProjectLike projectLike : projectLikeList) {
+                ProjectInfo projectInfo = projectInfoService.findById(projectLike.getProjectId());
+                if (removeUserId != projectInfo.getUserId()) {
+                    userIds.add(projectInfo.getUserId());
+                }
+            }
+        }
+        List<ProjectView> projectViewList = projectViewService.findAllByUserIdIsNot(removeUserId);
+        if (CollectionUtil.isNotEmpty(projectViewList)) {
+            for (ProjectView projectView : projectViewList) {
+                userIds.add(projectView.getUserId());
+            }
+        }
+        if (CollectionUtil.isEmpty(userIds)) {
+            return null;
+        }
+        return userInfoRepository.findAllByIdIn(new ArrayList<>(userIds));
+    }
+
+    @Override
+    public List<UserInfo> findIdNotIn(List<Integer> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return null;
+        }
+        return userInfoRepository.findAllByIdNotIn(ids);
     }
 
 

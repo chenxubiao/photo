@@ -5,6 +5,8 @@ import cn.chenxubiao.project.repository.ProjectViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by chenxb on 17-5-9.
  */
@@ -44,5 +46,10 @@ public class ProjectViewServiceImpl implements ProjectViewService {
             return 0;
         }
         return projectViewRepository.countByViewer(viewer);
+    }
+
+    @Override
+    public List<ProjectView> findAllByUserIdIsNot(int userId) {
+        return projectViewRepository.findAllByUserIdIsNot(userId);
     }
 }
