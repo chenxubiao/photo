@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "id": 4,
+      "createTime": "2017-05-28 09:41:50",
+      "modifyTime": "2017-05-28 09:41:50",
+      "userId": 2,
+      "type": 3,
+      "money": 10,
+      "projectId": 2,
+      "message": "您的账户05月28日09时41分上传图片a，花费金币10枚，账户余额100枚。「图片社区」",
+      "balance": 100,
+      "remark": "a",
+      "account": {
+        "id": 2,
+        "createTime": "2017-05-28 09:34:43",
+        "modifyTime": "2017-05-28 09:41:50",
+        "userId": 2,
+        "totalMoney": 100
+      }
+    },
+    {
+      "id": 3,
+      "createTime": "2017-05-28 09:38:08",
+      "modifyTime": "2017-05-28 09:38:08",
+      "userId": 2,
+      "type": 3,
+      "money": 10,
+      "projectId": 1,
+      "message": "您的账户05月28日09时38分上传图片ceshi，花费金币10枚，账户余额110枚。「图片社区」",
+      "balance": 110,
+      "remark": "ceshi",
+      "account": {
+        "id": 2,
+        "createTime": "2017-05-28 09:34:43",
+        "modifyTime": "2017-05-28 09:41:50",
+        "userId": 2,
+        "totalMoney": 100
+      }
+    },
+    {
+      "id": 2,
+      "createTime": "2017-05-28 09:34:43",
+      "modifyTime": "2017-05-28 09:34:43",
+      "userId": 2,
+      "type": 1,
+      "money": 120,
+      "projectId": 0,
+      "message": "恭喜您05月28日09时34分加入「图片社区」，系统已自动为您开通账户，注册收入金币120枚，账户余额120枚。「图片社区」",
+      "balance": 120,
+      "remark": "注册奖励：120",
+      "account": {
+        "id": 2,
+        "createTime": "2017-05-28 09:34:43",
+        "modifyTime": "2017-05-28 09:41:50",
+        "userId": 2,
+        "totalMoney": 100
+      }
+    }
+  ],
+  "balance": 100
+}

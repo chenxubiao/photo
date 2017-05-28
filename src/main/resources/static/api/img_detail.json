@@ -1,38 +1,53 @@
 {
   "data": {
-    "projectId": 8,
-    "picId": 22,
-    "startPicId": 20,
-    "endPicId": 30,
+    "projectId": 2,
+    "picId": 3,
+    "startPicId": 2,
+    "endPicId": 0,
     "userId": 2,
-    "avatarId": 66,
-    "userName": "long",
+    "avatarId": 0,
+    "userName": "chenxb",
     "isSelf": 0,
     "isFollow": 1,
-    "liked": 0,
+    "liked": 1,
     "likeNum": 2,
     "follow": 0,
-    "viewNum": 0,
+    "viewNum": 4,
     "category": {
-      "id": 3,
-      "name": "名人"
+      "id": 1,
+      "name": "动物"
     },
-    "tag": null,
-    "description": "f",
+    "tag": [
+      {
+        "id": 1,
+        "name": "sdf"
+      },
+      {
+        "id": 2,
+        "name": "sdfdsf"
+      },
+      {
+        "id": 3,
+        "name": "a"
+      }
+    ],
+    "description": "asdf",
     "exif": {
-      "id": 19,
-      "picId": 22,
+      "id": 2,
+      "picId": 3,
       "camera": "Canon EOS 70D",
       "width": 1459,
       "height": 2189,
       "lens": "EF50mm f/1.8 II",
       "focalLength": "50.0 mm",
-      "shutterSpeed": "1/199 sec",
-      "aperture": "F5.6",
+      "shutterSpeed": "1/399 sec",
+      "aperture": "F4.5",
       "iso": "100",
-      "taken": "2017-05-05 14:00:16.0",
-      "createTime": "2017-05-09 19:01:14",
-      "modifyTime": "2017-05-09 19:01:14"
-    }
+      "taken": "2017-05-06 16:39:18",
+      "createTime": "2017-05-28 09:40:21",
+      "modifyTime": "2017-05-28 09:40:21"
+    },
+    "auth": 1,
+    "money": 123
   }
 }
