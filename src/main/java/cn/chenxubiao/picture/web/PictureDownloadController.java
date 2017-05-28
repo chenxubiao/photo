@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,6 +135,13 @@ public class PictureDownloadController extends CommonController {
         downloadLogService.save(downloadLog);
 
         String relativePath = BBSConsts.PROTECTED_BASE_PATH + attachment.getRelativePath();
+        String fileName = projectInfo.getTitle() + "." + attachment.getExt();
+        try {
+            fileName = new String(fileName.getBytes("gbk"), "iso8859-1");
+        } catch (UnsupportedEncodingException e) {
+            fileName = attachment.getUid() + "." + attachment.getExt();
+        }
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
         response.setContentType(ConstStrings.CONTENT_TYPE_DOWNLOAD);//图片下载
         DownloadUtil.downloadPicture(response, relativePath);
         return null;

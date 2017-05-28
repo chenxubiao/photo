@@ -52,21 +52,20 @@ public class UserRecommendController extends CommonController {
         UserSession userSession = super.getUserSession(request);
         int userId = userSession.getUserId();
 
-        List<UserInfo> userInfos = userInfoService.findPopular(userId);
+//        List<UserInfo> userInfos = userInfoService.findPopular(userId);
 
         List<UserFollow> userFollowing = userFollowService.findFollowing(userId);
-        Set<Integer> userIds = null;
+        Set<Integer> userIds = new HashSet<>();
         // TODO: 17-5-28 用户推荐
         if (CollectionUtil.isEmpty(userFollowing)) {
 
         }else {
-            userIds = new HashSet<>();
             for (UserFollow userFollow : userFollowing) {
                 userIds.add(userFollow.getStartUserId());
             }
         }
         userIds.add(userId);
-        userInfos = userInfoService.findIdNotIn(new ArrayList<>(userIds));
+        List<UserInfo> userInfos = userInfoService.findIdNotIn(new ArrayList<>(userIds));
         if (CollectionUtil.isEmpty(userInfos)) {
             return ResponseEntity.failure(Errors.NOT_FOUND);
         }
