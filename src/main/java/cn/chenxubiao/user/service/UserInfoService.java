@@ -52,4 +52,6 @@ public interface UserInfoService {
     List<UserInfo> findPopular(int removeUserId);
 
     List<UserInfo> findIdNotIn(List<Integer> ids);
+
+    List<UserInfo> findByIdIn(List<Integer> ids);
 }

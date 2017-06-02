@@ -255,6 +255,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoRepository.findAllByIdNotIn(ids);
     }
 
+    @Override
+    public List<UserInfo> findByIdIn(List<Integer> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return null;
+        }
+        return userInfoRepository.findAllByIdInOrderByModifyTimeDesc(ids);
+    }
+
 
     private UserInfo setUserRoleList(UserInfo userInfo) {
         if (userInfo == null) {

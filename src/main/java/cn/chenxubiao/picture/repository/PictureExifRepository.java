@@ -18,7 +18,6 @@ import java.util.Set;
 @Transactional
 public interface PictureExifRepository extends PagingAndSortingRepository<PictureExif, Long> {
 
-    @Query(value = "select count(a) from PictureExif a where a.picId = ?1")
     int countByPicId(int id);
 
     @Query(value = "select a from PictureExif a")

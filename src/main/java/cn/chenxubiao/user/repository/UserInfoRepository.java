@@ -47,6 +47,8 @@ public interface UserInfoRepository extends PagingAndSortingRepository<UserInfo,
 
     List<UserInfo> findAllByIdNotIn(List<Integer> ids);
 
+    List<UserInfo> findAllByIdInOrderByModifyTimeDesc(List<Integer> ids);
+
     List<UserInfo> findDistinctByUserNameLikeOrDescriptionLikeOrEmailLikeAndIdNotIn
             (String userName, String desctiption, String email, List<Integer> id);
 

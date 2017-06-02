@@ -17,7 +17,6 @@ import cn.chenxubiao.message.domain.Message;
 import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
 import cn.chenxubiao.picture.domain.Attachment;
-import cn.chenxubiao.picture.domain.PictureExif;
 import cn.chenxubiao.picture.service.AttachmentService;
 import cn.chenxubiao.picture.service.PictureExifService;
 import cn.chenxubiao.project.bean.ProjectInfoBean;

@@ -20,12 +20,6 @@ import java.util.Set;
 public class PictureExifServiceImpl implements PictureExifService {
     @Autowired
     private PictureExifRepository pictureExifRepository;
-    @Autowired
-    private AttachmentService attachmentService;
-    @Autowired
-    private UserInfoService userInfoService;
-    @Autowired
-    private ProjectLikeService projectLikeService;
 
     @Override
     public void save(PictureExif pictureExif) {

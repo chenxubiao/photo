@@ -16,6 +16,8 @@ import cn.chenxubiao.message.domain.Message;
 import cn.chenxubiao.message.enums.MessageStatusEnum;
 import cn.chenxubiao.message.enums.MessageTypeEnum;
 import cn.chenxubiao.message.service.MessageService;
+import cn.chenxubiao.neo4j.domain.Person;
+import cn.chenxubiao.neo4j.service.PersonService;
 import cn.chenxubiao.user.bean.RegisterBean;
 import cn.chenxubiao.user.domain.UserInfo;
 import cn.chenxubiao.user.domain.UserLoginLog;
@@ -54,6 +56,8 @@ public class UserRegisterController extends GuestBaseController {
     private AccountLogService accountLogService;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private PersonService personService;
 
     /**
      * 用户注册接口
@@ -165,6 +169,9 @@ public class UserRegisterController extends GuestBaseController {
         message.setModifyTime(message.getCreateTime());
         messageService.save(message);
         messageService.save(messageAccount);
+
+        Person person = new Person(userInfo);
+        personService.save(person);
 
         return userHomeController.getUserHomeData(userInfo.getId(), request, pageable);
     }

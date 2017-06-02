@@ -38,7 +38,7 @@ public class ProfileUploadController extends CommonController {
      * 头像、背景图片上传接口
      *
      * @param request
-     * @param session
+     * @param
      * @return
      */
     @RequestMapping(value = "/picture/upload/profile", method = RequestMethod.POST)

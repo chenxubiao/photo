@@ -93,8 +93,17 @@ public class PictureUploadController extends CommonController {
         }
 
         //todo 启用多线程，保存图片exif信息
-        Thread thread = new ExifThread(userInfo, attachment);
-        thread.start();
+//        Thread thread = new ExifThread(userInfo, attachment, pictureExifService);
+//        thread.start();
+
+        PictureExif pictureExif = ExifUtil.getExifInfo(file);
+        if (pictureExif != null) {
+            pictureExif.setCreateTime(new Date());
+            pictureExif.setModifyTime(pictureExif.getCreateTime());
+            pictureExif.setPicId(attachment.getId());
+            pictureExifService.save(pictureExif);
+        }
+
 
         return ResponseEntity.success().set(BBSConsts.DATA, attachment);
     }
@@ -104,8 +113,10 @@ public class PictureUploadController extends CommonController {
         private int userId;
         private UserInfo userInfo;
         private Attachment attachment;
+        private PictureExifService pictureExifService;
 
-        public ExifThread(UserInfo userInfo, Attachment attachment) {
+        public ExifThread(UserInfo userInfo, Attachment attachment, PictureExifService pictureExifService) {
+            this.pictureExifService = pictureExifService;
             this.userInfo = userInfo;
             this.attachment = attachment;
         }
@@ -134,6 +145,14 @@ public class PictureUploadController extends CommonController {
             this.userId = userId;
         }
 
+        public PictureExifService getPictureExifService() {
+            return pictureExifService;
+        }
+
+        public void setPictureExifService(PictureExifService pictureExifService) {
+            this.pictureExifService = pictureExifService;
+        }
+
         @Override
         public void run() {
             File file = new File(PROTECTED_BASE_PATH + attachment.getRelativePath());
@@ -144,7 +163,7 @@ public class PictureUploadController extends CommonController {
             pictureExif.setCreateTime(new Date());
             pictureExif.setModifyTime(pictureExif.getCreateTime());
             pictureExif.setPicId(attachment.getId());
-            pictureExifService.save(pictureExif);
+            this.pictureExifService.save(pictureExif);
         }
     }
 
