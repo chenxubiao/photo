@@ -1,30 +1,80 @@
 {
   "data": {
-    "userId": 1,
-    "avatarId": 0,
-    "backgroundId": 2,
-    "userName": "bbs",
-    "email": "bbs@bbs.cn",
+    "userId": 2,
+    "avatarId": 3,
+    "backgroundId": 4,
+    "userName": "chenxb",
+    "email": "chenxb@bbs.cn",
     "cellphone": null,
     "sex": 1,
-    "birthday": null,
+    "birthday": "1970-01-01 00:00:00",
     "description": "",
+    "follows": 0,
+    "following": 0,
+    "isFollow": 1,
     "followers": 1,
-    "following": 1,
-    "views": 2,
-    "likes": 1,
+    "isSelf": 0,
+    "views": 32,
+    "likes": 5,
     "project": [
       {
         "projectId": 1,
-        "userId": 1,
-        "viewNum": 2,
+        "userId": 2,
+        "isSelf": 0,
+        "isFollow": 1,
+        "viewNum": 7,
         "likeNum": 1,
         "liked": 0,
-        "picId": 1,
-        "width": 1600,
-        "height": 1067,
-        "title": "hello"
+        "picId": 5,
+        "width": 2189,
+        "height": 1459,
+        "title": "千岛湖",
+        "user": null
+      },
+      {
+        "projectId": 2,
+        "userId": 2,
+        "isSelf": 0,
+        "isFollow": 1,
+        "viewNum": 13,
+        "likeNum": 2,
+        "liked": 1,
+        "picId": 6,
+        "width": 1459,
+        "height": 2189,
+        "title": "雕雕",
+        "user": null
+      },
+      {
+        "projectId": 3,
+        "userId": 2,
+        "isSelf": 0,
+        "isFollow": 1,
+        "viewNum": 12,
+        "likeNum": 2,
+        "liked": 1,
+        "picId": 9,
+        "width": 500,
+        "height": 573,
+        "title": "逗逗",
+        "user": null
       }
-    ]
+    ],
+    "userProfile": {
+      "userName": "chenxb",
+      "avatarId": 3,
+      "sex": 1,
+      "birthday": "1970-01-01 00:00:00",
+      "description": "",
+      "hobby": [],
+      "categoryIds": null,
+      "cameraNames": "",
+      "lensNames": "",
+      "toolNames": ""
+    }
+  },
+  "msg": {
+    "msgCount": 0,
+    "messages": null
   }
 }

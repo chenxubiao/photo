@@ -2,8 +2,10 @@ package cn.chenxubiao.neo4j.web;
 
 import cn.chenxubiao.common.bean.ResponseEntity;
 import cn.chenxubiao.common.bean.UserSession;
+import cn.chenxubiao.common.utils.CollectionUtil;
 import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.web.GuestBaseController;
+import cn.chenxubiao.neo4j.bean.PersonBean;
 import cn.chenxubiao.neo4j.domain.Person;
 import cn.chenxubiao.neo4j.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +28,15 @@ public class PersonController extends GuestBaseController {
     public ResponseEntity findAll() {
 
         List<Person> personList = personService.findAll();
-        return ResponseEntity.success().set(BBSConsts.DATA, personList);
+        List<PersonBean> personBeans = null;
+        if (CollectionUtil.isNotEmpty(personList)) {
+            personBeans = new ArrayList<>();
+            for (Person person : personList) {
+                PersonBean personBean = new PersonBean(person);
+                personBeans.add(personBean);
+            }
+        }
+        return ResponseEntity.success().set(BBSConsts.DATA, personBeans);
     }
 
     @RequestMapping(value = "/neo4j/recommond/user")
@@ -34,6 +45,16 @@ public class PersonController extends GuestBaseController {
         UserSession userSession = super.getUserSession(request);
         int userId = userSession == null ? 0 : userSession.getUserId();
         List<Person> personList = personService.recommondUser(userId);
-        return ResponseEntity.success().set(BBSConsts.DATA, personList);
+        List<PersonBean> personBeans = null;
+
+        if (CollectionUtil.isNotEmpty(personList)) {
+            personBeans = new ArrayList<>();
+            for (Person person : personList) {
+                PersonBean personBean = new PersonBean(person);
+                personBeans.add(personBean);
+            }
+        }
+        return ResponseEntity.success().set(BBSConsts.DATA, personBeans);
     }
+
 }

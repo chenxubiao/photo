@@ -1,0 +1,52 @@
+{
+  "user": [
+    {
+      "userId": 2,
+      "avatarId": 3,
+      "backgroundId": 4,
+      "userName": "chenxb",
+      "email": "chenxb@bbs.cn",
+      "cellphone": "",
+      "sex": 1,
+      "birthday": "1970-01-01 00:00:00",
+      "description": "",
+      "follows": 0,
+      "following": 0,
+      "isFollow": 0
+    }
+  ],
+  "data": [
+    {
+      "userId": 2,
+      "avatarId": 3,
+      "userName": "chenxb",
+      "isSelf": 0,
+      "follows": 0,
+      "following": 0,
+      "isLiked": 0,
+      "likeNum": 1,
+      "isFollow": 1,
+      "picId": 6,
+      "width": 1459,
+      "height": 2189,
+      "title": "雕雕",
+      "time": "6天前"
+    },
+    {
+      "userId": 5,
+      "avatarId": 10,
+      "userName": "mua",
+      "isSelf": 0,
+      "follows": 0,
+      "following": 0,
+      "isLiked": 0,
+      "likeNum": 1,
+      "isFollow": 1,
+      "picId": 11,
+      "width": 960,
+      "height": 800,
+      "title": "黄色图片",
+      "time": "3天前"
+    }
+  ]
+}

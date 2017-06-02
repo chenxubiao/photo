@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import javax.persistence.Transient;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,8 +21,6 @@ public class Person {
     @Relationship(type = "FOLLOW")
     @JsonIgnore
     private Set<Person> friends = new HashSet<>();
-    @Transient
-    private List<Person> follows;
 
     public Person() {
     }
@@ -65,9 +59,5 @@ public class Person {
 
     public void setFriends(Set<Person> friends) {
         this.friends = friends;
-    }
-
-    public List<Person> getFollows() {
-        return new ArrayList<>(friends);
     }
 }

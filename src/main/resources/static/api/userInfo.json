@@ -11,7 +11,7 @@
     "description": "",
     "followers": 1,
     "following": 1,
-    "isSelf": 1,
+    "isSelf": 0,
     "isFollow": 0,
     "views": 4,
     "likes": 7,

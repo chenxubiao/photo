@@ -7,6 +7,8 @@ import cn.chenxubiao.common.utils.consts.BBSConsts;
 import cn.chenxubiao.common.utils.consts.BBSMapping;
 import cn.chenxubiao.common.utils.consts.Errors;
 import cn.chenxubiao.common.web.CommonController;
+import cn.chenxubiao.neo4j.domain.Person;
+import cn.chenxubiao.neo4j.service.PersonService;
 import cn.chenxubiao.picture.service.AttachmentService;
 import cn.chenxubiao.tag.service.TagCategoryService;
 import cn.chenxubiao.user.bean.UserProfileBean;
@@ -40,6 +42,8 @@ public class UserSettingController extends CommonController {
     private UserHobbyService userHobbyService;
     @Autowired
     private UserToolService userToolService;
+    @Autowired
+    private PersonService personService;
 
     /**
      * 用户信息完善接口
@@ -68,6 +72,11 @@ public class UserSettingController extends CommonController {
             boolean isUserNameExist = userInfoService.isUserNameExist(userName);
             if (isUserNameExist) {
                 return ResponseEntity.failure(Errors.USER_USERNAME_IS_EXISTS);
+            }
+            Person person = personService.findByUserId(userInfo.getId());
+            if (person != null) {
+                person.setUserName(userName);
+                personService.save(person);
             }
             isUserInfoModify = true;
             userInfo.setUserName(userProfile.getUserName().trim());
