@@ -62,11 +62,14 @@ public class UserSettingController extends CommonController {
         }
         String userName = userProfile.getUserName().trim();
         if (!userInfo.getUserName().equals(userName)) {
-            isUserInfoModify = true;
+            if (StringUtil.isContainChinese(userName)) {
+                return ResponseEntity.failure(Errors.USER_USERNAME_IS_CHINESE);
+            }
             boolean isUserNameExist = userInfoService.isUserNameExist(userName);
             if (isUserNameExist) {
                 return ResponseEntity.failure(Errors.USER_USERNAME_IS_EXISTS);
             }
+            isUserInfoModify = true;
             userInfo.setUserName(userProfile.getUserName().trim());
         }
         if (avatarId > 0 && avatarId != userInfo.getAvatarId()) {

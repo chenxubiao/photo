@@ -102,8 +102,13 @@ public class ProjectDetailController extends CommonController {
             projectDetailBean.setAvatarId(userSession.getAvatarId());
         }
 
-        projectDetailBean.setAuth(projectInfo.getAuth());
-        projectDetailBean.setMoney(projectInfo.getMoney());
+        if (userSession.getUserId() == projectInfo.getUserId()) {
+            projectDetailBean.setAuth(1);
+            projectDetailBean.setMoney(0);
+        }else {
+            projectDetailBean.setAuth(projectInfo.getAuth());
+            projectDetailBean.setMoney(projectInfo.getMoney());
+        }
         projectDetailBean.setProjectId(projectInfo.getId());
         projectDetailBean.setDescription(projectInfo.getDescription());
         projectDetailBean.setUserId(projectInfo.getUserId());
