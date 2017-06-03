@@ -37,7 +37,7 @@ public class SearchController extends GuestBaseController {
 
 
 
-    @RequestMapping(value = "/search/data", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/data")
     public ResponseEntity search(@RequestParam(value = "name", defaultValue = "") String name,
                                  HttpServletRequest request) {
 

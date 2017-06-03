@@ -7,6 +7,7 @@ import cn.chenxubiao.common.web.GuestBaseController;
 import cn.chenxubiao.picture.bean.PicInfoBean;
 import cn.chenxubiao.project.service.ProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,9 +25,9 @@ public class BBSIndexPageProjectController extends GuestBaseController {
     private ProjectInfoService projectInfoService;
 
     @RequestMapping(value = "/index/picture/data", method = RequestMethod.GET)
-    public ResponseEntity getIndexPicInfo(HttpServletRequest request,
-                                          Pageable pageable) {
+    public ResponseEntity getIndexPicInfo(HttpServletRequest request) {
 
+        Pageable pageable = new PageRequest(0, 7);
         UserSession userSession = getUserSession(request);
         List<PicInfoBean> picInfoBeanList;
         if (userSession == null) {

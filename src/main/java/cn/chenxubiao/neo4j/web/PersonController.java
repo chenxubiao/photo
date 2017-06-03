@@ -28,14 +28,7 @@ public class PersonController extends GuestBaseController {
     public ResponseEntity findAll() {
 
         List<Person> personList = personService.findAll();
-        List<PersonBean> personBeans = null;
-        if (CollectionUtil.isNotEmpty(personList)) {
-            personBeans = new ArrayList<>();
-            for (Person person : personList) {
-                PersonBean personBean = new PersonBean(person);
-                personBeans.add(personBean);
-            }
-        }
+        List<PersonBean> personBeans = getPersonBeanList(personList);
         return ResponseEntity.success().set(BBSConsts.DATA, personBeans);
     }
 
@@ -45,8 +38,12 @@ public class PersonController extends GuestBaseController {
         UserSession userSession = super.getUserSession(request);
         int userId = userSession == null ? 0 : userSession.getUserId();
         List<Person> personList = personService.recommondUser(userId);
-        List<PersonBean> personBeans = null;
+        List<PersonBean> personBeans = getPersonBeanList(personList);
+        return ResponseEntity.success().set(BBSConsts.DATA, personBeans);
+    }
 
+    private List<PersonBean> getPersonBeanList(List<Person> personList) {
+        List<PersonBean> personBeans = null;
         if (CollectionUtil.isNotEmpty(personList)) {
             personBeans = new ArrayList<>();
             for (Person person : personList) {
@@ -54,7 +51,7 @@ public class PersonController extends GuestBaseController {
                 personBeans.add(personBean);
             }
         }
-        return ResponseEntity.success().set(BBSConsts.DATA, personBeans);
+        return personBeans;
     }
 
 }

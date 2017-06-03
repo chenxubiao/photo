@@ -200,6 +200,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         List<UserInfoBean> userInfoBeanList = new ArrayList<>();
         for (UserInfo userInfo : userInfoList) {
+            if (userInfo.getId() == 1) {
+                continue;
+            }
             UserInfoBean userInfoBean = convertToUserInfoBean(userInfo, userId);
             userInfoBeanList.add(userInfoBean);
         }

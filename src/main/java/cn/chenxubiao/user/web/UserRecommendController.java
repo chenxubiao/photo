@@ -57,7 +57,6 @@ public class UserRecommendController extends CommonController {
         if (CollectionUtil.isNotEmpty(recommendIds)) {
             List<UserInfo> userInfoList = userInfoService.findByIdIn(recommendIds);
 
-
             List<UserInfoBean> userInfoBeanList = new ArrayList<>();
             for (UserInfo userInfo : userInfoList) {
                 UserInfoBean userInfoBean = new UserInfoBean(userInfo);
@@ -84,6 +83,9 @@ public class UserRecommendController extends CommonController {
             List<UserInfoBean> userInfoBeanList = new ArrayList<>();
             for (UserInfo userInfo : userInfos) {
                 if (CollectionUtil.isNotEmpty(userIds) && userIds.contains(userInfo.getId())) {
+                    continue;
+                }
+                if (userInfo.getId() == 1) {
                     continue;
                 }
                 UserInfoBean userInfoBean = new UserInfoBean(userInfo);
